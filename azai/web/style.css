@@ -1,0 +1,152 @@
+/* AZAI local UI. No CDN. Black / gold. Jeeves is not sovereign. */
+:root {
+  --bg: #0b0b0b;
+  --panel: #141414;
+  --ink: #e8e0d0;
+  --muted: #8a8070;
+  --line: #2a261c;
+  --gold: #c9a227;
+  --gold-dim: #8a7219;
+  --pass: #3dba7a;
+  --pass-dim: #1d4a33;
+  --warn: #e0a13a;
+  --warn-dim: #5a4318;
+  --fail: #d4534b;
+  --fail-dim: #5a221f;
+  --focus: #c9a227;
+  font-synthesis: none;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Source Serif 4", "Iowan Old Style", Palatino, Georgia, serif;
+  line-height: 1.45;
+}
+body { padding: 1.4rem 1.2rem 3rem; max-width: 72rem; margin: 0 auto; }
+.tag {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  margin: 0.3rem 0 0.2rem;
+  color: var(--gold);
+}
+.motto { color: var(--gold); font-style: italic; margin: 0 0 0.8rem; }
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
+}
+.status span {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+}
+.status .PASS { border-color: var(--pass); color: var(--pass); }
+.status .CHECK { border-color: var(--warn); color: var(--warn); }
+.status .FAIL, .status .SEALED { border-color: var(--fail); color: var(--fail); }
+.status .OPEN, .status .READY { border-color: var(--gold-dim); color: var(--gold); }
+.banner {
+  margin: 0 0 1.1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--gold-dim);
+  background: #1a1610;
+  font-size: 0.95rem;
+}
+.banner code { color: var(--gold); }
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18rem;
+  gap: 1rem;
+}
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+.chat, .rail {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.chat-head { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: end; margin-bottom: 0.8rem; }
+.kicker {
+  display: block;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+select, textarea {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: var(--ink);
+  font: inherit;
+}
+.chat-head select { width: auto; min-width: 16rem; }
+textarea { min-height: 4.5rem; resize: vertical; }
+.transcript {
+  min-height: 18rem;
+  max-height: 28rem;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  background: #101010;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+}
+.turn { margin: 0 0 0.85rem; }
+.turn .who { color: var(--gold); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.75rem; letter-spacing: 0.08em; }
+.actions { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 0.6rem; }
+button {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: var(--bg);
+  cursor: pointer;
+  font-weight: 650;
+}
+button.ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+h2 {
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+.receipts { list-style: none; margin: 0 0 1.1rem; padding: 0; max-height: 16rem; overflow: auto; }
+.receipts li {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  border-bottom: 1px solid var(--line);
+  padding: 0.4rem 0;
+  color: var(--muted);
+}
+.integrity p { margin: 0.2rem 0; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85rem; }
+.integrity .PASS { color: var(--pass); }
+.integrity .CHECK { color: var(--warn); }
+.integrity .FAIL { color: var(--fail); }
+footer { margin-top: 1.6rem; color: var(--muted); font-size: 0.88rem; }
+.foot-note { font-style: italic; }
+label { display: block; margin: 0.4rem 0 0.25rem; color: var(--muted); }

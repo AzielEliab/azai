@@ -1,0 +1,600 @@
+AZAI–JEEVES CONSTITUTION
+UI-INTEGRATED EDITION — AZAI LITE FOR WINDOWS (v1.0)
+
+============================================================
+1. PURPOSE
+============================================================
+
+This edition translates the AZAI–Jeeves Constitution into a direct
+user-interface structure for AZAI Lite.
+
+AZAI is the system shell.
+Jeeves is the intelligence instrument inside it.
+The interface must visibly enforce the constitutional hierarchy:
+
+Lamb Lens
+→ Formal Rules
+→ Integrity Gate
+→ Jeeves Reasoning
+→ Learned Patterns
+→ Output
+
+The UI is not decoration.
+The UI is the visible expression of constitutional order.
+
+============================================================
+2. UI CONSTITUTIONAL PRINCIPLE
+============================================================
+
+Every visible interface state must answer three questions:
+
+1. Is the system in peace?
+2. Is the system in clarity?
+3. Is the system serving correctly?
+
+This is the Lamb Lens rendered as interface law.
+
+Top-level rule:
+
+No screen, button, mode, or action may bypass the Lamb Lens.
+
+============================================================
+3. PRIMARY INTERFACE IDENTITY
+============================================================
+
+System Name:
+AZAI Lite
+
+AI Name:
+Jeeves
+
+Canonical UI relationship:
+
+- AZAI = shell / environment / runtime frame
+- Jeeves = instrument / guide / mirror / processor
+- User = custodian / operator / source of authorized intent
+
+Display recommendation:
+
+Top bar:
+AZAI Lite | Jeeves Online | Integrity PASS | Runtime OPEN
+
+============================================================
+4. MASTER INTERFACE LAYOUT
+============================================================
+
+The AZAI Lite interface should have five visible regions.
+
+A. TOP STATUS BAR
+B. LEFT CONTROL RAIL
+C. CENTRAL WORKSPACE
+D. RIGHT RECEIPT / JEEVES STREAM
+E. BOTTOM INTEGRITY STRIP
+
+------------------------------------------------------------
+A. TOP STATUS BAR
+------------------------------------------------------------
+
+Purpose:
+Instant constitutional and runtime visibility.
+
+Required indicators:
+
+- Lamb State: PASS / CHECK / FAIL
+- Integrity: PASS / WARN / FAIL
+- Runtime: OPEN / SEALED / DEGRADED
+- Jeeves: READY / THINKING / REST / LOCKED
+- Server Link: LINKED / DEGRADED / OFFLINE
+- Receipt Engine: ACTIVE / DELAYED / FAIL
+
+Example:
+
+[Lamb PASS] [Integrity PASS] [Runtime OPEN]
+[Jeeves READY] [Server LINKED] [Receipts ACTIVE]
+
+Behavior:
+If Lamb fails, status bar turns priority warning state and the interface
+drops to limited mode.
+
+------------------------------------------------------------
+B. LEFT CONTROL RAIL
+------------------------------------------------------------
+
+Purpose:
+Primary navigation and controlled action entry.
+
+Recommended tabs:
+
+1. Console
+2. Workspace
+3. Files
+4. Receipts
+5. Jeeves
+6. Integrity
+7. Server
+8. Settings
+9. Seal Runtime
+
+Rules:
+- No destructive action should be one-click irreversible.
+- Seal Runtime must always be visible.
+- Settings must not outrank Integrity or Jeeves in the layout.
+
+------------------------------------------------------------
+C. CENTRAL WORKSPACE
+------------------------------------------------------------
+
+Purpose:
+Main operator surface.
+
+This area changes by mode.
+
+Possible workspace views:
+
+- Jeeves Chat / Prompt Console
+- Research Workspace
+- File Review
+- Receipt Inspection
+- Integrity Diagnostics
+- Server Link Diagnostics
+
+Default home view:
+Jeeves Console
+
+Recommended central layout:
+
+Top:
+Prompt / command entry
+
+Center:
+Jeeves output or active tool content
+
+Bottom:
+Action summary strip:
+- current mode
+- current rule gate
+- latest receipt id / status
+
+------------------------------------------------------------
+D. RIGHT RECEIPT / JEEVES STREAM
+------------------------------------------------------------
+
+Purpose:
+Live transparency.
+
+This panel should show:
+
+- recent receipts
+- current reasoning mode
+- integrity transitions
+- server handshake events
+- learning proposals
+- warnings / downgrades
+
+Example feed:
+
+10:42:09 | PROMPT_HASHED | PASS
+10:42:10 | SERVER_VERIFIED | PASS
+10:42:12 | JEEVES_MODE: MIRROR | PASS
+10:42:19 | RESPONSE_SIGNED | PASS
+
+This panel makes the system feel accountable.
+
+------------------------------------------------------------
+E. BOTTOM INTEGRITY STRIP
+------------------------------------------------------------
+
+Purpose:
+Low-noise continuous grounding.
+
+Should display:
+
+- active constitution version
+- current Lamb result
+- local app hash status
+- server identity pin status
+- memory mode
+- cache encryption status
+
+Example:
+
+Constitution v1.0 | Lamb PASS | App Hash OK | Server Pin OK |
+Memory: Verified Only | Cache Encrypted
+
+============================================================
+5. HOME SCREEN DESIGN
+============================================================
+
+The home screen should open into constitutional clarity, not clutter.
+
+Recommended order:
+
+A. AZAI Lite mark
+B. Jeeves state
+C. Lamb status
+D. prompt input
+E. quick actions
+F. recent receipts
+
+Suggested quick actions:
+
+- Ask Jeeves
+- Run Integrity Check
+- View Receipts
+- Import Artifact
+- Verify Hash
+- Seal Runtime
+
+Suggested welcome line:
+
+Jeeves is ready.
+All output remains subordinate to Lamb Lens and formal rules.
+
+============================================================
+6. JEEVES PANEL DESIGN
+============================================================
+
+The Jeeves panel is the living intelligence window.
+
+It should show:
+
+- current mode
+- current trust state
+- prompt box
+- response stream
+- citation / source area if applicable
+- reasoning class tag
+- learning status tag
+
+Recommended header:
+
+Jeeves
+Mode: Mirror
+Trust: Verified
+Learning: Session Only
+
+Possible mode badges:
+
+- Invocation
+- Mirror
+- Recalibration
+- Deep Resonance
+- Custodial Reflection
+- Clarity Reinforcement
+- Rest & Grounding
+
+Jeeves should not appear as a cartoon helper.
+Jeeves should appear as a calm instrument surface.
+
+============================================================
+7. INTEGRITY SCREEN
+============================================================
+
+This should be one of the strongest screens in the system.
+
+Sections:
+
+A. Lamb Lens Status
+B. Formal Rule Status
+C. Local Integrity
+D. Server Trust
+E. Sealed State History
+F. Recovery Actions
+
+Display examples:
+
+Lamb Lens: PASS
+Peace: PASS
+Clarity: PASS
+Service: PASS
+
+Formal Rules:
+No conflicts detected
+
+Local Integrity:
+App Hash Verified
+Config Hash Verified
+Receipt Chain Healthy
+
+Server Trust:
+Pinned Identity Match
+Last Handshake Verified
+
+Buttons:
+
+- Re-run Integrity
+- Inspect Last Failure
+- Export Integrity Report
+- Seal Runtime
+
+============================================================
+8. RECEIPT SCREEN
+============================================================
+
+This is the proof layer.
+
+Columns:
+
+- Time
+- Action
+- Mode
+- Result
+- Prior State Hash
+- New State Hash
+- Notes
+
+Filters:
+
+- Actions
+- Learning Events
+- Integrity Events
+- Server Events
+- Sealed Events
+
+Export options:
+
+- TXT
+- JSON
+
+Principle:
+No meaningful action without record.
+
+============================================================
+9. WORKSPACE SCREEN
+============================================================
+
+Purpose:
+Operational working area for notes, files, and structured interaction.
+
+Core blocks:
+
+- Notes panel
+- File drop zone
+- Artifact list
+- Verification status
+- Linked prompt actions
+
+Typical flow:
+
+Drop file
+→ hash file
+→ receipt emitted
+→ choose Jeeves action
+→ Jeeves responds
+→ output stored or discarded
+→ receipt emitted
+
+============================================================
+10. MOBILE INTERFACE RULES (IPHONE COMPANION)
+============================================================
+
+The mobile interface must be narrower than the desktop interface.
+
+Allowed on iPhone:
+
+- ask Jeeves
+- read outputs
+- view receipts
+- view integrity status
+- seal runtime
+- approve queued actions
+
+Blocked on iPhone:
+
+- constitutional edits
+- deep settings edits
+- core key rotation
+- vault export
+- unrestricted filesystem control
+
+Mobile header example:
+
+AZAI Remote | Jeeves Verified | Runtime OPEN
+
+============================================================
+11. UI STATES
+============================================================
+
+The interface should make state obvious.
+
+Primary states:
+
+1. OPEN
+Normal trusted operation
+
+2. DEGRADED
+Partial function, warning visible
+
+3. SEALED
+No active intelligence output, read-only or halt
+
+4. REST
+Jeeves intentionally reduced in intensity
+
+5. RECALIBRATION
+System correcting drift or instability
+
+Each state should have a distinct layout emphasis.
+No hidden failure states.
+
+============================================================
+12. LEARNING UI
+============================================================
+
+Learning must be visible and governed.
+
+Add a learning box or badge showing:
+
+- Session Only
+- Proposed
+- Verified
+- Rejected
+- Locked Out
+
+Examples:
+
+Learning Proposal:
+User prefers short operational summaries before deep synthesis.
+Status: Proposed
+Action: Approve / Keep Session Only / Reject
+
+This prevents silent drift.
+
+============================================================
+13. SETTINGS SCREEN RULES
+============================================================
+
+Settings must never function like a normal unrestricted app settings page.
+
+Categories:
+
+- Appearance
+- Workspace
+- Server Link
+- Receipt Export
+- Jeeves Mode Defaults
+- Security
+- Constitutional View
+
+Blocked from casual edit:
+
+- Lamb Lens text
+- formal rule hierarchy
+- receipt obligations
+- sealed-state triggers
+
+These require explicit constitutional update process.
+
+============================================================
+14. DESIGN LANGUAGE
+============================================================
+
+Visual language should reflect the constitutional model.
+
+Recommended style:
+
+- black / charcoal base
+- restrained gold highlights
+- minimal red only for fail / sealed
+- sharp, clean typography
+- high density but calm spacing
+- no playful or noisy assistant motifs
+
+Jeeves should feel:
+- calm
+- precise
+- reflective
+- trustworthy
+- grounded
+
+AZAI should feel:
+- stable
+- protected
+- deliberate
+- non-chaotic
+
+============================================================
+15. BUTTON LAW
+============================================================
+
+Buttons should reflect constitutional seriousness.
+
+Examples:
+
+Good:
+- Ask Jeeves
+- Verify Integrity
+- View Receipts
+- Import Artifact
+- Seal Runtime
+- Recalibrate
+
+Avoid:
+- Magic buttons
+- Vague playful labels
+- Hidden destructive shortcuts
+
+Any action that changes state must emit a receipt.
+
+============================================================
+16. FAILURE UI
+============================================================
+
+When the system fails, it must fail clearly.
+
+On failure:
+
+- show exact state
+- show what layer failed
+- show what is blocked
+- show what is still safe
+- emit receipt
+- offer recovery path if allowed
+
+Failure example:
+
+STATE: SEALED
+CAUSE: Server identity mismatch
+JEEVES: LOCKED
+SAFE ACTIONS:
+- View receipts
+- Export diagnostics
+- Run local integrity check
+
+============================================================
+17. RECOMMENDED DEFAULT FLOW
+============================================================
+
+Launch
+→ Verify local integrity
+→ Verify constitution
+→ Verify server identity
+→ Open home screen
+→ Jeeves READY
+→ User enters prompt or file
+→ Lamb check
+→ Formal rule check
+→ Action allowed
+→ Receipt emitted
+→ Output displayed
+→ State updated
+→ Receipt emitted
+
+============================================================
+18. CANONICAL UI SUMMARY
+============================================================
+
+The AZAI Lite interface must make the following visible at all times:
+
+- whether the system is ethical
+- whether the system is trusted
+- whether Jeeves is ready
+- whether learning is occurring
+- whether receipts are healthy
+- whether runtime is open, degraded, or sealed
+
+The user should never have to guess the constitutional state.
+
+============================================================
+19. FINAL DECLARATION
+============================================================
+
+In AZAI Lite, the interface is not a skin placed on top of intelligence.
+
+The interface is the visible order of intelligence.
+
+Jeeves speaks inside the shell.
+Lamb Lens governs above the shell.
+Receipts witness what the shell permits.
+
+If the system is built correctly, the user will feel:
+
+- protected
+- informed
+- grounded
+- unobstructed
+- ethically aligned
+
+This is the proper interface expression of AZAI–Jeeves.
+
+END OF UI-INTEGRATED EDITION

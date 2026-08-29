@@ -1,0 +1,56 @@
+THE AZIEL HUB & SOFTWARE TETHER FORMAT
+A Neutral Spatial Interface for Ethical Co-Presence of Independent Systems
+Version 1.0 (Conceptual Architecture)
+
+ABSTRACT
+This document defines the Aziel Hub as a neutral spatial container that allows independent software systems to coexist, render, and exchange typed signals without central authority, orchestration, or semantic interpretation. All functional power resides in standalone modules. The Hub acts only as a blank key: a geometric and connective surface enabling already-compatible systems to align perceptually. Unity and authority are never asserted by the system and exist only in the perception of the viewer.
+
+1. DESIGN PREMISE
+The Hub may define space and constraints, but never meaning, intent, or outcome. It enforces boundaries rather than goals. The system must never decide why anything matters.
+
+2. CORE DEFINITIONS
+Hub: A bounded spatial surface that renders independent programs, enforces physical and resource constraints, and permits declared signal exchange.
+Module: A fully standalone system that operates independently, contains its own logic and ethics, and optionally exposes declared interfaces.
+Tether: A declared, visible signal corridor between modules that is typed, permissioned, reversible, and non-semantic.
+Viewer: The only entity capable of assigning meaning, purpose, or authority.
+
+3. THE BLANK KEY PRINCIPLE
+The Hub fits the geometry of compatible systems but encodes no intent or authority. All locks already exist in the modules. Removing the Hub leaves all modules fully functional, only isolated.
+
+4. SPATIAL CONTAINER MODEL
+The Hub enforces spatial boundaries, rendering regions, resource ceilings, and interface compatibility.
+The Hub never enforces workflows, priorities, intent inference, outcome optimization, or semantic interpretation.
+
+5. SOFTWARE TETHER FORMAT
+Signals move through typed lanes (time, text, hash, media, event).
+All wiring is user-declared, visible, reversible, and non-persistent by default.
+The Hub validates form, never content or meaning.
+
+6. AZNET COMPATIBILITY
+AzNet functionality remains intact because all logic exists at the module level.
+Signal flow, receipts, integrity chains, and tethering occur independently of the Hub.
+Nothing activates or unlocks when modules are co-present.
+
+7. PERCEPTUAL CONVERGENCE (THE SNAP)
+When all compatible modules are present, visual alignment and coherence may emerge.
+This is not an activation, mode change, or system state.
+The system never knows it is complete.
+
+8. CONSTRAINT LOGICS
+Gabriel enforces integrity of transmission.
+Michael enforces boundary of presence.
+Scorch enforces irreversibility after integrity collapse.
+These are conditions, not agents, and never interpret meaning.
+
+9. AUTHORITY MODEL
+The Hub holds no authority.
+Any perceived authority exists only in the viewer.
+Responsibility remains with modules and users.
+
+10. NON-NEGOTIABLE INVARIANTS
+The system is invalid if the Hub interprets meaning, remembers interpretations, asserts unity, recommends actions, or centralizes decision logic.
+
+11. CONCLUSION
+The Aziel Hub is a space with physics, not a system with intent.
+The interface shows reality.
+The viewer decides what matters.

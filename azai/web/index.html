@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AZAI — Jeeves</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="tag">AZAI · v0.1.0 · loopback · Jeeves inside the shell</div>
+      <h1>AZAI</h1>
+      <p class="motto">Jeeves speaks inside the shell. Lamb Lens governs above the shell. Receipts witness what the shell permits.</p>
+    </div>
+    <div id="status" class="status" aria-live="polite">
+      <span data-k="lamb">Lamb —</span>
+      <span data-k="integrity">Integrity —</span>
+      <span data-k="runtime">Runtime —</span>
+      <span data-k="jeeves">Jeeves —</span>
+      <span data-k="providers">Providers —</span>
+    </div>
+  </header>
+
+  <aside class="banner limit" role="note">
+    Local OpenAI-compatible runtime — not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN.
+    Jeeves is not sovereign. Hub is a blank key: it does not interpret meaning.
+    Blend is visible: gpt / grok / venice are labeled, then a short synthesis.
+    Without keys, local Jeeves runs and does not pretend to be GPT.
+    Point other software at <code>OPENAI_BASE_URL=http://127.0.0.1:8860/v1</code> with a dummy key.
+  </aside>
+
+  <main class="layout">
+    <section class="chat" id="workspace">
+      <div class="chat-head">
+        <label for="model">
+          <span class="kicker">Model</span>
+        </label>
+        <select id="model">
+          <option value="blend" selected>blend — gpt + grok + venice, labeled</option>
+          <option value="gpt">gpt</option>
+          <option value="grok">grok</option>
+          <option value="venice">venice</option>
+          <option value="local">local — Jeeves stub</option>
+        </select>
+        <button type="button" id="seal">Seal Runtime</button>
+        <button type="button" id="open" class="ghost">Open Runtime</button>
+      </div>
+      <div id="transcript" class="transcript" aria-live="polite"></div>
+      <form id="prompt-form">
+        <label for="prompt"><span class="kicker">Ask Jeeves</span></label>
+        <textarea id="prompt" rows="3" placeholder="All output remains subordinate to Lamb Lens and formal rules."></textarea>
+        <div class="actions">
+          <button type="submit">Ask Jeeves</button>
+          <button type="button" id="integrity-btn" class="ghost">Integrity</button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="rail">
+      <h2>Receipts</h2>
+      <ol id="receipts" class="receipts"></ol>
+      <h2>Integrity</h2>
+      <div id="integrity" class="integrity">
+        <p>Peace —</p>
+        <p>Clarity —</p>
+        <p>Service —</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <p>Apache-2.0 · Aziel Eliab · 2026 · Bound to 127.0.0.1:8860 · Forks welcome and always allowed.</p>
+    <p class="foot-note">Voice is optional extra; MVP is text. Push-to-talk only; no wake word; no passive recording.</p>
+  </footer>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,846 @@
+AZAI VOICE SYSTEM
+Whitepaper & Engineering Design Layout Plan v1.0
+Mandible-Excluded Baseline
+
+
+1. EXECUTIVE SUMMARY
+
+AZAI Voice is a local-first, ethically constrained voice interface layer for the AZAI ecosystem. It enables speech-based interaction with AZAI Core, also referred to as Jeeves, while preserving local control, data sovereignty, trust-based processing, and Lamb Lens ethical governance.
+
+Core rule:
+Voice is an interface, not an authority.
+
+Voice does not replace AZAI Core. It simply allows the user to communicate with AZAI through speech instead of typing. All reasoning, memory handling, command validation, and ethical control still pass through the existing AZAI stack.
+
+
+2. DESIGN OBJECTIVES
+
+Primary goals:
+- Fully local speech pipeline by default.
+- No required cloud dependency.
+- Seamless integration with AZAI Core.
+- Deterministic and inspectable behavior.
+- Low-latency communication target.
+- Push-to-talk first, wake-word later.
+- No passive recording as the baseline.
+
+Secondary goals:
+- Modular architecture.
+- Swappable speech-to-text engine.
+- Swappable text-to-speech engine.
+- T7 bootstrap compatibility.
+- iPhone remote access compatibility.
+- AZNet/node-ready future expansion.
+- Secure command validation.
+
+
+3. CORE PRINCIPLE
+
+AZAI Voice must never bypass the main AZAI authority structure.
+
+The proper chain is:
+
+Human voice
+-> Speech-to-text
+-> AZAI Core
+-> Lamb Lens validation
+-> Memory routing rules
+-> Response generation
+-> Text-to-speech
+-> Human receives spoken response
+
+Voice is only a translation layer between human speech and AZAI processing.
+
+
+4. HIGH-LEVEL SYSTEM ARCHITECTURE
+
+System flow:
+
+[Microphone Input]
+        |
+        v
+[Audio Capture Layer]
+        |
+        v
+[Speech-to-Text Engine]
+        |
+        v
+[AZAI Core / Jeeves Router]
+        |
+        v
+[Lamb Lens Ethical Filter]
+        |
+        v
+[Memory Router: SPRE / Lumen]
+        |
+        v
+[Response Engine]
+        |
+        v
+[Text-to-Speech Engine]
+        |
+        v
+[Speaker / Headphones / iPhone Output]
+
+
+5. COMPONENT BREAKDOWN
+
+5.1 Input Layer
+
+Purpose:
+Capture user speech and convert it into a clean audio stream.
+
+Accepted input devices:
+- Laptop microphone.
+- USB microphone.
+- Headset microphone.
+- iPhone microphone routed through secure remote access.
+
+Baseline activation method:
+- Push-to-talk.
+
+Reason:
+Push-to-talk prevents false activation, passive recording concerns, and accidental command execution.
+
+Optional later activation:
+- Wake word, such as “Jeeves.”
+- Manual voice toggle.
+- Session-based listening window.
+
+
+5.2 Audio Capture Layer
+
+Responsibilities:
+- Start recording when activated.
+- Stop recording when user releases button or silence is detected.
+- Convert audio into proper format.
+- Normalize audio quality.
+
+Target audio format:
+- 16 kHz.
+- Mono.
+- WAV or raw PCM.
+
+Optional tools:
+- Voice activity detection.
+- Noise gate.
+- Silence trimming.
+
+
+5.3 Speech-to-Text Engine
+
+Purpose:
+Convert spoken input into text for AZAI Core.
+
+Preferred baseline:
+- Whisper local.
+- Faster-Whisper for speed optimization.
+
+Fallback:
+- Vosk offline speech recognition.
+
+Operational rules:
+- Speech-to-text runs locally by default.
+- No cloud transcription unless explicitly enabled by the user.
+- Transcripts are temporary unless the user chooses to save them.
+- Transcripts do not automatically become memory.
+
+Engineering notes:
+- Use Faster-Whisper for practical Windows performance.
+- Use smaller models for low-end machines.
+- Use medium or large models only if GPU resources are available.
+
+Recommended model tiers:
+- Tiny/base: fastest, lower accuracy.
+- Small: good baseline.
+- Medium: stronger accuracy if hardware allows.
+- Large: best accuracy, heavier compute.
+
+
+5.4 AZAI Core Interface
+
+Purpose:
+Receive the transcript and route it into the AZAI reasoning system.
+
+Core responsibilities:
+- Detect intent.
+- Classify request type.
+- Determine whether it is informational, operational, memory-related, or critical.
+- Pass request through Lamb Lens filter.
+- Route memory calls only when allowed.
+- Generate a response.
+
+Important constraint:
+Voice input must never directly execute commands.
+
+All commands must pass through:
+1. Intent detection.
+2. Safety classification.
+3. Confirmation requirement.
+4. Passcode requirement if critical.
+5. Execution layer.
+
+
+5.5 Lamb Lens Ethical Filter
+
+Purpose:
+Act as the primary ethical gate for every voice interaction.
+
+Rule:
+Lamb Lens overrides optimization, speed, convenience, and user pressure.
+
+Filter chain:
+
+Input transcript
+-> Intent interpretation
+-> Ethical validation
+-> Allowed / Modified / Refused / Requires confirmation
+-> Routed to output
+
+Lamb Lens checks:
+- Is the request harmful?
+- Is the request deceptive?
+- Does it violate user sovereignty?
+- Does it bypass consent?
+- Does it create unnecessary risk?
+- Does it need confirmation?
+- Should it be logged as a receipt?
+
+
+5.6 Memory Router: SPRE / Lumen
+
+Purpose:
+Control what becomes memory and what remains temporary interaction.
+
+Memory rules:
+- Voice does not automatically write memory.
+- A spoken thought is not automatically a verified record.
+- Memory writes must be explicit.
+- Important records should route through SPRE or Lumen.
+- Temporal Receipts should be append-only when used.
+
+Memory categories:
+- Temporary transcript: short-lived working context.
+- Session note: saved for the current work session.
+- Lumen entry: structured knowledge.
+- SPRE receipt: evidence-backed, timestamped record.
+
+Example voice command:
+“Jeeves, save this as a Lumen note.”
+
+System response:
+“Confirm save to Lumen?”
+
+User:
+“Yes.”
+
+Only then does it become memory.
+
+
+5.7 Response Engine
+
+Purpose:
+Prepare AZAI’s answer for spoken output.
+
+Voice response should be:
+- Shorter than text response.
+- Calm.
+- Clear.
+- Not over-talking.
+- Able to provide expanded details if requested.
+
+Voice behavior profile:
+- Quiet operator.
+- Precise assistant.
+- Does not chatter.
+- Does not pretend authority.
+- Speaks when called.
+
+Recommended default response pattern:
+- Acknowledge.
+- Answer directly.
+- Offer one next action only when useful.
+
+
+5.8 Text-to-Speech Engine
+
+Purpose:
+Convert AZAI’s response text into spoken audio.
+
+Preferred baseline:
+- Piper TTS.
+
+Advanced later option:
+- Coqui TTS.
+
+Why Piper first:
+- Lightweight.
+- Local.
+- Fast.
+- Easier to package.
+- Good for baseline AZAI Lite.
+
+Engineering notes:
+- Preload the selected voice model.
+- Cache common system responses.
+- Support interruption.
+- Allow mute mode.
+- Allow text-only mode.
+
+
+6. OPERATIONAL MODES
+
+6.1 Mode 1: Push-to-Talk Baseline
+
+This is the required first mode.
+
+Flow:
+Hold button
+-> Speak
+-> Release button
+-> Transcription
+-> AZAI processing
+-> Spoken response
+
+Advantages:
+- Lowest risk.
+- Lowest false activation.
+- Best privacy posture.
+- Best for early build testing.
+
+
+6.2 Mode 2: Wake Word
+
+Future mode.
+
+Flow:
+User says “Jeeves”
+-> Listening window opens
+-> User speaks command
+-> AZAI processes
+-> Response returned
+
+Risks:
+- False activations.
+- Passive listening concerns.
+- More security overhead.
+
+Wake word should not be enabled until push-to-talk is stable.
+
+
+6.3 Mode 3: Command Mode
+
+Purpose:
+Allow voice control of AZAI ecosystem functions.
+
+Examples:
+- “Run baseline report.”
+- “Open Temporal Lock.”
+- “Create SPRE receipt.”
+- “Disable voice mode.”
+
+Command classes:
+
+Class 1: Informational
+- No confirmation required.
+- Example: “What is Lumen?”
+
+Class 2: Operational
+- Confirmation required.
+- Example: “Run baseline report.”
+
+Class 3: Sensitive
+- Confirmation and passcode required.
+- Example: “Export memory.”
+
+Class 4: Critical
+- Confirmation, passcode, and delay/cooldown required.
+- Example: “Purge node.”
+
+
+7. SECURITY ARCHITECTURE
+
+7.1 Baseline Security Rules
+
+- No cloud listening by default.
+- No passive recording by default.
+- No direct command execution from raw voice.
+- Push-to-talk first.
+- Sensitive commands require confirmation.
+- Critical commands require passcode.
+- Transcripts are temporary unless saved.
+- Memory writes require explicit intent.
+
+
+7.2 Command Validation Layer
+
+Voice command validation path:
+
+Transcript
+-> Intent classification
+-> Risk classification
+-> Confirmation prompt if needed
+-> Passcode prompt if needed
+-> Execution router
+-> Optional receipt/log
+
+
+7.3 Anti-Misfire Controls
+
+Required safeguards:
+- Confirm before action.
+- Repeat interpreted command before critical execution.
+- Allow cancel phrase.
+- Include timeout.
+- Include mute button.
+- Include emergency disable.
+
+Cancel phrases:
+- “Cancel.”
+- “Stop.”
+- “Never mind.”
+- “Abort command.”
+
+
+7.4 Privacy Controls
+
+User-facing toggles:
+- Local-only mode.
+- Mute microphone.
+- Disable TTS.
+- Disable voice entirely.
+- Transcript auto-delete.
+- Require confirmation for all memory writes.
+
+
+8. NETWORK INTEGRATION
+
+8.1 Local Mode
+
+All components run on one machine.
+
+Local chain:
+Mic
+-> STT
+-> AZAI Core
+-> TTS
+-> Speaker
+
+Best for:
+- First build.
+- Laptop testing.
+- T7 bootstrap.
+- Base station testing.
+
+
+8.2 Base Server Mode
+
+Input device connects to the home base server.
+
+Chain:
+Client device mic
+-> Secure tunnel
+-> Home AZAI server
+-> AZAI Core processing
+-> Response returned
+
+Best for:
+- iPhone access.
+- Laptop terminal mode.
+- Multi-device control.
+
+
+8.3 iPhone Remote Access
+
+The iPhone should function as:
+- Remote microphone.
+- Remote display.
+- Remote speaker.
+- Control terminal.
+
+The iPhone should not be the full AZAI brain.
+
+Recommended connection options:
+- Tailscale.
+- WireGuard.
+- Local HTTPS endpoint.
+- Private web app hosted from base server.
+
+Security requirements:
+- Passcode.
+- Session token.
+- HTTPS or secure tunnel.
+- No open public exposure by default.
+
+
+9. ENGINEERING STACK
+
+9.1 Recommended Language Stack
+
+Core orchestration:
+- Python.
+
+UI options:
+- Python desktop UI for simplest local prototype.
+- Electron later for polished black/gold interface.
+
+Server API:
+- FastAPI or Flask.
+
+Audio:
+- sounddevice or pyaudio.
+- ffmpeg optional for conversion.
+
+Speech-to-text:
+- faster-whisper.
+
+Text-to-speech:
+- Piper.
+
+
+9.2 Suggested File Structure
+
+/AZAI_Voice/
+
+  /audio/
+    capture.py
+    vad.py
+    normalize.py
+
+  /stt/
+    whisper_engine.py
+    vosk_engine.py
+
+  /core/
+    azai_router.py
+    lamb_filter.py
+    intent_classifier.py
+    command_validator.py
+    memory_router.py
+    response_engine.py
+
+  /tts/
+    piper_engine.py
+    voice_cache.py
+
+  /ui/
+    voice_panel.py
+    assets/
+
+  /network/
+    api_server.py
+    iphone_endpoint.py
+
+  /config/
+    settings.json
+    voice_rules.json
+    command_rules.json
+
+  /logs/
+    session_logs/
+    error_logs/
+
+  launch.py
+  README.txt
+
+
+10. USER INTERFACE DESIGN
+
+10.1 AZAI Voice Panel
+
+Theme:
+- Black background.
+- Gold accents.
+- Minimal controls.
+- Clear state display.
+
+Primary layout:
+
+--------------------------------------------------
+AZAI VOICE
+--------------------------------------------------
+Status: Idle / Listening / Thinking / Speaking
+
+[ HOLD TO SPEAK ]
+
+Transcript:
+“You said...”
+
+Jeeves:
+“Response...”
+
+Controls:
+[ Mute Mic ] [ Disable Voice ] [ Local Only ]
+[ Require Confirmations ] [ Settings ]
+--------------------------------------------------
+
+
+10.2 State Indicators
+
+Idle:
+- Voice inactive.
+
+Listening:
+- Audio capture active.
+
+Thinking:
+- Transcript is being processed.
+
+Speaking:
+- TTS output is active.
+
+Command Pending:
+- Awaiting confirmation.
+
+Locked:
+- Passcode required.
+
+
+10.3 Required Buttons
+
+- Hold to Speak.
+- Stop Speaking.
+- Mute Mic.
+- Disable Voice.
+- Settings.
+- Local Only toggle.
+- Require Confirmation toggle.
+
+
+11. T7 BOOTSTRAP LAYOUT
+
+Purpose:
+Allow AZAI Voice to travel with the portable AZ Interface stack.
+
+Suggested T7 structure:
+
+/T7_AZAI/
+
+  /AZAI_Core/
+
+  /AZAI_Voice/
+    /audio/
+    /stt/
+    /tts/
+    /models/
+      /whisper/
+      /piper/
+    /ui/
+    /config/
+    launch_voice.bat
+    launch_voice.ps1
+
+  /TemporalLock/
+
+  /SPRE/
+
+  /Lumen/
+
+  /Interface/
+
+
+T7 role:
+- Portable interface layer.
+- Voice package carrier.
+- Node bootstrap device.
+- Local configuration carrier.
+
+Heavy inference can still be routed to the laptop or base server if needed.
+
+
+12. BUILD PHASES
+
+12.1 Phase 1: Local Prototype
+
+Goal:
+Get the first working voice loop.
+
+Build requirements:
+- Mic capture.
+- Whisper/faster-whisper transcription.
+- Text response placeholder or AZAI Core stub.
+- Piper spoken output.
+- Push-to-talk UI.
+
+Success condition:
+User speaks, AZAI transcribes, responds, and speaks back.
+
+
+12.2 Phase 2: AZAI Core Integration
+
+Goal:
+Connect voice to real AZAI routing.
+
+Add:
+- Intent detection.
+- Lamb Lens filter.
+- Memory routing rules.
+- Response formatting.
+
+Success condition:
+Voice input routes through AZAI logic instead of a generic chatbot path.
+
+
+12.3 Phase 3: Command Safety
+
+Goal:
+Prevent accidental or unsafe voice-triggered operations.
+
+Add:
+- Confirmation layer.
+- Passcode layer.
+- Command class rules.
+- Cancel phrases.
+- Cooldowns for critical commands.
+
+Success condition:
+No operational command executes without proper validation.
+
+
+12.4 Phase 4: iPhone Remote Access
+
+Goal:
+Use iPhone as remote AZAI Voice terminal.
+
+Add:
+- Secure tunnel.
+- Browser-based or app-like interface.
+- Remote mic upload/stream.
+- Returned text and voice response.
+
+Success condition:
+User can speak to AZAI from iPhone through the home base server.
+
+
+12.5 Phase 5: T7 Bootstrap Packaging
+
+Goal:
+Package AZAI Voice into the portable AZ Interface/T7 stack.
+
+Add:
+- Portable folder structure.
+- Launch scripts.
+- Local configs.
+- Model folders.
+- Offline fallback behavior.
+
+Success condition:
+T7 can launch AZAI Voice on a compatible Windows machine.
+
+
+13. PERFORMANCE TARGETS
+
+Baseline targets:
+
+- Speech-to-text latency: under 800 ms to 2 seconds depending on model.
+- TTS start latency: under 300 ms to 1 second.
+- Total response loop: target under 2 seconds for short commands.
+- RAM usage: under 4 GB baseline.
+- CPU acceptable on modern i7-class laptop.
+- GPU optional but helpful.
+
+Optimization methods:
+- Use faster-whisper.
+- Use smaller Whisper models for quick commands.
+- Cache common TTS phrases.
+- Keep Piper model loaded.
+- Use push-to-talk instead of continuous listening.
+
+
+14. FAILURE MODES AND MITIGATIONS
+
+Risk: Bad transcription.
+Mitigation: Repeat command before critical actions.
+
+Risk: Background noise.
+Mitigation: Push-to-talk, noise gate, VAD.
+
+Risk: Accidental command execution.
+Mitigation: Confirmation and passcode layers.
+
+Risk: Memory contamination.
+Mitigation: No automatic memory writes.
+
+Risk: Slow responses.
+Mitigation: Faster-whisper, smaller model, cached TTS.
+
+Risk: Remote exposure.
+Mitigation: Tailscale/WireGuard, no public default port.
+
+Risk: User confusion.
+Mitigation: Simple voice states: Idle, Listening, Thinking, Speaking.
+
+
+15. COMMAND EXAMPLES
+
+Informational:
+“Jeeves, what is AZAI?”
+
+Operational:
+“Jeeves, run the baseline report.”
+System: “Confirm run baseline report?”
+
+Memory:
+“Jeeves, save this as a Lumen note.”
+System: “Confirm save to Lumen?”
+
+Critical:
+“Jeeves, disable remote access.”
+System: “Critical command. Confirm and enter passcode.”
+
+Cancel:
+“Abort command.”
+
+
+16. ENGINEERING PRIORITY ORDER
+
+Build in this order:
+
+1. Push-to-talk local microphone capture.
+2. Speech-to-text with faster-whisper.
+3. Text response placeholder.
+4. Piper TTS output.
+5. Basic black/gold UI.
+6. AZAI Core router.
+7. Lamb Lens filter.
+8. Command confirmation.
+9. Memory routing.
+10. Base server endpoint.
+11. iPhone remote terminal.
+12. T7 bootstrap packaging.
+13. Wake word mode.
+
+Do not build wake word first.
+Do not build critical commands before confirmation safety exists.
+Do not allow automatic memory writes.
+
+
+17. MINIMUM VIABLE PRODUCT
+
+The MVP is:
+
+- Windows app.
+- Push-to-talk button.
+- Local transcription.
+- Local TTS.
+- Text display of transcript and response.
+- No passive listening.
+- No command execution without confirmation.
+
+MVP loop:
+
+Hold to Speak
+-> Transcript appears
+-> AZAI responds in text
+-> AZAI speaks response
+
+
+18. FINAL BASELINE STATEMENT
+
+AZAI Voice is a controlled, local-first speech interface for Jeeves/AZAI. It does not create independent authority, does not bypass Lamb Lens ethics, does not auto-write memory, and does not execute commands without validation. Its purpose is to make AZAI more natural to use while preserving sovereignty, security, and structural integrity.
+
+One-line summary:
+AZAI Voice equals local push-to-talk Jeeves, routed through the same ethical, memory, and security stack as the rest of AZAI.
+
+
+END OF DOCUMENT
