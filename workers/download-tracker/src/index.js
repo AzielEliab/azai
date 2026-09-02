@@ -1,6 +1,9 @@
 import * as engine from "./engine.js";
+const EXAMPLE_PAYLOAD = {
+  "text": "hello"
+};
 
-const SKILL_MARKDOWN = "---\nname: AZAI\ndescription: Use when calling AZAI hosted /v1 or installing the local package. Author Aziel Eliab.\n---\n\n# AZAI\n\nAZAI is a local OpenAI-compatible runtime, not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Hosted /v1 is lamb-check ONLY, never a paid-key proxy. Author: Aziel Eliab.\n\n**THIS IS:** a local OpenAI-compatible runtime under the Lamb Lens. Jeeves is the instrument inside the shell.\n\n**THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware, a VPN, or a hosted paid-key proxy. Jeeves is not sovereign.\n\nAuthor: **Aziel Eliab**. Forks are welcome and always allowed. Apache-2.0.\n\nAlways send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.\n\n## Call these URLs\n\n- Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- Live skill (this markdown): `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n\nOps (do **not** increment downloads or views):\n\n| Method | Path | What |\n|--------|------|------|\n| GET | `/v1/health` | Liveness. Does not increment downloads. |\n| GET | `/v1/skill` | This markdown. Does not increment downloads. |\n| GET | `/v1/models` | Local model list. Hosted is not a paid proxy. |\n| POST | `/v1/lamb-check` | Lamb Lens check only. Hosted never spends paid keys. |\n\nGrok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.\n\n## Example\n\n```bash\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/health\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/skill\ncurl -s -A 'Mozilla/5.0' -X POST https://azai-download-tracker.vibelock.workers.dev/v1/lamb-check \\\n  -H 'content-type: application/json' \\\n  -d '{\"text\":\"peace clarity service\"}'\n```\n\n## Local (after one-click install)\n\n```bash\ncurl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash\nazai ui\n```\n\nThen open http://127.0.0.1:8860 (loopback only).\n\nCounted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.2.0.tar.gz\nGitHub: https://github.com/AzielEliab/azai\n";
+const SKILL_MARKDOWN = "---\nname: AZAI\ndescription: Use when calling AZAI hosted /v1 or installing the local package. Author Aziel Eliab.\n---\n\n# AZAI\n\nAZAI is a local OpenAI-compatible runtime, not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Hosted /v1 is lamb-check ONLY, never a paid-key proxy. Author: Aziel Eliab.\n\n**THIS IS:** a local OpenAI-compatible runtime under the Lamb Lens. Jeeves is the instrument inside the shell.\n\n**THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware, a VPN, or a hosted paid-key proxy. Jeeves is not sovereign.\n\nAuthor: **Aziel Eliab**. Forks are welcome and always allowed. Apache-2.0.\n\nAlways send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.\n\n## Call these URLs\n\n- Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- Live skill (this markdown): `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n\nOps (do **not** increment downloads or views):\n\n| Method | Path | What |\n|--------|------|------|\n| GET | `/v1/health` | Liveness. Does not increment downloads. |\n| GET | `/v1/skill` | This markdown. Does not increment downloads. |\n| GET | `/v1/models` | Local model list. Hosted is not a paid proxy. |\n| POST | `/v1/lamb-check` | Lamb Lens check only. Hosted never spends paid keys. |\n\nGrok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.\n\n## Example\n\n```bash\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/health\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/skill\ncurl -s -A 'Mozilla/5.0' -X POST https://azai-download-tracker.vibelock.workers.dev/v1/lamb-check \\\n  -H 'content-type: application/json' \\\n  -d '{\"text\":\"peace clarity service\"}'\n```\n\n## Local (after one-click install)\n\n```bash\ncurl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash\nazai ui\n```\n\nThen open http://127.0.0.1:8860 (loopback only).\n\nCounted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.2.0.tar.gz\nGitHub: https://github.com/AzielEliab/azai\n\n## Catalog + local UI\n\nAuthor: **Aziel Eliab**. Honest scope: Local OpenAI-compatible runtime. Not a new foundation model. Jeeves is not sovereign.\n\n- Catalog product: https://aziel-runtime.vibelock.workers.dev/p/azai/\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- Catalog MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- This Worker skill: `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n- This Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Sample payload: `GET https://azai-download-tracker.vibelock.workers.dev/v1/example`\n\nLocal UI: **Import JSON file** (`type=file`) and **Export JSON**. Then `azai doctor`.\n\nGrok: import catalog or Worker OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.\n";
 /**
  * AZAI download tracker (Cloudflare Worker).
  *
@@ -427,6 +430,7 @@ function openapiSpec(request) {
     },
     servers: [{ url: origin }],
     paths: {
+            "/v1/example": { get: { operationId: "azaiExample", summary: "Sample JSON payload. Does not increment downloads.", responses: { "200": { description: "OK" } } } },
       "/v1/health": { get: { operationId: "azai_health", summary: "Liveness. Does not increment download KV. Not a provider proxy.", responses: { "200": { description: "ok" } } } },
       "/v1/models": { get: { operationId: "azai_models", summary: "Protocol mirror of blend, gpt, grok, venice, local. Live blend is local azai serve.", responses: { "200": { description: "models" } } } },
       "/v1/lamb-check": {
@@ -482,7 +486,7 @@ async function handleRuntime(request, url) {
   const path = url.pathname.replace(/\/+$/, "") || "/";
   if (path === "/v1/health" && request.method === "GET") {
     return json({
-      ok: true,
+      ok: true, author: "Aziel Eliab",
       product: "azai",
       instrument: "Jeeves",
       runtime: true,
@@ -494,6 +498,16 @@ async function handleRuntime(request, url) {
       limitation: engine.LIMITATION,
     });
   }
+  if ((path === "/v1/example" || path === "/v1/example/") && (request.method === "GET" || request.method === "HEAD")) {
+    return json({
+      ok: true,
+      product: "azai",
+      author: "Aziel Eliab",
+      example: EXAMPLE_PAYLOAD,
+      note: "Sample payload only. Does not increment downloads.",
+    });
+  }
+
 
   if (path === "/v1/skill" && request.method === "GET") {
     return new Response(SKILL_MARKDOWN, {
