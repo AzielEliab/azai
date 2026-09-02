@@ -5,13 +5,11 @@ description: Use when calling AZAI hosted /v1 or installing the local package. A
 
 # AZAI
 
-AZAI is a local OpenAI-compatible runtime, not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Hosted /v1 is lamb-check ONLY, never a paid-key proxy. Author: Aziel Eliab.
+Local OpenAI-compatible runtime blending GPT, Grok, and Venice. Author: **Aziel Eliab**.
 
-**THIS IS:** a local OpenAI-compatible runtime under the Lamb Lens. Jeeves is the instrument inside the shell.
+**THIS IS:** a local OpenAI-compatible runtime that blends GPT, Grok, and Venice.
 
-**THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware, a VPN, or a hosted paid-key proxy. Jeeves is not sovereign.
-
-Author: **Aziel Eliab**. Forks are welcome and always allowed. Apache-2.0.
+**THIS IS NOT:** a foundation model, a paid-key proxy, or a truth verdict. Hosted `/v1` does not increment downloads or views.
 
 Always send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.
 
@@ -24,12 +22,9 @@ Always send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent
 
 Ops (do **not** increment downloads or views):
 
-| Method | Path | What |
-|--------|------|------|
-| GET | `/v1/health` | Liveness. Does not increment downloads. |
-| GET | `/v1/skill` | This markdown. Does not increment downloads. |
-| GET | `/v1/models` | Local model list. Hosted is not a paid proxy. |
-| POST | `/v1/lamb-check` | Lamb Lens check only. Hosted never spends paid keys. |
+- `GET /v1/health` — liveness
+- `GET /v1/skill` — this file
+- Product POSTs listed in OpenAPI
 
 Grok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.
 
@@ -38,9 +33,6 @@ Grok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.
 ```bash
 curl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/health
 curl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/skill
-curl -s -A 'Mozilla/5.0' -X POST https://azai-download-tracker.vibelock.workers.dev/v1/lamb-check \
-  -H 'content-type: application/json' \
-  -d '{"text":"peace clarity service"}'
 ```
 
 ## Local (after one-click install)
@@ -48,6 +40,7 @@ curl -s -A 'Mozilla/5.0' -X POST https://azai-download-tracker.vibelock.workers.
 ```bash
 curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash
 azai ui
+azai doctor
 ```
 
 Then open http://127.0.0.1:8860 (loopback only).
