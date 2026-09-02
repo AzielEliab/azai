@@ -273,6 +273,16 @@ mobile/               Flutter companion (`flutter create .`)
 workers/download-tracker/   Cloudflare Worker
 ```
 
+## Cite this
+
+Aziel Eliab. AZAI. https://github.com/AzielEliab/azai. https://azai-download-tracker.vibelock.workers.dev.
+
+- Catalog: https://aziel-runtime.vibelock.workers.dev/
+- Worker homepage: https://azai-download-tracker.vibelock.workers.dev/
+- Counted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download
+- GitHub: https://github.com/AzielEliab/azai
+- Citation JSON: https://azai-download-tracker.vibelock.workers.dev/cite.json
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE).
