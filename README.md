@@ -19,6 +19,40 @@ See the spec: [docs/whitepaper.md](docs/whitepaper.md). Source papers:
 
 **Forks are welcome and always allowed.**
 
+
+## One-click install
+
+```bash
+curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash
+```
+
+The script curls the **counted** tarball from this project's Worker
+(`/download`, User-Agent `Mozilla/5.0`), extracts, makes a venv, and
+`pip install -e .`. Then run `azai ui`.
+
+Or tap **Download** / **One-click install** on the Worker homepage
+(a 6th-grader can tap it):
+https://azai-download-tracker.vibelock.workers.dev/
+
+## Counted download (Cloudflare Worker)
+
+**This is the counted download.** GitHub releases exist as a mirror.
+The Worker serves the gzip itself (HTTP 200, no 302 to GitHub).
+
+# → [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/) ←
+
+Direct tarball (also counted):
+[azai-0.2.0.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.2.0.tar.gz)
+
+- Live count JSON: [https://azai-download-tracker.vibelock.workers.dev/stats](https://azai-download-tracker.vibelock.workers.dev/stats)
+- OpenAPI: [https://azai-download-tracker.vibelock.workers.dev/openapi.json](https://azai-download-tracker.vibelock.workers.dev/openapi.json)
+- Skill: [https://azai-download-tracker.vibelock.workers.dev/v1/skill](https://azai-download-tracker.vibelock.workers.dev/v1/skill)
+- One-click install: [https://azai-download-tracker.vibelock.workers.dev/install.sh](https://azai-download-tracker.vibelock.workers.dev/install.sh)
+- GitHub: [https://github.com/AzielEliab/azai](https://github.com/AzielEliab/azai)
+
+Isolated counter: Worker `azai-download-tracker`, KV `AZAI_DOWNLOADS`. Not mixed with any other product. `/v1` does not increment downloads.
+
+
 ## Quick start (3 steps)
 
 1. **Install**
