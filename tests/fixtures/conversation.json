@@ -1,0 +1,7 @@
+{
+  "product": "azai",
+  "messages": [
+    {"role": "user", "content": "hello from json"},
+    {"role": "assistant", "content": "Jeeves here. Not sovereign."}
+  ]
+}

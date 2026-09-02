@@ -1,12 +1,12 @@
 # AZAI — iPhone & Android companion
 
-Ask Jeeves, read receipts, view integrity, seal runtime. Constitutional
+Ask Jeeves, read receipts, view integrity, seal runtime, export/share text. Constitutional
 edits, deep settings, key rotation, and vault export are **blocked**.
 
 Dark gold. Application id: `com.azieeliab.azai`
 
 The intelligence engine is the desktop `azai` package (`azai serve` on
-127.0.0.1:8860). This app is a companion surface.
+127.0.0.1:8860). This app is a companion surface (v0.2.0). Text + export share.
 
 ## Open in Android Studio / Xcode
 

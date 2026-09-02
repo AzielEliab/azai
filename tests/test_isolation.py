@@ -80,7 +80,7 @@ def test_worker_isolated() -> None:
     assert "/download" in toml
     src = (ROOT / "workers" / "download-tracker" / "src" / "index.js").read_text(encoding="utf-8")
     assert 'const PROJECT = "azai"' in src
-    assert "azai-0.1.0.tar.gz" in src
+    assert "azai-0.2.0.tar.gz" in src
     assert "azai|__total__" in src or 'PROJECT + "|__total__"' in src
     assert "Isolated counter" in src
     assert "env.ASSETS.fetch" in src

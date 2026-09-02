@@ -1,0 +1,2 @@
+user: What is a receipt?
+assistant: A receipt is a signed record of what the shell permitted.

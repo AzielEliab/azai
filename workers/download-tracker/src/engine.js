@@ -8,7 +8,7 @@
  */
 
 export const LIMITATION =
-  "AZAI is a local OpenAI-compatible runtime, not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Lamb Lens (peace, clarity, service) gates every turn. Hub is a blank key: it does not interpret meaning. Hosted /v1 is a protocol mirror + Lamb check + models list, NOT a proxy that spends the author's paid keys. Constitutional gate, not a proof of ethics.";
+  "AZAI is a local OpenAI-compatible runtime, not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Lamb Lens (peace, clarity, service) gates every turn. Hub is a blank key: it does not interpret meaning. Hosted /v1 is lamb-check ONLY (plus a protocol mirror of health/models), NOT a proxy that spends the author's paid keys. Never a paid-key proxy. Constitutional gate, not a proof of ethics.";
 
 export const MODELS = ["blend", "gpt", "grok", "venice", "local"];
 

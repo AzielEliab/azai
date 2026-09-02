@@ -1,6 +1,7 @@
 """AZAI runtime: Lamb gate, blend, seal, memory, OpenAI-compat chat.
 
 Paid provider calls happen here on the operator's machine.
+Session transcript is import/exportable. Receipts stay append-only.
 """
 
 from __future__ import annotations
@@ -12,6 +13,9 @@ from pathlib import Path
 from typing import Any
 
 from azai.config import LIMITATION, MODELS
+from azai.debug import dlog
+from azai.exchange import bundle as make_bundle
+from azai.exchange import parse_conversation, simple_text, to_markdown
 from azai.jeeves import local_reply
 from azai.lamb import check_text, is_fail
 from azai.providers import provider_status, try_named
@@ -50,8 +54,11 @@ class Runtime:
         self.data_dir = resolve_data_dir(str(data_dir) if data_dir else None)
         self.receipts = ReceiptLog(self.data_dir)
         self.state_path = self.data_dir / "runtime.json"
+        self.session_path = self.data_dir / "session.json"
         self._session_memory: list[str] = []
+        self._transcript: list[dict[str, Any]] = []
         self._load_state()
+        self._load_session()
 
     def _load_state(self) -> None:
         if self.state_path.exists():
@@ -66,6 +73,28 @@ class Runtime:
     def _save_state(self) -> None:
         self.state_path.write_text(json.dumps(self._state, indent=2) + "\n", encoding="utf-8")
 
+    def _load_session(self) -> None:
+        if not self.session_path.exists():
+            self._transcript = []
+            return
+        try:
+            data = json.loads(self.session_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            self._transcript = []
+            return
+        msgs = data.get("messages") if isinstance(data, dict) else data
+        if isinstance(msgs, list):
+            self._transcript = [m for m in msgs if isinstance(m, dict)]
+        else:
+            self._transcript = []
+
+    def _save_session(self) -> None:
+        payload = {"messages": self._transcript}
+        self.session_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    def transcript(self) -> list[dict[str, Any]]:
+        return list(self._transcript)
+
     @property
     def sealed(self) -> bool:
         return bool(self._state.get("sealed"))
@@ -74,12 +103,14 @@ class Runtime:
         self._state["sealed"] = True
         self._save_state()
         rec = self.receipts.append("seal", "SEALED", extra={"reason": reason})
+        dlog("seal", reason=reason)
         return {"ok": True, "sealed": True, "receipt": rec["hash"]}
 
     def open(self, reason: str = "operator") -> dict[str, Any]:
         self._state["sealed"] = False
         self._save_state()
         rec = self.receipts.append("open", "OPEN", extra={"reason": reason})
+        dlog("open", reason=reason)
         return {"ok": True, "sealed": False, "receipt": rec["hash"]}
 
     def integrity(self, sample: str = "") -> dict[str, Any]:
@@ -120,10 +151,41 @@ class Runtime:
             "note": "Session-only by default. Not written as verified memory.",
         }
 
+    def _record(self, role: str, content: str, **extra: Any) -> None:
+        row: dict[str, Any] = {"role": role, "content": content}
+        row.update(extra)
+        self._transcript.append(row)
+        self._save_session()
+
+    def import_text(self, content: str, filename: str = "") -> dict[str, Any]:
+        messages = parse_conversation(content, filename=filename)
+        return self.import_messages(messages, source=filename or "import")
+
+    def import_messages(self, messages: list[dict[str, str]], source: str = "import") -> dict[str, Any]:
+        self._transcript = []
+        for m in messages:
+            role = str(m.get("role") or "user")
+            body = str(m.get("content") or "")
+            self._transcript.append({"role": role, "content": body})
+        self._save_session()
+        rec = self.receipts.append("import", "OK", extra={"n": len(self._transcript), "source": source})
+        dlog("import", n=len(self._transcript), source=source)
+        return {"ok": True, "count": len(self._transcript), "receipt": rec["hash"], "messages": self.transcript()}
+
+    def export_bundle(self) -> dict[str, Any]:
+        return make_bundle(self.transcript(), self.receipts.read(), self.receipts.verify())
+
+    def export_json(self) -> str:
+        return json.dumps(self.export_bundle(), indent=2) + "\n"
+
+    def export_markdown(self) -> str:
+        return to_markdown(self.export_bundle())
+
     def _blend(self, messages: list[dict[str, str]]) -> str:
         parts: list[str] = []
         available: list[str] = []
         for name in BLEND_SOURCES:
+            dlog("provider", name=name)
             text, ok = try_named(name, messages)
             parts.append(f"[{name}]\n{text.strip()}")
             if ok:
@@ -148,8 +210,10 @@ class Runtime:
         model = (model or "blend").lower().strip()
         if model not in MODELS:
             model = "blend"
+        dlog("chat", model=model, n=len(prompt or ""))
         if self.sealed:
             rec = self.receipts.append("chat_blocked", "SEALED", extra={"model": model})
+            self._record("user", prompt, blocked="sealed")
             raise SealedError("runtime is sealed — Jeeves locked; receipts remain readable") from None
 
         lamb_in = check_text(prompt)
@@ -159,6 +223,7 @@ class Runtime:
                 "FAIL",
                 extra={"peace": lamb_in["peace"], "clarity": lamb_in["clarity"], "service": lamb_in["service"]},
             )
+            self._record("user", prompt, lamb="FAIL")
             raise LambBlocked(lamb_in, "prompt")
 
         messages = [{"role": "user", "content": prompt}]
@@ -186,6 +251,7 @@ class Runtime:
         lamb_out = check_text(content)
         if is_fail(lamb_out):
             rec = self.receipts.append("lamb_fail_output", "FAIL", extra={"model": model})
+            self._record("user", prompt, lamb="FAIL", stage="output")
             raise LambBlocked(lamb_out, "output")
 
         rec = self.receipts.append(
@@ -193,8 +259,17 @@ class Runtime:
             lamb_out["overall"],
             extra={"model": model, "lamb_in": lamb_in["overall"], "lamb_out": lamb_out["overall"]},
         )
+        self._record("user", prompt)
+        self._record(
+            "assistant",
+            content,
+            model=model,
+            receipt=rec["hash"],
+            lamb=lamb_out["overall"],
+        )
         return {
             "content": content,
+            "simple": simple_text(content),
             "model": model,
             "lamb_in": lamb_in,
             "lamb_out": lamb_out,
@@ -245,6 +320,8 @@ class Runtime:
                 "lamb_out": result["lamb_out"],
                 "receipt": result["receipt"],
                 "limitation": LIMITATION,
+                "simple": result["simple"],
+                "hosted_v1": "lamb-check-only",
             },
         }
 

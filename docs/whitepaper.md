@@ -1,4 +1,4 @@
-# AZAI — local OpenAI-compatible runtime (v0.1.0)
+# AZAI — local OpenAI-compatible runtime (v0.2.0)
 
 Aziel Artificial Intelligence. Shell: **AZAI**. Instrument: **Jeeves**.
 Author: Aziel Eliab, 2026. Apache-2.0.
@@ -77,3 +77,14 @@ Copied into `docs/source/`:
 
 Jeeves speaks inside the shell. Lamb Lens governs above the shell.
 Receipts witness what the shell permits.
+
+
+## v0.2.0
+
+Loopback UI at 127.0.0.1:8860 with one chat box, Send, Check this text,
+Peace / Clarity / Service chips, a sample prompt, and Simple / Advanced
+views. Import `.txt` / JSON conversations. Export chat + receipts as JSON
+and Markdown. `azai doctor` verifies Lamb fixtures, loopback, receipts,
+max body, no telemetry, and that the Worker holds no keys and is not a
+paid-key proxy. `AZAI_DEBUG=1` prints local stderr traces (keys redacted).
+Hosted `/v1` is lamb-check ONLY.

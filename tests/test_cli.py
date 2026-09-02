@@ -6,7 +6,7 @@ from azai.cli import main
 def test_cli_version(capsys) -> None:
     assert main(["version"]) == 0
     out = capsys.readouterr().out
-    assert "azai 0.1.0" in out
+    assert "azai 0.2.0" in out
 
 
 def test_cli_models(capsys) -> None:

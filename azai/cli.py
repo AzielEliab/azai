@@ -8,6 +8,9 @@
     azai integrity
     azai seal / azai open
     azai receipts
+    azai doctor
+    azai import PATH
+    azai export --format json|md
 
 Loopback UI: `azai ui` at http://127.0.0.1:8860.
 """
@@ -17,10 +20,12 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 from typing import Sequence
 
 from azai import __version__
 from azai.config import LAN_RISK, LIMITATION, MODELS, UI_HOST, UI_PORT
+from azai.debug import dlog
 from azai.runtime import LambBlocked, Runtime, SealedError, models_payload, resolve_data_dir
 
 
@@ -31,7 +36,8 @@ def _build_parser() -> argparse.ArgumentParser:
             "AZAI (Aziel Artificial Intelligence) — local OpenAI-compatible runtime "
             "that blends GPT, Grok, and Venice under the Lamb Lens. "
             "Jeeves is the instrument inside the shell and is not sovereign. "
-            "Loopback UI: `azai ui` at http://127.0.0.1:8860."
+            "Loopback UI: `azai ui` at http://127.0.0.1:8860. "
+            "Hosted /v1 is lamb-check only, never a paid-key proxy."
         ),
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -53,6 +59,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p_chat.add_argument("--message", required=True)
     p_chat.add_argument("--data", default=None)
     p_chat.add_argument("--json", action="store_true", dest="as_json")
+    p_chat.add_argument("--simple", action="store_true", help="Print the simple (6th-grader) view of blend output.")
 
     p_models = sub.add_parser("models", help="List blend, gpt, grok, venice, local.")
     p_models.add_argument("--json", action="store_true", dest="as_json")
@@ -76,6 +83,20 @@ def _build_parser() -> argparse.ArgumentParser:
     p_mem.add_argument("--confirm", action="store_true")
     p_mem.add_argument("--data", default=None)
 
+    p_doc = sub.add_parser("doctor", help="Local self-check: Lamb fixtures, loopback, receipts, no Worker keys.")
+    p_doc.add_argument("--data", default=None)
+    p_doc.add_argument("--json", action="store_true", dest="as_json")
+
+    p_imp = sub.add_parser("import", help="Import a .txt or JSON conversation (replaces session transcript).")
+    p_imp.add_argument("path", help="Path to .txt or .json")
+    p_imp.add_argument("--data", default=None)
+    p_imp.add_argument("--json", action="store_true", dest="as_json")
+
+    p_exp = sub.add_parser("export", help="Export chat + receipts as JSON or Markdown.")
+    p_exp.add_argument("--format", choices=("json", "md"), default="json")
+    p_exp.add_argument("--out", default=None, help="Write to this path instead of stdout.")
+    p_exp.add_argument("--data", default=None)
+
     return parser
 
 
@@ -86,6 +107,7 @@ def _rt(args) -> Runtime:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(list(argv) if argv is not None else None)
+    dlog("cli", cmd=args.cmd)
 
     if args.cmd == "version":
         print(f"azai {__version__}")
@@ -158,6 +180,44 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(rt.remember(args.text, confirm=args.confirm), indent=2))
         return 0 if args.confirm else 2
 
+    if args.cmd == "doctor":
+        from azai.doctor import format_report, run
+
+        payload = run(data_dir=args.data)
+        if args.as_json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(format_report(payload))
+        return 0 if payload.get("ok") else 1
+
+    if args.cmd == "import":
+        path = Path(args.path)
+        if not path.is_file():
+            print(f"import not found: {path}", file=sys.stderr)
+            return 2
+        text = path.read_text(encoding="utf-8")
+        rt = _rt(args)
+        try:
+            result = rt.import_text(text, filename=path.name)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+        if args.as_json:
+            print(json.dumps(result, indent=2))
+        else:
+            print(f"imported {result['count']} messages from {path.name}")
+        return 0
+
+    if args.cmd == "export":
+        rt = _rt(args)
+        body = rt.export_markdown() if args.format == "md" else rt.export_json()
+        if args.out:
+            Path(args.out).write_text(body, encoding="utf-8")
+            print(args.out)
+        else:
+            print(body, end="" if body.endswith("\n") else "\n")
+        return 0
+
     if args.cmd == "chat":
         rt = _rt(args)
         try:
@@ -171,7 +231,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.as_json:
             print(json.dumps(result, indent=2))
         else:
-            print(result["content"])
+            print(result["simple"] if args.simple else result["content"])
         return 0
 
     print(LIMITATION, file=sys.stderr)

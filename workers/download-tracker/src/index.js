@@ -2,7 +2,7 @@ import * as engine from "./engine.js";
 /**
  * AZAI download tracker (Cloudflare Worker).
  *
- * GET  /download?asset=azai-0.1.0.tar.gz
+ * GET  /download?asset=azai-0.2.0.tar.gz
  *      increments KV, serves the tarball via env.ASSETS.fetch
  *      (does not 302 to GitHub)
  * GET  /stats   JSON totals + per-repo + per-branch breakdown
@@ -19,7 +19,8 @@ import * as engine from "./engine.js";
  */
 
 const PROJECT = "azai";
-const DEFAULT_ASSET = "azai-0.1.0.tar.gz";
+const DEFAULT_ASSET = "azai-0.2.0.tar.gz";
+const MAX_BODY = 1048576;
 const DEFAULT_OWNER = "AzielEliab";
 const DEFAULT_REPO = "azai";
 const DEFAULT_BRANCH = "main";
@@ -206,7 +207,7 @@ async function indexHtml(env) {
   <p class="motto">Jeeves speaks inside the shell. Lamb Lens governs above the shell. Receipts witness what the shell permits.</p>
   <div class="card">
     <p class="count">${n}<span> downloads of this project</span></p>
-    <a class="dl" href="/download?asset=azai-0.1.0.tar.gz">Download azai-0.1.0.tar.gz — ${n} counted</a>
+    <a class="dl" href="/download?asset=azai-0.2.0.tar.gz">Download azai-0.2.0.tar.gz — ${n} counted</a>
     <p class="meta">The count ticks on this click. Nobody reports anything. Forks using this same link are counted automatically.</p>
     <p class="iso">Isolated counter: Worker <code>azai-download-tracker</code>, project <code>azai</code>. Not mixed with any other product.</p>
     <p class="limit">Not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Hosted /v1 is a protocol mirror + Lamb check, not a provider proxy. Forks welcome and always allowed.</p>
@@ -236,8 +237,8 @@ function openapiSpec(request) {
     openapi: "3.1.0",
     info: {
       title: "AZAI hosted runtime",
-      version: "0.1.0",
-      summary: "Protocol mirror + Lamb check. Not a provider proxy. Jeeves is not sovereign.",
+      version: "0.2.0",
+      summary: "Hosted /v1 is lamb-check ONLY (plus health/models). Never a paid-key proxy. Jeeves is not sovereign.",
       description: engine.LIMITATION,
     },
     servers: [{ url: origin }],
@@ -303,6 +304,7 @@ async function handleRuntime(request, url) {
       runtime: true,
       kv_increment: false,
       provider_proxy: false,
+      hosted_v1: "lamb-check-only",
       not_a_foundation_model: true,
       jeeves_sovereign: false,
       limitation: engine.LIMITATION,
@@ -317,16 +319,28 @@ async function handleRuntime(request, url) {
   if ((path === "/ai" || url.pathname === "/ai/") && request.method === "GET") {
     return html(aiHelpPage(request));
   }
+  if (path === "/v1/chat/completions" || path === "/v1/chat") {
+    return json({
+      error: "hosted /v1 is lamb-check ONLY, never a paid-key proxy",
+      provider_proxy: false,
+      hint: "Paid GPT/Grok/Venice calls happen on local azai serve (127.0.0.1:8860).",
+      limitation: engine.LIMITATION,
+    }, 403);
+  }
   if ((path === "/v1/lamb-check" || path === "/v1/lamb_check") && request.method === "POST") {
+    const buf = await request.arrayBuffer();
+    if (buf.byteLength > MAX_BODY) {
+      return json({ error: "payload too large", max: MAX_BODY, provider_proxy: false }, 413);
+    }
     let body;
-    try { body = await request.json(); } catch {
+    try { body = JSON.parse(new TextDecoder().decode(buf) || "{}"); } catch {
       return json({ error: "JSON body required", limitation: engine.LIMITATION }, 400);
     }
     const text = (body && (body.text || body.prompt)) || "";
     return json(engine.lambCheck(text));
   }
   if (path.startsWith("/v1/") || path === "/v1") {
-    return json({ error: "not found", hint: "GET /v1/health /v1/models ; POST /v1/lamb-check", limitation: engine.LIMITATION, provider_proxy: false }, 404);
+    return json({ error: "not found", hint: "GET /v1/health /v1/models ; POST /v1/lamb-check — hosted /v1 is lamb-check ONLY, never a paid-key proxy", limitation: engine.LIMITATION, provider_proxy: false }, 404);
   }
   return null;
 }

@@ -26,11 +26,12 @@ in-process. Do not set live API keys in CI.
    gates every turn. Hub is a blank key: it does not interpret meaning.
 3. **Blend is visible.** When mode=blend, label `[gpt]` `[grok]`
    `[venice]` then `[synthesis]`. Never hide which model said what.
-4. **Hosted Worker is not a provider proxy.** `/v1` is protocol mirror
-   + Lamb check + models list. Paid calls happen on the operator's
-   local `azai serve`.
+4. **Hosted Worker `/v1` is lamb-check ONLY.** Never a paid-key proxy.
+   Health and models are a protocol mirror. Paid calls happen on the
+   operator's local `azai serve`.
 5. **UI binds 127.0.0.1:8860 by default.** `--host` for on-site LAN is
    documented risk (it can spend the operator's keys). Prefer loopback.
+   Max POST body is 1 MiB. No telemetry. No keys in the Worker.
 6. **Voice is optional extra `[voice]`.** MVP is text. Push-to-talk
    only; no wake word; no passive recording; voice does not execute
    commands. Do not vendor Whisper/Piper models in the tarball.
@@ -48,7 +49,10 @@ in-process. Do not set live API keys in CI.
 - Providers: `azai/providers.py`
 - Runtime / blend / seal: `azai/runtime.py`
 - Receipts: `azai/receipts.py`
-- CLI: `azai/cli.py`
+- CLI: `azai/cli.py` (`azai doctor`, import/export)
+- Import/export: `azai/exchange.py`
+- Doctor: `azai/doctor.py`
+- Debug (`AZAI_DEBUG=1`): `azai/debug.py`
 - Local UI + `/v1`: `azai/ui.py`, `azai/web/`
 - Spec: `docs/whitepaper.md`
 - Source papers: `docs/source/`

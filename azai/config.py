@@ -22,6 +22,38 @@ VENICE_MODEL = "llama-3.3-70b"
 
 PROVIDER_TIMEOUT = 30.0
 
+# Hardening: refuse oversized POSTs (local UI and hosted lamb-check).
+MAX_BODY_BYTES = 1_048_576  # 1 MiB
+
+SAMPLE_PROMPT = "Explain receipts in one sentence, please."
+
+VIEWS = ("simple", "advanced")
+
+# Phrases that must never appear in the loopback UI or Worker (no telemetry).
+TELEMETRY_FORBIDDEN = (
+    "google-analytics",
+    "googletagmanager",
+    "gtag(",
+    "mixpanel",
+    "segment.io",
+    "sentry.io",
+    "amplitude.com",
+    "hotjar",
+    "fullstory",
+)
+
+# Hosted Worker must never contain these as live secrets or provider calls.
+WORKER_KEY_MARKERS = (
+    "sk-",
+    "xai-",
+    "Bearer ",
+)
+WORKER_PROVIDER_HOSTS = (
+    "api.openai.com",
+    "api.x.ai",
+    "api.venice.ai",
+)
+
 LIMITATION = (
     "AZAI is a local OpenAI-compatible runtime, not a new foundation model, "
     "not a kernel, not a worm, not IP-blocking malware, not a VPN. "
@@ -34,8 +66,8 @@ LIMITATION = (
     "no passive recording; voice does not execute commands. "
     "Memory writes require explicit confirm. Session-only by default. "
     "Paid GPT/Grok/Venice calls happen on the operator's local azai serve. "
-    "The hosted Cloudflare /v1 is a protocol mirror + Lamb check + models list, "
-    "NOT a proxy that spends the author's paid keys. "
+    "The hosted Cloudflare /v1 is lamb-check ONLY (plus a protocol mirror of "
+    "health/models), NOT a proxy that spends the author's paid keys. "
     "Lamb Lens is a constitutional gate, not a proof of ethics. "
     "Jeeves speaks inside the shell. Lamb Lens governs above the shell. "
     "Receipts witness what the shell permits."

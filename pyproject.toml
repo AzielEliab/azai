@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "azai"
-version = "0.1.0"
+version = "0.2.0"
 description = "AZAI: local OpenAI-compatible runtime that blends GPT, Grok, and Venice under the Lamb Lens. Jeeves is not sovereign."
 readme = "README.md"
 license = {file = "LICENSE"}

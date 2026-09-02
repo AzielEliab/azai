@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'theme.dart';
 
@@ -8,10 +10,11 @@ void main() {
 }
 
 const String limitation =
-    'AZAI companion. Ask Jeeves, read receipts, view integrity, seal runtime. '
-    'Constitutional edits are blocked. Deep settings, key rotation, and vault '
-    'export are blocked. The engine is the desktop azai package on '
-    '127.0.0.1:8860. Jeeves is not sovereign. Not a new foundation model.';
+    'AZAI companion. Ask Jeeves, read receipts, view integrity, seal runtime, '
+    'export/share text. Constitutional edits are blocked. Deep settings, key '
+    'rotation, and vault export are blocked. The engine is the desktop azai '
+    'package on 127.0.0.1:8860. Jeeves is not sovereign. Not a new foundation '
+    'model. Hosted /v1 is lamb-check only, never a paid-key proxy.';
 
 class AzaiApp extends StatelessWidget {
   const AzaiApp({super.key});
@@ -51,6 +54,28 @@ class _AzaiHomeState extends State<AzaiHome> {
     super.dispose();
   }
 
+  String _exportMarkdown() {
+    final buf = StringBuffer();
+    buf.writeln('# AZAI conversation');
+    buf.writeln();
+    buf.writeln('Jeeves is not sovereign. Lamb Lens governs every turn.');
+    buf.writeln();
+    buf.writeln('## Chat');
+    buf.writeln();
+    for (final row in _chat) {
+      buf.writeln(row);
+      buf.writeln();
+    }
+    buf.writeln('## Receipts');
+    buf.writeln();
+    for (final row in _receipts.take(12)) {
+      buf.writeln('- $row');
+    }
+    buf.writeln();
+    buf.writeln('_Apache-2.0, Aziel Eliab. Companion export, v0.2.0._');
+    return buf.toString();
+  }
+
   void _ask() {
     final text = _prompt.text.trim();
     if (text.isEmpty) return;
@@ -72,11 +97,33 @@ class _AzaiHomeState extends State<AzaiHome> {
     });
   }
 
+  Future<void> _exportShare() async {
+    final md = _exportMarkdown();
+    try {
+      await Share.share(md, subject: 'AZAI conversation');
+    } catch (_) {
+      await Clipboard.setData(ClipboardData(text: md));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Export copied. Paste to share.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final locked = _runtime == 'SEALED';
     return Scaffold(
-      appBar: AppBar(title: const Text('AZAI Remote')),
+      appBar: AppBar(
+        title: const Text('AZAI Remote'),
+        actions: [
+          IconButton(
+            tooltip: 'Export / share',
+            onPressed: _exportShare,
+            icon: const Icon(Icons.ios_share),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -97,17 +144,22 @@ class _AzaiHomeState extends State<AzaiHome> {
             enabled: !locked,
             decoration: const InputDecoration(
               labelText: 'Ask Jeeves',
-              helperText: 'Companion only. Constitutional edits blocked.',
+              helperText: 'Companion only. Constitutional edits blocked. Text + export share.',
             ),
           ),
           const SizedBox(height: 12),
-          Row(
+          Wrap(
+            spacing: 12,
+            runSpacing: 8,
             children: [
               FilledButton(onPressed: locked ? null : _ask, child: const Text('Ask Jeeves')),
-              const SizedBox(width: 12),
               OutlinedButton(
                 onPressed: _seal,
                 child: Text(locked ? 'Open Runtime' : 'Seal Runtime'),
+              ),
+              OutlinedButton(
+                onPressed: _exportShare,
+                child: const Text('Export / Share'),
               ),
             ],
           ),

@@ -6,10 +6,10 @@
   <title>AZAI — Jeeves</title>
   <link rel="stylesheet" href="/style.css">
 </head>
-<body>
+<body data-view="simple">
   <header class="top">
     <div class="brand">
-      <div class="tag">AZAI · v0.1.0 · loopback · Jeeves inside the shell</div>
+      <div class="tag">AZAI · v0.2.0 · loopback · Jeeves inside the shell</div>
       <h1>AZAI</h1>
       <p class="motto">Jeeves speaks inside the shell. Lamb Lens governs above the shell. Receipts witness what the shell permits.</p>
     </div>
@@ -23,16 +23,27 @@
   </header>
 
   <aside class="banner limit" role="note">
-    Local OpenAI-compatible runtime — not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN.
-    Jeeves is not sovereign. Hub is a blank key: it does not interpret meaning.
-    Blend is visible: gpt / grok / venice are labeled, then a short synthesis.
-    Without keys, local Jeeves runs and does not pretend to be GPT.
+    Type a question. Press <strong>Send</strong>. Jeeves is not sovereign.
+    <strong>Check this text</strong> runs the Lamb Lens only — it does not call GPT, Grok, or Venice.
+    Hosted cloud <code>/v1</code> is lamb-check only, never a paid-key proxy.
     Point other software at <code>OPENAI_BASE_URL=http://127.0.0.1:8860/v1</code> with a dummy key.
   </aside>
 
+  <div class="toolbar">
+    <div class="view-toggle" role="group" aria-label="View">
+      <button type="button" id="view-simple" class="on">Simple</button>
+      <button type="button" id="view-advanced">Advanced</button>
+    </div>
+    <div id="chips" class="chips" aria-label="Lamb Lens">
+      <span class="chip" data-axis="peace">Peace —</span>
+      <span class="chip" data-axis="clarity">Clarity —</span>
+      <span class="chip" data-axis="service">Service —</span>
+    </div>
+  </div>
+
   <main class="layout">
     <section class="chat" id="workspace">
-      <div class="chat-head">
+      <div class="chat-head advanced-only">
         <label for="model">
           <span class="kicker">Model</span>
         </label>
@@ -48,16 +59,24 @@
       </div>
       <div id="transcript" class="transcript" aria-live="polite"></div>
       <form id="prompt-form">
-        <label for="prompt"><span class="kicker">Ask Jeeves</span></label>
-        <textarea id="prompt" rows="3" placeholder="All output remains subordinate to Lamb Lens and formal rules."></textarea>
+        <label for="prompt"><span class="kicker">One chat box</span></label>
+        <textarea id="prompt" rows="3" placeholder="Type here. Try the sample prompt if you are stuck."></textarea>
         <div class="actions">
-          <button type="submit">Ask Jeeves</button>
-          <button type="button" id="integrity-btn" class="ghost">Integrity</button>
+          <button type="submit" id="send">Send</button>
+          <button type="button" id="lamb-btn">Check this text</button>
+          <button type="button" id="sample-btn" class="ghost">Sample prompt</button>
+          <button type="button" id="integrity-btn" class="ghost advanced-only">Integrity</button>
+        </div>
+        <div class="actions files">
+          <button type="button" id="import-btn" class="ghost">Import .txt / JSON</button>
+          <button type="button" id="export-json" class="ghost">Export JSON</button>
+          <button type="button" id="export-md" class="ghost">Export Markdown</button>
+          <input type="file" id="import-file" accept=".txt,.json,text/plain,application/json" hidden>
         </div>
       </form>
     </section>
 
-    <aside class="rail">
+    <aside class="rail advanced-only">
       <h2>Receipts</h2>
       <ol id="receipts" class="receipts"></ol>
       <h2>Integrity</h2>
@@ -69,9 +88,11 @@
     </aside>
   </main>
 
+  <p id="debug-strip" class="debug-strip" hidden></p>
+
   <footer>
     <p>Apache-2.0 · Aziel Eliab · 2026 · Bound to 127.0.0.1:8860 · Forks welcome and always allowed.</p>
-    <p class="foot-note">Voice is optional extra; MVP is text. Push-to-talk only; no wake word; no passive recording.</p>
+    <p class="foot-note">Voice is optional extra; MVP is text. Push-to-talk only; no wake word; no passive recording. No telemetry.</p>
   </footer>
   <script src="/app.js"></script>
 </body>
