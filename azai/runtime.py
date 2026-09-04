@@ -16,7 +16,7 @@ from azai.config import DEFAULT_MODEL, LIMITATION, MODELS
 from azai.debug import dlog
 from azai.exchange import bundle as make_bundle
 from azai.exchange import parse_conversation, simple_text, to_markdown
-from azai.jeeves import local_reply, wrap_messages
+from azai.jeeves import local_reply, sanitize_site_context, wrap_messages
 from azai.lamb import check_text, is_fail
 from azai.providers import provider_status, try_named
 from azai.receipts import ReceiptLog
@@ -207,11 +207,18 @@ class Runtime:
         parts.append(f"[synthesis]\n{synth}")
         return "\n\n".join(parts)
 
-    def chat(self, prompt: str, model: str = DEFAULT_MODEL) -> dict[str, Any]:
+    def chat(
+        self,
+        prompt: str,
+        model: str = DEFAULT_MODEL,
+        site_context: Any = None,
+    ) -> dict[str, Any]:
         model = (model or DEFAULT_MODEL).lower().strip()
         if model not in MODELS:
             model = DEFAULT_MODEL
-        dlog("chat", model=model, n=len(prompt or ""))
+        cleaned_context = sanitize_site_context(site_context)
+        context_n = len(cleaned_context)
+        dlog("chat", model=model, n=len(prompt or ""), site_context_n=context_n)
         if self.sealed:
             rec = self.receipts.append("chat_blocked", "SEALED", extra={"model": model})
             self._record("user", prompt, blocked="sealed")
@@ -237,7 +244,7 @@ class Runtime:
                     + "\n".join(self._session_memory[-8:]),
                 },
             )
-        messages = wrap_messages(messages)
+        messages = wrap_messages(messages, site_context=cleaned_context)
 
         if model in {"local", "ollama"}:
             content = local_reply(prompt, lamb_in, messages=messages)
@@ -259,7 +266,12 @@ class Runtime:
         rec = self.receipts.append(
             "chat",
             lamb_out["overall"],
-            extra={"model": model, "lamb_in": lamb_in["overall"], "lamb_out": lamb_out["overall"]},
+            extra={
+                "model": model,
+                "lamb_in": lamb_in["overall"],
+                "lamb_out": lamb_out["overall"],
+                "site_context_n": context_n,
+            },
         )
         self._record("user", prompt)
         self._record(
@@ -268,6 +280,7 @@ class Runtime:
             model=model,
             receipt=rec["hash"],
             lamb=lamb_out["overall"],
+            site_context_n=context_n,
         )
         return {
             "content": content,
@@ -277,18 +290,27 @@ class Runtime:
             "lamb_out": lamb_out,
             "receipt": rec["hash"],
             "sealed": False,
+            "ask_jeeves": True,
+            "jeeves_sovereign": False,
+            "site_context_n": context_n,
         }
 
     def openai_completion(self, body: dict[str, Any]) -> dict[str, Any]:
         messages = body.get("messages") or []
         model = str(body.get("model") or DEFAULT_MODEL)
+        azai_extra = body.get("azai") if isinstance(body.get("azai"), dict) else {}
+        site_context = (
+            body.get("site_context")
+            or body.get("corpus_context")
+            or azai_extra.get("site_context")
+        )
         prompt_parts = []
         for msg in messages:
             if msg.get("role") == "user":
                 prompt_parts.append(str(msg.get("content") or ""))
         prompt = "\n".join(prompt_parts) or str(body.get("prompt") or "")
         try:
-            result = self.chat(prompt, model=model)
+            result = self.chat(prompt, model=model, site_context=site_context)
         except SealedError as exc:
             return {
                 "error": {"message": str(exc), "type": "sealed", "code": "runtime_sealed"},
@@ -324,6 +346,9 @@ class Runtime:
                 "limitation": LIMITATION,
                 "simple": result["simple"],
                 "hosted_v1": "lamb-check-only",
+                "ask_jeeves": True,
+                "jeeves_sovereign": False,
+                "site_context_n": result.get("site_context_n", 0),
             },
         }
 

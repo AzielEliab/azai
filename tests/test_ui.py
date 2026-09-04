@@ -24,6 +24,7 @@ def test_ui_get_root_contains_azai_and_jeeves(tmp_path) -> None:
             html = resp.read().decode("utf-8")
         assert "AZAI" in html
         assert "Jeeves" in html or "JEEVES" in html
+        assert "Ask Jeeves" in html
         assert "Ollama" in html
         assert "Send" in html
         assert "Check this text" in html
@@ -45,6 +46,13 @@ def test_ui_get_root_contains_azai_and_jeeves(tmp_path) -> None:
             spec = json.loads(resp.read().decode("utf-8"))
         assert spec["openapi"].startswith("3.")
         assert "/v1/chat/completions" in spec["paths"]
+        assert "/v1/jeeves" in spec["paths"]
+        assert "site_context" in str(spec["paths"]["/v1/chat/completions"])
+        with urllib.request.urlopen(f"http://127.0.0.1:{port}/v1/jeeves", timeout=3) as resp:
+            card = json.loads(resp.read().decode("utf-8"))
+        assert card["mode"] == "ask-jeeves"
+        assert card["sovereign"] is False
+        assert card["can_modify_scores"] is False
     finally:
         httpd.shutdown()
         httpd.server_close()

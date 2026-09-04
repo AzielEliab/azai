@@ -47,7 +47,7 @@ KV id in `wrangler.toml`: `155f641feb8244bea7fa245133128a32`. Binding name MUST 
 Tracked asset URL:
 
 ```
-https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.0.tar.gz
+https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz
 ```
 
 Rebuild the counted tarball from the repo root:
@@ -62,7 +62,8 @@ All responses include `Access-Control-Allow-Origin: *`.
 
 ## AI runtime (`/v1`)
 
-CORS `*`. `GET /v1/health`, `GET /v1/models`, `POST /v1/lamb-check` `{text}`,
+CORS `*`. `GET /v1/health`, `GET /v1/models`, `GET /v1/skill`, `GET /v1/jeeves`
+(Ask Jeeves contract; not chat), `POST /v1/lamb-check` `{text}`,
 `GET /openapi.json` (OpenAPI 3.1), `GET /ai`.
 Routes under `/v1` **do not** increment download KV.
 Lamb check is the JS port of `azai/lamb.py`. No provider proxy.

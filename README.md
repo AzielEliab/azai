@@ -7,7 +7,7 @@ proxy.** Hub is a blank key: it does not interpret meaning.
 
 **Author:** Aziel Eliab
 **Date:** 2026
-**Version:** 0.3.0
+**Version:** 0.3.1
 **License:** [Apache-2.0](LICENSE)
 
 > Not a new foundation model, not a kernel, not a worm, not IP-blocking
@@ -45,7 +45,7 @@ The Worker serves the gzip itself (HTTP 200, no 302 to GitHub).
 # → [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/) ←
 
 Direct tarball (also counted):
-[azai-0.3.0.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.0.tar.gz)
+[azai-0.3.1.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz)
 
 - Live count JSON: [https://azai-download-tracker.vibelock.workers.dev/stats](https://azai-download-tracker.vibelock.workers.dev/stats)
 - OpenAPI: [https://azai-download-tracker.vibelock.workers.dev/openapi.json](https://azai-download-tracker.vibelock.workers.dev/openapi.json)
@@ -83,7 +83,7 @@ export OPENAI_API_KEY=dummy
 
 Counted download: [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/)
 
-Direct tarball (also counted): [azai-0.3.0.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.0.tar.gz)
+Direct tarball (also counted): [azai-0.3.1.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz)
 
 GitHub: [https://github.com/AzielEliab/azai](https://github.com/AzielEliab/azai)
 
@@ -100,9 +100,10 @@ Self-check: `azai doctor` (loopback Ollama probe is advisory; prints exact insta
   JEEVES is the ethics/assistant layer inside it. Without Ollama, a
   constitution stub still runs (Lamb Lens + receipts) and does **not**
   pretend to be GPT.
-- **JEEVES is not sovereign.** Lamb Lens (peace, clarity, service) and
-  the operator govern every turn. This is a constitutional gate, not a
-  proof of ethics.
+- **JEEVES is not sovereign.** **Ask Jeeves** is the research-assistant
+  mode for the public Corpus/Library. Lamb Lens first — public Corpus
+  posture; never the operator. Jeeves cannot modify scores (same rights
+  as a normal user). This is a constitutional gate, not a proof of ethics.
 - **Hub is a blank key.** It does not interpret meaning. Removing the
   Hub leaves modules functional, only isolated.
 - **Blend is visible.** When `model=blend`, responses are labeled
@@ -172,6 +173,7 @@ azai version
 azai ui                 # 127.0.0.1:8860 loopback only
 azai serve              # same as ui, emphasize OpenAI-compat API
 azai chat --model local --message "..."
+azai jeeves             # Ask Jeeves research-assistant contract
 azai models
 azai ollama             # local base status + exact install steps
 azai integrity
@@ -196,6 +198,7 @@ POST bodies larger than 1 MiB are rejected (413).
 
 `azai ui` binds **127.0.0.1:8860** only by default. Black / gold.
 
+- **Ask Jeeves** research assistant (Corpus/Library; not sovereign)
 - One chat box, **Send**, **Check this text** (Lamb only — no provider call)
 - Peace / Clarity / Service chips
 - Sample prompt
@@ -219,7 +222,8 @@ OPENAI_API_KEY=dummy
 | Method | Path | Notes |
 |--------|------|--------|
 | GET | `/v1/models` | local, ollama, blend, gpt, grok, venice |
-| POST | `/v1/chat/completions` | `messages[]`, `model`, `stream` accepted (returned non-stream) |
+| POST | `/v1/chat/completions` | `messages[]`, `model`, optional `site_context` (public titles/summaries) |
+| GET | `/v1/jeeves` | Ask Jeeves research-assistant contract |
 | GET | `/v1/health` | runtime + which keys present |
 | GET | `/openapi.json` | OpenAPI 3.1 |
 | GET | `/v1/receipts` | append-only chain |
@@ -229,6 +233,26 @@ OPENAI_API_KEY=dummy
 | POST | `/v1/import` | `{content, filename}` `.txt` or JSON |
 | GET | `/v1/export?format=json\|md` | chat + receipts |
 | GET | `/v1/session` | current transcript |
+
+## Ask Jeeves (Corpus / Library)
+
+Site assistants — especially [www.azielcorpuslibrary.net](https://www.azielcorpuslibrary.net/) —
+call **local** AZAI. Hosted Worker `/v1` is lamb-check ONLY (plus
+`GET /v1/jeeves` for the contract). Jeeves is not GPT and is not sovereign.
+
+1. Search the library: `GET https://www.azielcorpuslibrary.net/v1/search?q=`
+2. POST public titles/summaries to local Ask Jeeves:
+
+```bash
+azai jeeves
+curl -s http://127.0.0.1:8860/v1/chat/completions \
+  -H 'content-type: application/json' \
+  -d '{"model":"local","messages":[{"role":"user","content":"What does the library say?"}],"site_context":[{"title":"Florence","summary":"Public record summary"}]}'
+```
+
+`site_context` is an adaptive hook as the library grows. Persist nothing
+secret. Jeeves cannot modify scores. Upload is out of band: files still
+run full SPRE×CLCE×PhysLing + Bayesian ingest — no score shortcut.
 
 ## Receipts
 
@@ -270,7 +294,7 @@ Lamb fixtures, `azai doctor`, and import/export roundtrip.
 
 Isolated download counter for this project only. Worker
 `azai-download-tracker`, project `azai`, KV `AZAI_DOWNLOADS` bound as
-`DOWNLOADS`. GET `/download` **serves** `azai-0.3.0.tar.gz` (does not 302
+`DOWNLOADS`. GET `/download` **serves** `azai-0.3.1.tar.gz` (does not 302
 to GitHub) with HTTP 200 and `Content-Type: application/gzip`. See
 [workers/download-tracker/README.md](workers/download-tracker/README.md).
 
@@ -279,6 +303,8 @@ models). It is not a chat proxy and does not hold paid keys.
 
 - `GET https://azai-download-tracker.vibelock.workers.dev/v1/health`
 - `GET https://azai-download-tracker.vibelock.workers.dev/v1/models`
+- `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`
+- `GET https://azai-download-tracker.vibelock.workers.dev/v1/jeeves` (Ask Jeeves contract; not chat)
 - `POST https://azai-download-tracker.vibelock.workers.dev/v1/lamb-check` `{text}`
 - OpenAPI 3.1: https://azai-download-tracker.vibelock.workers.dev/openapi.json
 - Help: https://azai-download-tracker.vibelock.workers.dev/ai

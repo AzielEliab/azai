@@ -22,6 +22,7 @@ from azai.config import (
     WORKER_PROVIDER_HOSTS,
 )
 from azai.debug import enabled as debug_enabled
+from azai.jeeves import REFUSALS as JEEVES_REFUSALS
 from azai.jeeves import SOVEREIGN as JEEVES_SOVEREIGN
 from azai.jeeves import SYSTEM as JEEVES_SYSTEM
 from azai.lamb import check_text
@@ -48,7 +49,7 @@ def _check(cid: str, ok: bool, detail: str = "") -> dict[str, Any]:
 def run(data_dir: str | None = None) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
 
-    checks.append(_check("version", __version__ == "0.3.0", __version__))
+    checks.append(_check("version", __version__ == "0.3.1", __version__))
 
     py_ok = sys.version_info >= (3, 10)
     checks.append(
@@ -127,7 +128,7 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
                 "lamb-check only" if not proxy_hits else ",".join(proxy_hits),
             )
         )
-        checks.append(_check("tarball", "azai-0.3.0.tar.gz" in wsrc, "azai-0.3.0.tar.gz"))
+        checks.append(_check("tarball", "azai-0.3.1.tar.gz" in wsrc, "azai-0.3.1.tar.gz"))
 
         skill = root / "SKILL.md"
         skill_txt = skill.read_text(encoding="utf-8") if skill.is_file() else ""
@@ -136,8 +137,10 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
             and "Ollama" in skill_txt
             and "JEEVES" in skill_txt
             and "not sovereign" in skill_txt.lower()
+            and "Ask Jeeves" in skill_txt
+            and "azielcorpuslibrary.net" in skill_txt
         )
-        checks.append(_check("skill_true_local", skill_ok, "SKILL.md names Ollama + JEEVES"))
+        checks.append(_check("skill_true_local", skill_ok, "SKILL.md names Ollama + Ask Jeeves"))
 
         install = (root / "install.sh").read_text(encoding="utf-8") if (root / "install.sh").is_file() else ""
         setup = root / "scripts" / "setup-ollama.sh"
@@ -152,8 +155,31 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
         checks.append(_check("skill_true_local", True, "skill not in this install"))
         checks.append(_check("install_ollama", True, "install scripts not in this install"))
 
-    jeeves_ok = (not JEEVES_SOVEREIGN) and "not sovereign" in JEEVES_SYSTEM.lower()
-    checks.append(_check("jeeves_layer", jeeves_ok, "ethics/assistant; not sovereign; under Lamb Lens"))
+    sys_low = JEEVES_SYSTEM.lower()
+    jeeves_ok = (
+        (not JEEVES_SOVEREIGN)
+        and "not sovereign" in sys_low
+        and "ask jeeves" in sys_low
+        and "lamb lens first" in sys_low
+        and "public corpus" in sys_low
+        and "never the operator" in sys_low
+        and "cannot modify scores" in sys_low
+        and bool(JEEVES_REFUSALS)
+    )
+    checks.append(_check("jeeves_layer", jeeves_ok, "Ask Jeeves; not sovereign; Lamb Lens first"))
+    refusal_needles = (
+        "operator account",
+        "admin hashes",
+        "hidden routes",
+        "score forge",
+        "quarantine bypass",
+        "cannot modify scores",
+        "no score shortcut",
+        "spre",
+        "bayesian ingest",
+    )
+    refusals_ok = all(n in sys_low for n in refusal_needles)
+    checks.append(_check("ask_jeeves_refusals", refusals_ok, "SYSTEM hard refusals present"))
 
     ollama = ollama_probe()
     if ollama.get("reachable") and ollama.get("model_present"):
@@ -184,6 +210,7 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
         "instrument": "Jeeves",
         "jeeves_sovereign": False,
         "jeeves_layer": "ethics/assistant",
+        "ask_jeeves": True,
         "local_ai": "ollama-base",
         "hosted_v1": "lamb-check-only",
         "ollama": ollama,
@@ -194,7 +221,7 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
 def format_report(payload: dict[str, Any]) -> str:
     lines = [
         f"AZAI doctor {payload.get('version')}  "
-        "(true local AI on Ollama; JEEVES is not sovereign)"
+        "(true local AI on Ollama; Ask Jeeves research assistant; JEEVES is not sovereign)"
     ]
     for c in payload.get("checks") or []:
         mark = "PASS" if c.get("ok") else "FAIL"

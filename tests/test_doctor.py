@@ -22,12 +22,13 @@ def test_doctor_run_ok(tmp_path) -> None:
         "tarball",
         "receipts",
         "jeeves_layer",
+        "ask_jeeves_refusals",
         "ollama",
         "skill_true_local",
         "install_ollama",
     ):
         assert ids[needed]["ok"] is True, needed + " " + str(ids[needed])
-    assert payload["version"] == "0.3.0"
+    assert payload["version"] == "0.3.1"
     assert payload["jeeves_sovereign"] is False
     assert payload["local_ai"] == "ollama-base"
     assert payload["hosted_v1"] == "lamb-check-only"

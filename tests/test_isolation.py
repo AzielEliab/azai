@@ -80,7 +80,7 @@ def test_worker_isolated() -> None:
     assert "/download" in toml
     src = (ROOT / "workers" / "download-tracker" / "src" / "index.js").read_text(encoding="utf-8")
     assert 'const PROJECT = "azai"' in src
-    assert "azai-0.3.0.tar.gz" in src
+    assert "azai-0.3.1.tar.gz" in src
     assert "true local AI" in src or "true local ai" in src.lower()
     assert "ollama" in src.lower()
     assert "azai|__total__" in src or 'PROJECT + "|__total__"' in src
@@ -88,6 +88,9 @@ def test_worker_isolated() -> None:
     assert "env.ASSETS.fetch" in src
     assert "private, no-store" in src
     assert "/v1/lamb-check" in src
+    assert "/v1/jeeves" in src
+    assert "Ask Jeeves" in src
+    assert "azielcorpuslibrary.net" in src
     lowered = src.lower().replace("-", "").replace("_", "").replace(" ", "")
     assert "forgereceipts" not in lowered
     assert "godlock" not in lowered
@@ -111,3 +114,6 @@ def test_readme_honest_scope() -> None:
     assert "127.0.0.1:8860" in readme
     assert "OPENAI_BASE_URL" in readme
     assert "standalone" in low
+    assert "ask jeeves" in low
+    assert "azielcorpuslibrary.net" in low
+    assert "cannot modify scores" in low or "cannot modify scores" in readme.lower()

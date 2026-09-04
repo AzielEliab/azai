@@ -8,7 +8,7 @@
  */
 
 export const LIMITATION =
-  "AZAI packages a true local AI stack on an Ollama base with JEEVES. OpenAI-compatible local API. Not a hosted paid-key proxy. AZAI is not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. JEEVES is the ethics/assistant layer and is not sovereign. Lamb Lens (peace, clarity, service) and the operator govern every turn. Hub is a blank key: it does not interpret meaning. Hosted /v1 is lamb-check ONLY (plus a protocol mirror of health/models), NOT a proxy that spends the author's paid keys. Never a paid-key proxy. Constitutional gate, not a proof of ethics.";
+  "AZAI packages a true local AI stack on an Ollama base with JEEVES. OpenAI-compatible local API. Not a hosted paid-key proxy. AZAI is not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. JEEVES is the Ask Jeeves research assistant (ethics/assistant layer) and is not sovereign. Lamb Lens first — public Corpus posture; never the operator. Jeeves cannot modify scores; same rights as a normal user. Hub is a blank key: it does not interpret meaning. Hosted /v1 is lamb-check ONLY (plus a protocol mirror of health/models), NOT a proxy that spends the author's paid keys. Never a paid-key proxy. Site assistants (www.azielcorpuslibrary.net) call local azai serve with optional site_context. Constitutional gate, not a proof of ethics.";
 
 export const MODELS = ["local", "ollama", "blend", "gpt", "grok", "venice"];
 

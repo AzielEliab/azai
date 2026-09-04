@@ -1,4 +1,4 @@
-# AZAI — true local AI on an Ollama base (v0.3.0)
+# AZAI — true local AI on an Ollama base (v0.3.1)
 
 Aziel Artificial Intelligence. Shell: **AZAI**. Instrument: **JEEVES**.
 Author: Aziel Eliab, 2026. Apache-2.0.
@@ -80,6 +80,21 @@ Copied into `docs/source/`:
 Jeeves speaks inside the shell. Lamb Lens governs above the shell.
 Receipts witness what the shell permits.
 
+
+## v0.3.1
+
+Ask Jeeves research-assistant mode for site assistants, especially
+https://www.azielcorpuslibrary.net/. Lamb Lens first — public Corpus
+posture; never the operator. Hard refusals live in `azai/jeeves.py`
+SYSTEM: no operator account info / credentials / admin hashes / hidden
+routes; no corpus-risking advice (wipe, score forge, quarantine bypass);
+cannot modify scores (same rights as a normal user). Optional
+`site_context` (public titles/summaries) is an adaptive hook as the
+library grows; persist nothing secret. Upload guidance is out of band:
+files still run full SPRE×CLCE×PhysLing + Bayesian ingest — no score
+shortcut. CLI `azai jeeves`, UI copy, Worker `/v1/skill` + `/v1/jeeves`
++ OpenAPI document how the Corpus calls local AZAI. JEEVES remains not
+sovereign and is not GPT.
 
 ## v0.3.0
 

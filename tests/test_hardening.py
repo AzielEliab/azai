@@ -71,6 +71,6 @@ def test_worker_has_no_keys_and_is_not_a_proxy() -> None:
     assert "sk-" not in src
     assert "lamb-check" in low
     assert "not a proxy" in low or "lamb-check only" in low
-    assert "azai-0.3.0.tar.gz" in src
+    assert "azai-0.3.1.tar.gz" in src
     assert "1048576" in src or "MAX_BODY" in src
     assert "provider_proxy: false" in src or "provider_proxy:false" in src.replace(" ", "")
