@@ -6,7 +6,21 @@ from azai.cli import main
 def test_cli_version(capsys) -> None:
     assert main(["version"]) == 0
     out = capsys.readouterr().out
-    assert "azai 0.3.0" in out
+    assert "azai 0.3.1" in out
+
+
+def test_cli_jeeves(capsys) -> None:
+    assert main(["jeeves"]) == 0
+    out = capsys.readouterr().out
+    assert "Ask Jeeves" in out
+    assert "not sovereign" in out.lower()
+    assert "Lamb Lens first" in out
+    assert "cannot modify scores" in out.lower() or "Cannot modify scores" in out
+    assert "SPRE" in out
+    assert "azielcorpuslibrary.net" in out
+    assert main(["jeeves", "--json"]) == 0
+    jout = capsys.readouterr().out
+    assert '"mode": "ask_jeeves"' in jout or '"mode":"ask_jeeves"' in jout.replace(" ", "")
 
 
 def test_cli_models(capsys) -> None:

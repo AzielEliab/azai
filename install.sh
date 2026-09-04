@@ -5,7 +5,7 @@
 set -euo pipefail
 
 HOST="${AZAI_HOME_HOST:-https://azai-download-tracker.vibelock.workers.dev}"
-ASSET="${AZAI_HOME_ASSET:-azai-0.3.0.tar.gz}"
+ASSET="${AZAI_HOME_ASSET:-azai-0.3.1.tar.gz}"
 WORKDIR="${AZAI_HOME:-$HOME/azai}"
 
 mkdir -p "$WORKDIR"

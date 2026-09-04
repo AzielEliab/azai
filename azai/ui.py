@@ -46,8 +46,17 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
         "info": {
             "title": "AZAI local runtime",
             "version": __version__,
-            "summary": "True local AI on an Ollama base with JEEVES. OpenAI-compatible. Not a hosted paid-key proxy.",
-            "description": LIMITATION + " Point other software at OPENAI_BASE_URL=" + origin + "/v1 with a dummy key.",
+            "summary": "True local AI on an Ollama base with Ask Jeeves research assistant. OpenAI-compatible. Not a hosted paid-key proxy. Jeeves is not sovereign.",
+            "description": (
+                LIMITATION
+                + " Ask Jeeves research assistant for site assistants "
+                + "(especially https://www.azielcorpuslibrary.net/): POST /v1/chat/completions "
+                + "with model=local and optional site_context (public record titles/summaries). "
+                + "Persist nothing secret. Jeeves cannot modify scores. "
+                + "Point other software at OPENAI_BASE_URL="
+                + origin
+                + "/v1 with a dummy key."
+            ),
             "license": {"name": "Apache-2.0", "identifier": "Apache-2.0"},
             "contact": {"name": "Aziel Eliab", "url": "https://github.com/AzielEliab/azai"},
         },
@@ -70,7 +79,7 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
             "/v1/chat/completions": {
                 "post": {
                     "operationId": "azai_chat",
-                    "summary": "OpenAI-compat chat. Stream is accepted and returned as non-stream.",
+                    "summary": "Ask Jeeves research assistant (Ollama + JEEVES). Stream accepted, returned non-stream. Optional site_context for Corpus callers.",
                     "requestBody": {
                         "required": True,
                         "content": {
@@ -81,6 +90,21 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
                                         "model": {"type": "string", "enum": list(MODELS), "default": DEFAULT_MODEL},
                                         "messages": {"type": "array"},
                                         "stream": {"type": "boolean"},
+                                        "site_context": {
+                                            "type": "array",
+                                            "description": (
+                                                "Optional retrieved public Corpus/Library records "
+                                                "(title + summary). Adaptive hook as the library grows. "
+                                                "Persist nothing secret. Jeeves cannot modify scores."
+                                            ),
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "title": {"type": "string"},
+                                                    "summary": {"type": "string"},
+                                                },
+                                            },
+                                        },
                                     },
                                 }
                             }
@@ -149,6 +173,13 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
                     "responses": {"200": {"description": "session"}},
                 }
             },
+            "/v1/jeeves": {
+                "get": {
+                    "operationId": "azai_jeeves",
+                    "summary": "Ask Jeeves research-assistant contract. Not sovereign. Not GPT. Corpus callers read this then POST /v1/chat/completions with site_context.",
+                    "responses": {"200": {"description": "Ask Jeeves mode card"}},
+                }
+            },
         },
     }
 
@@ -193,7 +224,7 @@ def serve(
     kind = "AZAI serve" if emphasize_api else "AZAI UI"
     print(
         f"{kind} http://{bound_host}:{bound_port} "
-        f"(Ollama base; JEEVES ethics layer, not sovereign; Lamb Lens above; {extra} no telemetry)"
+        f"(Ollama base; Ask Jeeves research assistant, not sovereign; Lamb Lens first; {extra} no telemetry)"
     )
     try:
         httpd.serve_forever()
@@ -288,7 +319,12 @@ class Handler(BaseHTTPRequestHandler):
                 "version": __version__,
                 "instrument": "Jeeves",
                 "jeeves_layer": "ethics/assistant",
+                "jeeves_mode": "ask_jeeves",
+                "ask_jeeves": True,
+                "jeeves_posture": "public-corpus",
                 "jeeves_sovereign": False,
+                "can_modify_scores": False,
+                "corpus_library": "https://www.azielcorpuslibrary.net/",
                 "local_ai": "ollama-base",
                 "true_local_ai": True,
                 "runtime": integ["runtime"],
@@ -329,6 +365,11 @@ class Handler(BaseHTTPRequestHandler):
             return
         if path in ("/v1/session", "/api/session"):
             self._json(200, {"messages": self.state.runtime.transcript()})
+            return
+        if path in ("/v1/jeeves", "/api/jeeves"):
+            from azai.jeeves import mode_card
+
+            self._json(200, mode_card())
             return
         if path in ("/v1/export", "/api/export"):
             fmt = (qs.get("format") or ["json"])[0].lower()

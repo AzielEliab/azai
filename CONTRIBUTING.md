@@ -22,14 +22,16 @@ in-process. Do not set live API keys in CI.
 1. **True local AI on an Ollama base.** Default `model=local` uses
    Ollama through JEEVES. Local JEEVES does not pretend to be GPT.
    Not a hosted paid-key proxy.
-2. **JEEVES is not sovereign.** It is the ethics/assistant layer.
-   Lamb Lens (peace, clarity, service) and the operator govern every
-   turn. Hub is a blank key: it does not interpret meaning.
+2. **JEEVES is not sovereign.** It is the ethics/assistant layer
+   (**Ask Jeeves** research assistant). Lamb Lens first — public Corpus
+   posture; never the operator. Jeeves cannot modify scores. Hub is a
+   blank key: it does not interpret meaning.
 3. **Blend is visible.** When mode=blend, label `[gpt]` `[grok]`
    `[venice]` then `[synthesis]`. Never hide which model said what.
 4. **Hosted Worker `/v1` is lamb-check ONLY.** Never a paid-key proxy.
-   Health and models are a protocol mirror. Paid calls happen on the
-   operator's local `azai serve`.
+   Health, models, skill, and the Ask Jeeves card (`GET /v1/jeeves`) are
+   a protocol mirror. Paid calls and Jeeves chat happen on local
+   `azai serve`. Corpus/Library callers POST `site_context` there.
 5. **UI binds 127.0.0.1:8860 by default.** `--host` for on-site LAN is
    documented risk (it can spend the operator's keys). Prefer loopback.
    Max POST body is 1 MiB. No telemetry. No keys in the Worker.

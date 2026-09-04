@@ -6,7 +6,7 @@ edits, deep settings, key rotation, and vault export are **blocked**.
 Dark gold. Application id: `com.azieeliab.azai`
 
 The intelligence engine is the desktop `azai` package (`azai serve` on
-127.0.0.1:8860). This app is a companion surface (v0.3.0). Text + export share.
+127.0.0.1:8860). This app is a companion surface (v0.3.1). Text + export share.
 
 ## Open in Android Studio / Xcode
 
@@ -25,8 +25,9 @@ Xcode.
 
 ## Honest scope
 
-AZAI is true local AI on an Ollama base with JEEVES, not a new foundation
-model. JEEVES is not sovereign. This phone app does not spend the author's
+AZAI is true local AI on an Ollama base with JEEVES (Ask Jeeves research
+assistant), not a new foundation model. JEEVES is not sovereign. This phone
+app does not spend the author's
 paid keys and does not edit the constitution. Offline / LAN against a
 local AZAI server. No telemetry.
 

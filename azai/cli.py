@@ -4,6 +4,7 @@
     azai ui
     azai serve
     azai chat --model local --message "..."
+    azai jeeves
     azai models
     azai ollama
     azai integrity
@@ -35,9 +36,11 @@ def _build_parser() -> argparse.ArgumentParser:
         prog="azai",
         description=(
             "AZAI (Aziel Artificial Intelligence) — true local AI on an Ollama base "
-            "with JEEVES as the ethics/assistant layer (not sovereign). "
-            "OpenAI-compatible local API at http://127.0.0.1:8860/v1. "
-            "Hosted /v1 is lamb-check only, never a paid-key proxy."
+            "with JEEVES as the Ask Jeeves research assistant (ethics/assistant "
+            "layer; not sovereign). Lamb Lens first — public Corpus posture; "
+            "never the operator. OpenAI-compatible local API at "
+            "http://127.0.0.1:8860/v1. Hosted /v1 is lamb-check only, never a "
+            "paid-key proxy."
         ),
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -54,12 +57,26 @@ def _build_parser() -> argparse.ArgumentParser:
     p_serve.add_argument("--port", type=int, default=UI_PORT)
     p_serve.add_argument("--data", default=None)
 
-    p_chat = sub.add_parser("chat", help="One-shot chat through Lamb Lens + JEEVES.")
+    p_chat = sub.add_parser(
+        "chat",
+        help="One-shot Ask Jeeves research-assistant turn (Lamb Lens + JEEVES; not sovereign).",
+    )
     p_chat.add_argument("--model", default=DEFAULT_MODEL, choices=list(MODELS))
     p_chat.add_argument("--message", required=True)
     p_chat.add_argument("--data", default=None)
     p_chat.add_argument("--json", action="store_true", dest="as_json")
     p_chat.add_argument("--simple", action="store_true", help="Print the simple (6th-grader) view of blend output.")
+    p_chat.add_argument(
+        "--site-context",
+        default=None,
+        help="Optional JSON file of retrieved public record titles/summaries (adaptive hook). Persist nothing secret.",
+    )
+
+    p_jv = sub.add_parser(
+        "jeeves",
+        help="Print Ask Jeeves research-assistant mode (Corpus/Library; not sovereign).",
+    )
+    p_jv.add_argument("--json", action="store_true", dest="as_json")
 
     p_models = sub.add_parser("models", help="List local, ollama, blend, gpt, grok, venice.")
     p_models.add_argument("--json", action="store_true", dest="as_json")
@@ -243,10 +260,39 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(body, end="" if body.endswith("\n") else "\n")
         return 0
 
+    if args.cmd == "jeeves":
+        from azai.jeeves import MODE_LABEL, REFUSALS, UPLOAD_GUIDANCE, mode_card
+
+        payload = mode_card()
+        if args.as_json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(f"{MODE_LABEL}  (not sovereign; not GPT; Ollama base)")
+            print("Lamb Lens first — public Corpus posture; never the operator.")
+            print(f"Site: {payload['corpus_library']}")
+            print("Hard refusals:")
+            for line in REFUSALS:
+                print(f"  - {line}")
+            print(UPLOAD_GUIDANCE)
+            print(payload["adaptive"])
+            print(payload["how_corpus_calls"])
+        return 0
+
     if args.cmd == "chat":
+        site_context = None
+        if getattr(args, "site_context", None):
+            path = Path(args.site_context)
+            if not path.is_file():
+                print(f"site-context not found: {path}", file=sys.stderr)
+                return 2
+            try:
+                site_context = json.loads(path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError as exc:
+                print(f"site-context invalid JSON: {exc}", file=sys.stderr)
+                return 2
         rt = _rt(args)
         try:
-            result = rt.chat(args.message, model=args.model)
+            result = rt.chat(args.message, model=args.model, site_context=site_context)
         except SealedError as exc:
             print(str(exc), file=sys.stderr)
             return 3

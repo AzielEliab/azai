@@ -1,4 +1,4 @@
-"""One-shot local JEEVES turn (Ollama base, constitution stub if Ollama is down)."""
+"""One-shot Ask Jeeves research-assistant turn (Ollama base; stub if Ollama is down)."""
 
 from azai.runtime import Runtime
 
