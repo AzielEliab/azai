@@ -14,7 +14,18 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 
 from azai import __version__
-from azai.config import LAN_RISK, LIMITATION, MAX_BODY_BYTES, MODELS, MOTTO, SAMPLE_PROMPT, UI_HOST, UI_PORT
+from azai.config import (
+    DEFAULT_MODEL,
+    LAN_RISK,
+    LIMITATION,
+    MAX_BODY_BYTES,
+    MODELS,
+    MOTTO,
+    SAMPLE_PROMPT,
+    UI_HOST,
+    UI_PORT,
+)
+from azai.ollama import probe as ollama_probe
 from azai.debug import dlog, enabled as debug_enabled, status_payload
 from azai.lamb import check_text
 from azai.providers import provider_status
@@ -35,7 +46,7 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
         "info": {
             "title": "AZAI local runtime",
             "version": __version__,
-            "summary": "OpenAI-compatible local blend of GPT, Grok, and Venice under Lamb Lens.",
+            "summary": "True local AI on an Ollama base with JEEVES. OpenAI-compatible. Not a hosted paid-key proxy.",
             "description": LIMITATION + " Point other software at OPENAI_BASE_URL=" + origin + "/v1 with a dummy key.",
             "license": {"name": "Apache-2.0", "identifier": "Apache-2.0"},
             "contact": {"name": "Aziel Eliab", "url": "https://github.com/AzielEliab/azai"},
@@ -52,7 +63,7 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
             "/v1/models": {
                 "get": {
                     "operationId": "azai_models",
-                    "summary": "Lists blend, gpt, grok, venice, local.",
+                    "summary": "Lists local (Ollama+JEEVES), ollama, blend, gpt, grok, venice.",
                     "responses": {"200": {"description": "OpenAI-compat model list"}},
                 }
             },
@@ -67,7 +78,7 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "model": {"type": "string", "enum": list(MODELS)},
+                                        "model": {"type": "string", "enum": list(MODELS), "default": DEFAULT_MODEL},
                                         "messages": {"type": "array"},
                                         "stream": {"type": "boolean"},
                                     },
@@ -182,7 +193,7 @@ def serve(
     kind = "AZAI serve" if emphasize_api else "AZAI UI"
     print(
         f"{kind} http://{bound_host}:{bound_port} "
-        f"(Jeeves inside the shell; Lamb Lens above; {extra} no telemetry)"
+        f"(Ollama base; JEEVES ethics layer, not sovereign; Lamb Lens above; {extra} no telemetry)"
     )
     try:
         httpd.serve_forever()
@@ -270,16 +281,27 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/v1/health" or path == "/api/status":
             integ = self.state.runtime.integrity()
             status = provider_status()
+            ollama = ollama_probe()
             payload = {
                 "ok": True,
                 "product": "azai",
                 "version": __version__,
                 "instrument": "Jeeves",
+                "jeeves_layer": "ethics/assistant",
+                "jeeves_sovereign": False,
+                "local_ai": "ollama-base",
+                "true_local_ai": True,
                 "runtime": integ["runtime"],
                 "jeeves": integ["jeeves"],
                 "lamb": integ["lamb"],
                 "integrity": integ["overall"],
                 "providers": {k: {"present": v["present"]} for k, v in status.items()},
+                "ollama": {
+                    "reachable": bool(ollama.get("reachable")),
+                    "model": ollama.get("model"),
+                    "model_present": bool(ollama.get("model_present")),
+                    "url": ollama.get("url"),
+                },
                 "limitation": LIMITATION,
                 "motto": MOTTO,
                 "sample_prompt": SAMPLE_PROMPT,
@@ -338,7 +360,7 @@ class Handler(BaseHTTPRequestHandler):
         if path in ("/v1/chat/completions", "/api/chat"):
             if path == "/api/chat" and "messages" not in body:
                 body = {
-                    "model": body.get("model") or "blend",
+                    "model": body.get("model") or DEFAULT_MODEL,
                     "messages": [{"role": "user", "content": body.get("message") or body.get("prompt") or ""}],
                 }
             payload = self.state.runtime.openai_completion(body)

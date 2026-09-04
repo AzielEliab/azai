@@ -1,4 +1,7 @@
-"""azai doctor — local self-check. No network. No telemetry."""
+"""azai doctor — local self-check. No paid network. No telemetry.
+
+Ollama probe is loopback-only (127.0.0.1:11434) and is advisory.
+"""
 
 from __future__ import annotations
 
@@ -10,6 +13,7 @@ from typing import Any
 from azai import __version__
 from azai.config import (
     MAX_BODY_BYTES,
+    OLLAMA_INSTALL_STEPS,
     SAMPLE_PROMPT,
     TELEMETRY_FORBIDDEN,
     UI_HOST,
@@ -18,7 +22,10 @@ from azai.config import (
     WORKER_PROVIDER_HOSTS,
 )
 from azai.debug import enabled as debug_enabled
+from azai.jeeves import SOVEREIGN as JEEVES_SOVEREIGN
+from azai.jeeves import SYSTEM as JEEVES_SYSTEM
 from azai.lamb import check_text
+from azai.ollama import probe as ollama_probe
 from azai.runtime import Runtime, resolve_data_dir
 
 LAMB_PASS = SAMPLE_PROMPT
@@ -41,7 +48,7 @@ def _check(cid: str, ok: bool, detail: str = "") -> dict[str, Any]:
 def run(data_dir: str | None = None) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
 
-    checks.append(_check("version", __version__ == "0.2.0", __version__))
+    checks.append(_check("version", __version__ == "0.3.0", __version__))
 
     py_ok = sys.version_info >= (3, 10)
     checks.append(
@@ -120,12 +127,46 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
                 "lamb-check only" if not proxy_hits else ",".join(proxy_hits),
             )
         )
-        checks.append(_check("tarball", "azai-0.2.0.tar.gz" in wsrc, "azai-0.2.0.tar.gz"))
+        checks.append(_check("tarball", "azai-0.3.0.tar.gz" in wsrc, "azai-0.3.0.tar.gz"))
+
+        skill = root / "SKILL.md"
+        skill_txt = skill.read_text(encoding="utf-8") if skill.is_file() else ""
+        skill_ok = (
+            "true local AI" in skill_txt
+            and "Ollama" in skill_txt
+            and "JEEVES" in skill_txt
+            and "not sovereign" in skill_txt.lower()
+        )
+        checks.append(_check("skill_true_local", skill_ok, "SKILL.md names Ollama + JEEVES"))
+
+        install = (root / "install.sh").read_text(encoding="utf-8") if (root / "install.sh").is_file() else ""
+        setup = root / "scripts" / "setup-ollama.sh"
+        setup_txt = setup.read_text(encoding="utf-8") if setup.is_file() else ""
+        install_ok = "ollama" in install.lower() and "ollama pull" in setup_txt.lower()
+        checks.append(_check("install_ollama", install_ok, "install.sh + scripts/setup-ollama.sh"))
     else:
         checks.append(_check("no_telemetry", True, "web not in this install"))
         checks.append(_check("worker_no_keys", True, "worker not in this install"))
         checks.append(_check("worker_not_proxy", True, "worker not in this install"))
         checks.append(_check("tarball", True, "worker not in this install"))
+        checks.append(_check("skill_true_local", True, "skill not in this install"))
+        checks.append(_check("install_ollama", True, "install scripts not in this install"))
+
+    jeeves_ok = (not JEEVES_SOVEREIGN) and "not sovereign" in JEEVES_SYSTEM.lower()
+    checks.append(_check("jeeves_layer", jeeves_ok, "ethics/assistant; not sovereign; under Lamb Lens"))
+
+    ollama = ollama_probe()
+    if ollama.get("reachable") and ollama.get("model_present"):
+        ollama_detail = f"ready {ollama.get('url')} model={ollama.get('model')}"
+    elif ollama.get("reachable"):
+        ollama_detail = (
+            f"server up at {ollama.get('url')} but model {ollama.get('model')} not pulled. "
+            f"Run: ollama pull {ollama.get('model')}"
+        )
+    else:
+        ollama_detail = "not detected — exact steps:\n" + OLLAMA_INSTALL_STEPS
+    # Advisory: doctor stays green without Ollama so CI/offline installs work.
+    checks.append(_check("ollama", True, ollama_detail))
 
     checks.append(
         _check(
@@ -142,13 +183,19 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
         "version": __version__,
         "instrument": "Jeeves",
         "jeeves_sovereign": False,
+        "jeeves_layer": "ethics/assistant",
+        "local_ai": "ollama-base",
         "hosted_v1": "lamb-check-only",
+        "ollama": ollama,
         "checks": checks,
     }
 
 
 def format_report(payload: dict[str, Any]) -> str:
-    lines = [f"AZAI doctor {payload.get('version')}  (Jeeves is not sovereign)"]
+    lines = [
+        f"AZAI doctor {payload.get('version')}  "
+        "(true local AI on Ollama; JEEVES is not sovereign)"
+    ]
     for c in payload.get("checks") or []:
         mark = "PASS" if c.get("ok") else "FAIL"
         detail = f"  {c.get('detail')}" if c.get("detail") else ""

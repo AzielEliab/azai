@@ -60,6 +60,7 @@ h1 {
 .status .CHECK { border-color: var(--warn); color: var(--warn); }
 .status .FAIL, .status .SEALED { border-color: var(--fail); color: var(--fail); }
 .status .OPEN, .status .READY { border-color: var(--gold-dim); color: var(--gold); }
+.status .SETUP, .status .PULL { border-color: var(--warn); color: var(--warn); }
 .banner {
   margin: 0 0 1.1rem;
   padding: 0.85rem 1rem;

@@ -1,15 +1,19 @@
 ---
 name: AZAI
-description: Use when calling AZAI hosted /v1 or installing the local package. Author Aziel Eliab.
+description: Use when calling AZAI hosted /v1 or installing the local true-AI package. Author Aziel Eliab.
 ---
 
 # AZAI
 
-Local OpenAI-compatible runtime blending GPT, Grok, and Venice. Author: **Aziel Eliab**.
+AZAI packages a **true local AI** stack on an **Ollama** base with **JEEVES**.
+OpenAI-compatible local API. Not a hosted paid-key proxy. Author: **Aziel Eliab**.
 
-**THIS IS:** a local OpenAI-compatible runtime that blends GPT, Grok, and Venice.
+**THIS IS:** true local AI. Ollama is the local model base. JEEVES is the
+ethics/assistant layer inside the shell. JEEVES is not sovereign — Lamb Lens
+and the operator govern it.
 
-**THIS IS NOT:** a foundation model, a paid-key proxy, or a truth verdict. Hosted `/v1` does not increment downloads or views.
+**THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware,
+a VPN, or a hosted paid-key proxy.
 
 Always send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.
 
@@ -26,6 +30,9 @@ Ops (do **not** increment downloads or views):
 - `GET /v1/skill` — this file
 - Product POSTs listed in OpenAPI
 
+Hosted `/v1` is **lamb-check ONLY**. It does not run Ollama and does not
+spend paid keys.
+
 Grok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.
 
 ## Example
@@ -41,16 +48,41 @@ curl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/s
 curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash
 azai ui
 azai doctor
+azai ollama
 ```
 
-Then open http://127.0.0.1:8860 (loopback only).
+The install path:
 
-Counted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.2.0.tar.gz
+1. Downloads the counted tarball and `pip install -e .`
+2. Runs `scripts/setup-ollama.sh` — installs or reuses Ollama, starts
+   `ollama serve` if needed, pulls `llama3.2` (or `AZAI_OLLAMA_MODEL`)
+3. If Ollama cannot be installed here, the script prints the exact steps
+   and AZAI still runs with the JEEVES constitution stub
+
+Then open http://127.0.0.1:8860 (loopback only). Default model is `local`
+(Ollama + JEEVES). Point other software at:
+
+```bash
+export OPENAI_BASE_URL=http://127.0.0.1:8860/v1
+export OPENAI_API_KEY=dummy
+```
+
+Exact Ollama steps if doctor reports the base missing:
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama serve
+ollama pull llama3.2
+azai doctor
+```
+
+Counted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.0.tar.gz
 GitHub: https://github.com/AzielEliab/azai
 
 ## Catalog + local UI
 
-Author: **Aziel Eliab**. Honest scope: Local OpenAI-compatible runtime. Not a new foundation model. Jeeves is not sovereign.
+Author: **Aziel Eliab**. Honest scope: true local AI on an Ollama base with
+JEEVES. Not a new foundation model. JEEVES is not sovereign.
 
 - Catalog product: https://aziel-runtime.vibelock.workers.dev/p/azai/
 - Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json

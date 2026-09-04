@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "azai"
-version = "0.2.0"
-description = "AZAI: local OpenAI-compatible runtime that blends GPT, Grok, and Venice under the Lamb Lens. Jeeves is not sovereign."
+version = "0.3.0"
+description = "AZAI: true local AI on an Ollama base with JEEVES. OpenAI-compatible local API. Not a hosted paid-key proxy. Jeeves is not sovereign."
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [{name = "Aziel Eliab"}]
@@ -13,6 +13,8 @@ requires-python = ">=3.10"
 keywords = [
     "azai",
     "jeeves",
+    "ollama",
+    "true-local-ai",
     "openai-compatible",
     "local",
     "lamb-lens",

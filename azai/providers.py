@@ -1,6 +1,7 @@
 """GPT / Grok / Venice HTTP clients. Keys from env, never files in git.
 
-Tests inject hooks so urllib is never called. Timeouts, no retry storms.
+Ollama is the unpaid local base (see azai.ollama). Tests inject hooks
+so urllib is never called. Timeouts, no retry storms.
 """
 
 from __future__ import annotations
@@ -21,6 +22,9 @@ from azai.config import (
     VENICE_URL,
     VENICE_URL_ALT,
 )
+from azai.ollama import call_chat as ollama_chat
+from azai.ollama import ollama_model
+from azai.ollama import status as ollama_status
 
 Hook = Callable[[str, list[dict[str, str]], str], str]
 
@@ -64,10 +68,12 @@ def provider_status() -> dict[str, dict[str, Any]]:
         },
         "local": {
             "present": True,
-            "env": None,
-            "url": "local Jeeves stub",
+            "env": "AZAI_OLLAMA_URL / AZAI_OLLAMA_MODEL",
+            "url": "JEEVES on Ollama base (constitution stub if Ollama is down)",
             "model": "local",
+            "role": "JEEVES ethics/assistant layer",
         },
+        "ollama": ollama_status(),
     }
 
 
@@ -120,8 +126,11 @@ def call_named(name: str, messages: list[dict[str, str]]) -> str:
             "gpt": os.environ.get("AZAI_GPT_MODEL") or GPT_MODEL,
             "grok": os.environ.get("AZAI_GROK_MODEL") or GROK_MODEL,
             "venice": os.environ.get("AZAI_VENICE_MODEL") or VENICE_MODEL,
+            "ollama": ollama_model(),
         }.get(name, name)
         return hook(name, messages, model)
+    if name == "ollama":
+        return ollama_chat(messages)
     if name == "gpt":
         key = _env_first("OPENAI_API_KEY")
         if not key:

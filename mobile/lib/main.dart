@@ -72,7 +72,7 @@ class _AzaiHomeState extends State<AzaiHome> {
       buf.writeln('- $row');
     }
     buf.writeln();
-    buf.writeln('_Apache-2.0, Aziel Eliab. Companion export, v0.2.0._');
+    buf.writeln('_Apache-2.0, Aziel Eliab. Companion export, v0.3.0._');
     return buf.toString();
   }
 

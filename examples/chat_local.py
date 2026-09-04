@@ -1,4 +1,4 @@
-"""One-shot local Jeeves turn. No network. No keys required."""
+"""One-shot local JEEVES turn (Ollama base, constitution stub if Ollama is down)."""
 
 from azai.runtime import Runtime
 

@@ -8,9 +8,9 @@
  */
 
 export const LIMITATION =
-  "AZAI is a local OpenAI-compatible runtime, not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Lamb Lens (peace, clarity, service) gates every turn. Hub is a blank key: it does not interpret meaning. Hosted /v1 is lamb-check ONLY (plus a protocol mirror of health/models), NOT a proxy that spends the author's paid keys. Never a paid-key proxy. Constitutional gate, not a proof of ethics.";
+  "AZAI packages a true local AI stack on an Ollama base with JEEVES. OpenAI-compatible local API. Not a hosted paid-key proxy. AZAI is not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. JEEVES is the ethics/assistant layer and is not sovereign. Lamb Lens (peace, clarity, service) and the operator govern every turn. Hub is a blank key: it does not interpret meaning. Hosted /v1 is lamb-check ONLY (plus a protocol mirror of health/models), NOT a proxy that spends the author's paid keys. Never a paid-key proxy. Constitutional gate, not a proof of ethics.";
 
-export const MODELS = ["blend", "gpt", "grok", "venice", "local"];
+export const MODELS = ["local", "ollama", "blend", "gpt", "grok", "venice"];
 
 export const PEACE_FAIL = [
   "enslave",
@@ -100,7 +100,7 @@ export function models() {
       object: "model",
       created: 0,
       owned_by: "azai",
-      note: "Protocol mirror. Live blend runs on local azai serve, not this Worker.",
+      note: "Protocol mirror. Live Ollama + JEEVES runs on local azai serve, not this Worker.",
     })),
     limitation: LIMITATION,
   };

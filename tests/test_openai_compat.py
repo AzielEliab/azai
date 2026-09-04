@@ -6,7 +6,7 @@ from azai.runtime import Runtime, models_payload
 
 def test_models_list_contains_all() -> None:
     ids = [m["id"] for m in models_payload()["data"]]
-    assert ids == ["blend", "gpt", "grok", "venice", "local"]
+    assert ids == ["local", "ollama", "blend", "gpt", "grok", "venice"]
 
 
 def test_openai_compat_json_shape_mocked(tmp_path) -> None:
