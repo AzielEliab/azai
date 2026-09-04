@@ -63,8 +63,8 @@ def test_source_imports_isolated() -> None:
 
 
 def test_not_inside_sibling_products() -> None:
-    text = str(ROOT)
-    assert text.endswith("/azai") or text.endswith("\\azai") or "/azai" in text
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert 'name = "azai"' in pyproject
     assert not (ROOT / "azos").exists()
     assert not (ROOT / "godlock").exists()
     assert not (ROOT / "forgereceipts").exists()
