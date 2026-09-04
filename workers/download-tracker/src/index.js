@@ -439,7 +439,7 @@ function openapiSpec(request) {
             "/v1/example": { get: { operationId: "azaiExample", summary: "Sample JSON payload. Does not increment downloads.", responses: { "200": { description: "OK" } } } },
       "/v1/health": { get: { operationId: "azai_health", summary: "Liveness. Does not increment download KV. Not a provider proxy.", responses: { "200": { description: "ok" } } } },
       "/v1/skill": { get: { operationId: "azai_skill", summary: "AZAI skill markdown, including how the Corpus/Library calls Ask Jeeves. Does not increment downloads.", responses: { "200": { description: "markdown" } } } },
-      "/v1/jeeves": { get: { operationId: "azai_jeeves", summary: "Ask Jeeves research-assistant contract. Not chat. Not sovereign. Not GPT. How www.azielcorpuslibrary.net calls local AZAI/Jeeves.", responses: { "200": { description: "ask-jeeves mode card" } } } },
+      "/v1/jeeves": { get: { operationId: "azai_jeeves", summary: "Ask Jeeves research-assistant contract. Not chat. Not sovereign. Not GPT. How www.azielcorpuslibrary.net calls local AZAI/Jeeves.", responses: { "200": { description: "Ask Jeeves mode card" } } } },
       "/v1/models": { get: { operationId: "azai_models", summary: "Protocol mirror of local, ollama, blend, gpt, grok, venice. Live Ollama+JEEVES is local azai serve.", responses: { "200": { description: "models" } } } },
       "/v1/lamb-check": {
         post: {
@@ -504,7 +504,7 @@ async function handleRuntime(request, url) {
       not_a_foundation_model: true,
       jeeves_sovereign: false,
       jeeves_layer: "ethics/assistant",
-      jeeves_mode: "ask-jeeves",
+      jeeves_mode: "ask_jeeves",
       ask_jeeves: true,
       jeeves_posture: "public-corpus",
       can_modify_scores: false,
@@ -542,7 +542,7 @@ async function handleRuntime(request, url) {
       ok: true,
       product: "azai",
       author: "Aziel Eliab",
-      mode: "ask-jeeves",
+      mode: "ask_jeeves",
       label: "Ask Jeeves research assistant",
       sovereign: false,
       not_gpt: true,

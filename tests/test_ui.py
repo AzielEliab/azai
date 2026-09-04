@@ -50,7 +50,7 @@ def test_ui_get_root_contains_azai_and_jeeves(tmp_path) -> None:
         assert "site_context" in str(spec["paths"]["/v1/chat/completions"])
         with urllib.request.urlopen(f"http://127.0.0.1:{port}/v1/jeeves", timeout=3) as resp:
             card = json.loads(resp.read().decode("utf-8"))
-        assert card["mode"] == "ask-jeeves"
+        assert card["mode"] == "ask_jeeves"
         assert card["sovereign"] is False
         assert card["can_modify_scores"] is False
     finally:

@@ -20,7 +20,7 @@ def test_cli_jeeves(capsys) -> None:
     assert "azielcorpuslibrary.net" in out
     assert main(["jeeves", "--json"]) == 0
     jout = capsys.readouterr().out
-    assert '"mode": "ask-jeeves"' in jout or '"mode":"ask-jeeves"' in jout.replace(" ", "")
+    assert '"mode": "ask_jeeves"' in jout or '"mode":"ask_jeeves"' in jout.replace(" ", "")
 
 
 def test_cli_models(capsys) -> None:

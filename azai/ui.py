@@ -177,7 +177,7 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
                 "get": {
                     "operationId": "azai_jeeves",
                     "summary": "Ask Jeeves research-assistant contract. Not sovereign. Not GPT. Corpus callers read this then POST /v1/chat/completions with site_context.",
-                    "responses": {"200": {"description": "ask-jeeves mode card"}},
+                    "responses": {"200": {"description": "Ask Jeeves mode card"}},
                 }
             },
         },
@@ -319,7 +319,7 @@ class Handler(BaseHTTPRequestHandler):
                 "version": __version__,
                 "instrument": "Jeeves",
                 "jeeves_layer": "ethics/assistant",
-                "jeeves_mode": "ask-jeeves",
+                "jeeves_mode": "ask_jeeves",
                 "ask_jeeves": True,
                 "jeeves_posture": "public-corpus",
                 "jeeves_sovereign": False,

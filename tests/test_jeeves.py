@@ -26,7 +26,7 @@ from azai.runtime import Runtime
 
 def test_jeeves_is_not_sovereign_and_not_gpt() -> None:
     assert SOVEREIGN is False
-    assert MODE == "ask-jeeves"
+    assert MODE == "ask_jeeves"
     assert "Ask Jeeves" in MODE_LABEL
     low = SYSTEM.lower()
     assert "not sovereign" in low
@@ -174,8 +174,8 @@ def test_runtime_chat_site_context_count_only_in_receipt(tmp_path) -> None:
     recs = rt.receipts.read()
     chat_recs = [r for r in recs if r.get("action") == "chat"]
     assert chat_recs
-    extra = chat_recs[-1].get("extra") or {}
-    dumped = json.dumps(extra)
+    extra = (chat_recs[-1].get("payload") or {}).get("extra") or {}
+    dumped = json.dumps(chat_recs[-1])
     assert extra.get("site_context_n") == 1
     assert "Florence" not in dumped
     assert "Public record" not in dumped

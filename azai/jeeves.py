@@ -16,7 +16,7 @@ from azai.ollama import probe as ollama_probe
 
 OATH = "Truth belongs to the Source; understanding belongs to service."
 ROLE = "ethics/assistant layer"
-MODE = "ask-jeeves"
+MODE = "ask_jeeves"
 MODE_LABEL = "Ask Jeeves research assistant"
 POSTURE = "public-corpus"
 CORPUS_LIBRARY = "https://www.azielcorpuslibrary.net/"
