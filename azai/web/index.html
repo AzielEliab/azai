@@ -9,7 +9,7 @@
 <body data-view="simple">
   <header class="top">
     <div class="brand">
-      <div class="tag">AZAI · v0.2.0 · loopback · Jeeves inside the shell</div>
+      <div class="tag">AZAI · v0.3.0 · true local AI · Ollama base · JEEVES inside the shell</div>
       <h1>AZAI</h1>
       <p class="motto">Jeeves speaks inside the shell. Lamb Lens governs above the shell. Receipts witness what the shell permits.</p>
     </div>
@@ -18,13 +18,15 @@
       <span data-k="integrity">Integrity —</span>
       <span data-k="runtime">Runtime —</span>
       <span data-k="jeeves">Jeeves —</span>
+      <span data-k="ollama">Ollama —</span>
       <span data-k="providers">Providers —</span>
     </div>
   </header>
 
   <aside class="banner limit" role="note">
-    Type a question. Press <strong>Send</strong>. Jeeves is not sovereign.
-    <strong>Check this text</strong> runs the Lamb Lens only — it does not call GPT, Grok, or Venice.
+    Type a question. Press <strong>Send</strong>. True local AI on an <strong>Ollama</strong> base.
+    <strong>JEEVES</strong> is the ethics/assistant layer and is not sovereign — Lamb Lens and you govern it.
+    <strong>Check this text</strong> runs the Lamb Lens only — it does not call Ollama or paid providers.
     Hosted cloud <code>/v1</code> is lamb-check only, never a paid-key proxy.
     Point other software at <code>OPENAI_BASE_URL=http://127.0.0.1:8860/v1</code> with a dummy key.
   </aside>
@@ -48,11 +50,12 @@
           <span class="kicker">Model</span>
         </label>
         <select id="model">
-          <option value="blend" selected>blend — gpt + grok + venice, labeled</option>
+          <option value="local" selected>local — Ollama + JEEVES</option>
+          <option value="ollama">ollama — local base through JEEVES</option>
+          <option value="blend">blend — optional gpt + grok + venice, labeled</option>
           <option value="gpt">gpt</option>
           <option value="grok">grok</option>
           <option value="venice">venice</option>
-          <option value="local">local — Jeeves stub</option>
         </select>
         <button type="button" id="seal">Seal Runtime</button>
         <button type="button" id="open" class="ghost">Open Runtime</button>

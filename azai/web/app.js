@@ -122,11 +122,14 @@ async function refresh() {
   badge(bar, "integrity", "Integrity", status.integrity || lamb);
   badge(bar, "runtime", "Runtime", status.runtime || "—");
   badge(bar, "jeeves", "Jeeves", status.jeeves || "—");
+  const ol = status.ollama || {};
+  const olabel = ol.reachable ? (ol.model_present ? "READY" : "PULL") : "SETUP";
+  badge(bar, "ollama", "Ollama", olabel);
   const prov = status.providers || {};
   const present = Object.entries(prov)
-    .filter(([k, v]) => k !== "local" && v && v.present)
+    .filter(([k, v]) => k !== "local" && k !== "ollama" && v && v.present)
     .map(([k]) => k);
-  const ptxt = present.length ? present.join("+") : "local only";
+  const ptxt = present.length ? present.join("+") : "ollama base";
   badge(bar, "providers", "Providers", ptxt);
   setChips(status.lamb || {});
   const rec = await jget("/v1/receipts");

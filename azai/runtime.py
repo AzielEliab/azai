@@ -12,11 +12,11 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from azai.config import LIMITATION, MODELS
+from azai.config import DEFAULT_MODEL, LIMITATION, MODELS
 from azai.debug import dlog
 from azai.exchange import bundle as make_bundle
 from azai.exchange import parse_conversation, simple_text, to_markdown
-from azai.jeeves import local_reply
+from azai.jeeves import local_reply, wrap_messages
 from azai.lamb import check_text, is_fail
 from azai.providers import provider_status, try_named
 from azai.receipts import ReceiptLog
@@ -192,24 +192,25 @@ class Runtime:
                 available.append(name)
         if available:
             synth = (
-                f"Three-source blend. Present: {', '.join(available)}. "
+                f"Optional paid blend. Present: {', '.join(available)}. "
                 "Each instrument is labeled above; nothing is hidden. "
-                "Jeeves is not sovereign. Lamb Lens gated this turn."
+                "JEEVES is not sovereign. Lamb Lens gated this turn. "
+                "The true local base is Ollama + JEEVES (model=local)."
             )
         else:
             synth = (
-                "No live providers (keys missing or hooks empty). "
-                "Falling back to local Jeeves — not GPT."
+                "No live paid providers (keys missing or hooks empty). "
+                "Falling back to local JEEVES on the Ollama base — not GPT, not a hosted proxy."
             )
             prompt = messages[-1]["content"] if messages else ""
-            parts.append("[local / Jeeves]\n" + local_reply(prompt, check_text(prompt)))
+            parts.append(local_reply(prompt, check_text(prompt), messages=messages))
         parts.append(f"[synthesis]\n{synth}")
         return "\n\n".join(parts)
 
-    def chat(self, prompt: str, model: str = "blend") -> dict[str, Any]:
-        model = (model or "blend").lower().strip()
+    def chat(self, prompt: str, model: str = DEFAULT_MODEL) -> dict[str, Any]:
+        model = (model or DEFAULT_MODEL).lower().strip()
         if model not in MODELS:
-            model = "blend"
+            model = DEFAULT_MODEL
         dlog("chat", model=model, n=len(prompt or ""))
         if self.sealed:
             rec = self.receipts.append("chat_blocked", "SEALED", extra={"model": model})
@@ -236,9 +237,10 @@ class Runtime:
                     + "\n".join(self._session_memory[-8:]),
                 },
             )
+        messages = wrap_messages(messages)
 
-        if model == "local":
-            content = local_reply(prompt, lamb_in)
+        if model in {"local", "ollama"}:
+            content = local_reply(prompt, lamb_in, messages=messages)
         elif model == "blend":
             content = self._blend(messages)
         else:
@@ -246,7 +248,7 @@ class Runtime:
             if ok:
                 content = f"[{model}]\n{text.strip()}"
             else:
-                content = local_reply(prompt, lamb_in) + f"\n\n({model} {text})"
+                content = local_reply(prompt, lamb_in, messages=messages) + f"\n\n({model} {text})"
 
         lamb_out = check_text(content)
         if is_fail(lamb_out):
@@ -279,7 +281,7 @@ class Runtime:
 
     def openai_completion(self, body: dict[str, Any]) -> dict[str, Any]:
         messages = body.get("messages") or []
-        model = str(body.get("model") or "blend")
+        model = str(body.get("model") or DEFAULT_MODEL)
         prompt_parts = []
         for msg in messages:
             if msg.get("role") == "user":

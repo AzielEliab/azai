@@ -1,15 +1,19 @@
 include LICENSE
 include README.md
 include CONTRIBUTING.md
+include SKILL.md
 include pyproject.toml
 include .gitignore
+include install.sh
 graft docs
 graft examples
 graft tests
+graft scripts
 graft workers
 graft azai/web
 graft mobile
 global-exclude *.pyc
 global-exclude __pycache__
+recursive-exclude workers/download-tracker/public *.tar.gz
 prune workers/download-tracker/node_modules
 prune workers/download-tracker/.wrangler

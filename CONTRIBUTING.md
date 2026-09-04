@@ -19,11 +19,12 @@ in-process. Do not set live API keys in CI.
 
 ## Ground rules
 
-1. **Not a new foundation model.** AZAI is a local OpenAI-compatible
-   runtime that blends GPT, Grok, and Venice. Local Jeeves does not
-   pretend to be GPT.
-2. **Jeeves is not sovereign.** Lamb Lens (peace, clarity, service)
-   gates every turn. Hub is a blank key: it does not interpret meaning.
+1. **True local AI on an Ollama base.** Default `model=local` uses
+   Ollama through JEEVES. Local JEEVES does not pretend to be GPT.
+   Not a hosted paid-key proxy.
+2. **JEEVES is not sovereign.** It is the ethics/assistant layer.
+   Lamb Lens (peace, clarity, service) and the operator govern every
+   turn. Hub is a blank key: it does not interpret meaning.
 3. **Blend is visible.** When mode=blend, label `[gpt]` `[grok]`
    `[venice]` then `[synthesis]`. Never hide which model said what.
 4. **Hosted Worker `/v1` is lamb-check ONLY.** Never a paid-key proxy.
@@ -47,6 +48,8 @@ in-process. Do not set live API keys in CI.
 
 - Lamb Lens: `azai/lamb.py` and `workers/download-tracker/src/engine.js`
 - Providers: `azai/providers.py`
+- Ollama base: `azai/ollama.py`, `scripts/setup-ollama.sh`
+- JEEVES layer: `azai/jeeves.py`
 - Runtime / blend / seal: `azai/runtime.py`
 - Receipts: `azai/receipts.py`
 - CLI: `azai/cli.py` (`azai doctor`, import/export)

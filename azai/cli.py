@@ -3,8 +3,9 @@
     azai version
     azai ui
     azai serve
-    azai chat --model blend --message "..."
+    azai chat --model local --message "..."
     azai models
+    azai ollama
     azai integrity
     azai seal / azai open
     azai receipts
@@ -24,7 +25,7 @@ from pathlib import Path
 from typing import Sequence
 
 from azai import __version__
-from azai.config import LAN_RISK, LIMITATION, MODELS, UI_HOST, UI_PORT
+from azai.config import DEFAULT_MODEL, LAN_RISK, LIMITATION, MODELS, UI_HOST, UI_PORT
 from azai.debug import dlog
 from azai.runtime import LambBlocked, Runtime, SealedError, models_payload, resolve_data_dir
 
@@ -33,10 +34,9 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="azai",
         description=(
-            "AZAI (Aziel Artificial Intelligence) — local OpenAI-compatible runtime "
-            "that blends GPT, Grok, and Venice under the Lamb Lens. "
-            "Jeeves is the instrument inside the shell and is not sovereign. "
-            "Loopback UI: `azai ui` at http://127.0.0.1:8860. "
+            "AZAI (Aziel Artificial Intelligence) — true local AI on an Ollama base "
+            "with JEEVES as the ethics/assistant layer (not sovereign). "
+            "OpenAI-compatible local API at http://127.0.0.1:8860/v1. "
             "Hosted /v1 is lamb-check only, never a paid-key proxy."
         ),
     )
@@ -54,14 +54,14 @@ def _build_parser() -> argparse.ArgumentParser:
     p_serve.add_argument("--port", type=int, default=UI_PORT)
     p_serve.add_argument("--data", default=None)
 
-    p_chat = sub.add_parser("chat", help="One-shot chat through Lamb Lens.")
-    p_chat.add_argument("--model", default="blend", choices=list(MODELS))
+    p_chat = sub.add_parser("chat", help="One-shot chat through Lamb Lens + JEEVES.")
+    p_chat.add_argument("--model", default=DEFAULT_MODEL, choices=list(MODELS))
     p_chat.add_argument("--message", required=True)
     p_chat.add_argument("--data", default=None)
     p_chat.add_argument("--json", action="store_true", dest="as_json")
     p_chat.add_argument("--simple", action="store_true", help="Print the simple (6th-grader) view of blend output.")
 
-    p_models = sub.add_parser("models", help="List blend, gpt, grok, venice, local.")
+    p_models = sub.add_parser("models", help="List local, ollama, blend, gpt, grok, venice.")
     p_models.add_argument("--json", action="store_true", dest="as_json")
 
     p_int = sub.add_parser("integrity", help="Peace / clarity / service + receipt chain.")
@@ -83,9 +83,12 @@ def _build_parser() -> argparse.ArgumentParser:
     p_mem.add_argument("--confirm", action="store_true")
     p_mem.add_argument("--data", default=None)
 
-    p_doc = sub.add_parser("doctor", help="Local self-check: Lamb fixtures, loopback, receipts, no Worker keys.")
+    p_doc = sub.add_parser("doctor", help="Local self-check: Lamb, JEEVES, Ollama steps, loopback, no Worker keys.")
     p_doc.add_argument("--data", default=None)
     p_doc.add_argument("--json", action="store_true", dest="as_json")
+
+    p_ol = sub.add_parser("ollama", help="Show local Ollama base status and exact install steps.")
+    p_ol.add_argument("--json", action="store_true", dest="as_json")
 
     p_imp = sub.add_parser("import", help="Import a .txt or JSON conversation (replaces session transcript).")
     p_imp.add_argument("path", help="Path to .txt or .json")
@@ -179,6 +182,28 @@ def main(argv: Sequence[str] | None = None) -> int:
         rt = _rt(args)
         print(json.dumps(rt.remember(args.text, confirm=args.confirm), indent=2))
         return 0 if args.confirm else 2
+
+    if args.cmd == "ollama":
+        from azai.ollama import install_steps, probe
+
+        payload = probe()
+        if args.as_json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(
+                f"Ollama reachable={payload.get('reachable')}  "
+                f"url={payload.get('url')}  model={payload.get('model')}  "
+                f"model_present={payload.get('model_present')}"
+            )
+            if payload.get("error"):
+                print(payload["error"])
+            if payload.get("steps"):
+                print()
+                print(payload["steps"])
+            elif not payload.get("reachable"):
+                print()
+                print(install_steps())
+        return 0
 
     if args.cmd == "doctor":
         from azai.doctor import format_report, run

@@ -6,13 +6,13 @@ from azai.cli import main
 def test_cli_version(capsys) -> None:
     assert main(["version"]) == 0
     out = capsys.readouterr().out
-    assert "azai 0.2.0" in out
+    assert "azai 0.3.0" in out
 
 
 def test_cli_models(capsys) -> None:
     assert main(["models"]) == 0
     out = capsys.readouterr().out
-    for name in ("blend", "gpt", "grok", "venice", "local"):
+    for name in ("local", "ollama", "blend", "gpt", "grok", "venice"):
         assert name in out
 
 
@@ -26,6 +26,13 @@ def test_cli_integrity(capsys) -> None:
     assert main(["integrity", "--json"]) == 0
     out = capsys.readouterr().out
     assert "peace" in out.lower() or "PASS" in out
+
+
+def test_cli_ollama_status(capsys) -> None:
+    assert main(["ollama"]) == 0
+    out = capsys.readouterr().out
+    assert "Ollama" in out
+    assert "127.0.0.1:11434" in out
 
 
 def test_cli_memory_requires_confirm(capsys) -> None:

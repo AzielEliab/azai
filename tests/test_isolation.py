@@ -63,8 +63,8 @@ def test_source_imports_isolated() -> None:
 
 
 def test_not_inside_sibling_products() -> None:
-    text = str(ROOT)
-    assert text.endswith("/azai") or text.endswith("\\azai") or "/azai" in text
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert 'name = "azai"' in pyproject
     assert not (ROOT / "azos").exists()
     assert not (ROOT / "godlock").exists()
     assert not (ROOT / "forgereceipts").exists()
@@ -80,7 +80,9 @@ def test_worker_isolated() -> None:
     assert "/download" in toml
     src = (ROOT / "workers" / "download-tracker" / "src" / "index.js").read_text(encoding="utf-8")
     assert 'const PROJECT = "azai"' in src
-    assert "azai-0.2.0.tar.gz" in src
+    assert "azai-0.3.0.tar.gz" in src
+    assert "true local AI" in src or "true local ai" in src.lower()
+    assert "ollama" in src.lower()
     assert "azai|__total__" in src or 'PROJECT + "|__total__"' in src
     assert "Isolated counter" in src
     assert "env.ASSETS.fetch" in src
@@ -101,6 +103,8 @@ def test_readme_honest_scope() -> None:
     assert "not a new foundation model" in low
     assert "not a kernel" in low
     assert "jeeves is not sovereign" in low
+    assert "ollama" in low
+    assert "true local" in low
     assert "blank key" in low
     assert "Forks are welcome" in readme
     assert "azai-download-tracker.vibelock.workers.dev" in readme

@@ -16,8 +16,9 @@ not 302 to GitHub. `Cache-Control: private, no-store`.
 
 No secrets belong in this directory.
 
-Not a new foundation model. Jeeves is not sovereign. Hosted `/v1` is lamb-check ONLY (plus health/models). Never a paid-key proxy. Forks are welcome
-and always allowed.
+True local AI on an Ollama base with JEEVES. Not a new foundation model.
+JEEVES is not sovereign. Hosted `/v1` is lamb-check ONLY (plus health/models).
+Never a paid-key proxy. Forks are welcome and always allowed.
 
 This worker is AZAI only. It is not mixed with AZ-OS, GodLock,
 ForgeReceipts, The ARK, or any other product.
@@ -46,7 +47,13 @@ KV id in `wrangler.toml`: `155f641feb8244bea7fa245133128a32`. Binding name MUST 
 Tracked asset URL:
 
 ```
-https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.2.0.tar.gz
+https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.0.tar.gz
+```
+
+Rebuild the counted tarball from the repo root:
+
+```
+bash scripts/pack-tarball.sh
 ```
 
 ## CORS

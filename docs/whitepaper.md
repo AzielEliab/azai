@@ -1,13 +1,14 @@
-# AZAI — local OpenAI-compatible runtime (v0.2.0)
+# AZAI — true local AI on an Ollama base (v0.3.0)
 
-Aziel Artificial Intelligence. Shell: **AZAI**. Instrument: **Jeeves**.
+Aziel Artificial Intelligence. Shell: **AZAI**. Instrument: **JEEVES**.
 Author: Aziel Eliab, 2026. Apache-2.0.
 
 ## What this is
 
-A **standard local AI** that blends GPT, Grok, and Venice on the
-operator's machine, gated by the Lamb Lens, with an OpenAI-compatible
-HTTP surface so other software on site can point at it.
+A **true local AI** package. **Ollama** is the local model base.
+**JEEVES** is the ethics/assistant layer (not sovereign). The local
+API is OpenAI-compatible so other software on site can point at it.
+Optional paid GPT / Grok / Venice blend stays on this machine only.
 
 ```
 OPENAI_BASE_URL=http://127.0.0.1:8860/v1
@@ -40,8 +41,9 @@ When `model=blend`, the runtime calls gpt, grok, and venice (or records
 that a key is missing) and returns labeled sections plus a short
 synthesis. Never hide which model said what.
 
-Without keys, `model=local` (and blend fallback) runs the Jeeves stub.
-The stub does not pretend to be GPT.
+Default `model=local` (and `model=ollama`) runs JEEVES on the Ollama
+base. Without Ollama, the constitution stub still answers and does not
+pretend to be GPT.
 
 Paid calls happen only on local `azai serve`. The hosted Cloudflare
 Worker `/v1` lists models and runs the same Lamb rules in JS. It does
@@ -78,6 +80,16 @@ Copied into `docs/source/`:
 Jeeves speaks inside the shell. Lamb Lens governs above the shell.
 Receipts witness what the shell permits.
 
+
+## v0.3.0
+
+Ollama is the true local base. `scripts/setup-ollama.sh` installs or
+reuses Ollama and pulls `llama3.2` (or `AZAI_OLLAMA_MODEL`). JEEVES wraps
+every local turn as the ethics/assistant layer and is not sovereign.
+Default model is `local`. Optional paid blend remains labeled.
+`azai ollama` and `azai doctor` print exact Ollama steps when the base
+is missing. OpenAI-compatible API unchanged at `/v1`. Hosted `/v1` is
+still lamb-check ONLY — not a paid-key proxy.
 
 ## v0.2.0
 

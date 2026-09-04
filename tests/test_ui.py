@@ -23,7 +23,8 @@ def test_ui_get_root_contains_azai_and_jeeves(tmp_path) -> None:
             assert resp.status == 200
             html = resp.read().decode("utf-8")
         assert "AZAI" in html
-        assert "Jeeves" in html
+        assert "Jeeves" in html or "JEEVES" in html
+        assert "Ollama" in html
         assert "Send" in html
         assert "Check this text" in html
         assert "Peace" in html and "Clarity" in html and "Service" in html
@@ -35,7 +36,7 @@ def test_ui_get_root_contains_azai_and_jeeves(tmp_path) -> None:
         with urllib.request.urlopen(f"http://127.0.0.1:{port}/v1/models", timeout=3) as resp:
             models = json.loads(resp.read().decode("utf-8"))
         ids = [m["id"] for m in models["data"]]
-        assert ids == ["blend", "gpt", "grok", "venice", "local"]
+        assert ids == ["local", "ollama", "blend", "gpt", "grok", "venice"]
         with urllib.request.urlopen(f"http://127.0.0.1:{port}/v1/health", timeout=3) as resp:
             health = json.loads(resp.read().decode("utf-8"))
         assert health["ok"] is True

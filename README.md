@@ -1,17 +1,19 @@
 # AZAI (Aziel Artificial Intelligence)
 
-**Local OpenAI-compatible runtime** that blends GPT, Grok, and Venice
-under the Lamb Lens. **Jeeves** is the instrument inside the shell.
-Jeeves is not sovereign. Hub is a blank key: it does not interpret meaning.
+**True local AI** on an **Ollama** base. **JEEVES** is the ethics/assistant
+layer inside the shell. JEEVES is not sovereign — Lamb Lens and the
+operator govern it. OpenAI-compatible local API. **Not a hosted paid-key
+proxy.** Hub is a blank key: it does not interpret meaning.
 
 **Author:** Aziel Eliab
 **Date:** 2026
-**Version:** 0.2.0
+**Version:** 0.3.0
 **License:** [Apache-2.0](LICENSE)
 
 > Not a new foundation model, not a kernel, not a worm, not IP-blocking
-> malware, not a VPN. Paid GPT/Grok/Venice calls happen on the operator's
-> local `azai serve`. The hosted Worker `/v1` is **lamb-check ONLY**,
+> malware, not a VPN. The local base is Ollama on this machine. Optional
+> paid GPT/Grok/Venice calls happen only on the operator's local
+> `azai serve`. The hosted Worker `/v1` is **lamb-check ONLY**,
 > never a paid-key proxy.
 
 See the spec: [docs/whitepaper.md](docs/whitepaper.md). Source papers:
@@ -28,7 +30,8 @@ curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash
 
 The script curls the **counted** tarball from this project's Worker
 (`/download`, User-Agent `Mozilla/5.0`), extracts, makes a venv, and
-`pip install -e .`. Then run `azai ui`.
+`pip install -e .`, then `scripts/setup-ollama.sh` (installs/uses Ollama
+and pulls `llama3.2` unless `AZAI_OLLAMA_MODEL` is set). Then run `azai ui`.
 
 Or tap **Download** / **One-click install** on the Worker homepage
 (a 6th-grader can tap it):
@@ -42,7 +45,7 @@ The Worker serves the gzip itself (HTTP 200, no 302 to GitHub).
 # → [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/) ←
 
 Direct tarball (also counted):
-[azai-0.2.0.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.2.0.tar.gz)
+[azai-0.3.0.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.0.tar.gz)
 
 - Live count JSON: [https://azai-download-tracker.vibelock.workers.dev/stats](https://azai-download-tracker.vibelock.workers.dev/stats)
 - OpenAPI: [https://azai-download-tracker.vibelock.workers.dev/openapi.json](https://azai-download-tracker.vibelock.workers.dev/openapi.json)
@@ -67,7 +70,7 @@ python -m venv .venv && source .venv/bin/activate && pip install -e ".[dev]"
 azai ui
 ```
 
-3. **Open** [http://127.0.0.1:8860](http://127.0.0.1:8860) — one chat box, **Send**, **Check this text**. Loopback only. No CDN, no telemetry.
+3. **Open** [http://127.0.0.1:8860](http://127.0.0.1:8860) — one chat box, **Send**, **Check this text**. Loopback only. No CDN, no telemetry. Default model is **local** (Ollama + JEEVES).
 
 That is the whole start. Type a question or press **Sample prompt**. Peace / Clarity / Service chips show the Lamb Lens. Simple view is the default (6th-grader easy). Advanced view shows blend labels and receipts.
 
@@ -80,22 +83,26 @@ export OPENAI_API_KEY=dummy
 
 Counted download: [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/)
 
-Direct tarball (also counted): [azai-0.2.0.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.2.0.tar.gz)
+Direct tarball (also counted): [azai-0.3.0.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.0.tar.gz)
 
 GitHub: [https://github.com/AzielEliab/azai](https://github.com/AzielEliab/azai)
 
-Self-check (no network): `azai doctor`
+Self-check: `azai doctor` (loopback Ollama probe is advisory; prints exact install steps if the base is missing)
 
 ---
 
 ## Honest scope
 
+- **True local AI on an Ollama base.** Default `model=local` talks to
+  Ollama at `http://127.0.0.1:11434` through JEEVES. Default model tag:
+  `llama3.2` (`AZAI_OLLAMA_MODEL`). No OpenAI key is required for local.
 - **Not a new foundation model.** AZAI is a local runtime / shell.
-  Jeeves is the instrument inside it. Without API keys, a local stub
-  still runs (Lamb Lens + receipts + constitution) and does **not**
+  JEEVES is the ethics/assistant layer inside it. Without Ollama, a
+  constitution stub still runs (Lamb Lens + receipts) and does **not**
   pretend to be GPT.
-- **Jeeves is not sovereign.** Lamb Lens (peace, clarity, service)
-  gates every turn. This is a constitutional gate, not a proof of ethics.
+- **JEEVES is not sovereign.** Lamb Lens (peace, clarity, service) and
+  the operator govern every turn. This is a constitutional gate, not a
+  proof of ethics.
 - **Hub is a blank key.** It does not interpret meaning. Removing the
   Hub leaves modules functional, only isolated.
 - **Blend is visible.** When `model=blend`, responses are labeled
@@ -115,13 +122,26 @@ Self-check (no network): `azai doctor`
 Motto: *Jeeves speaks inside the shell. Lamb Lens governs above the
 shell. Receipts witness what the shell permits.*
 
-## Providers (keys from env, never files in git)
+## Local base (Ollama) + optional paid providers
+
+JEEVES wraps every turn. Paid keys stay on this machine and never go
+through the hosted Worker.
 
 | id | env | URL | default model |
 |----|-----|-----|----------------|
+| local / ollama | `AZAI_OLLAMA_URL` / `AZAI_OLLAMA_MODEL` | `http://127.0.0.1:11434/v1/chat/completions` | `llama3.2` — **no paid key** |
 | gpt | `OPENAI_API_KEY` | `https://api.openai.com/v1/chat/completions` | `gpt-4o-mini` (`AZAI_GPT_MODEL`) |
 | grok | `XAI_API_KEY` or `GROK_API_KEY` | `https://api.x.ai/v1/chat/completions` | `grok-3-mini` (alt: `grok-2-latest` via `AZAI_GROK_MODEL`) |
 | venice | `VENICE_API_KEY` | `https://api.venice.ai/api/v1/chat/completions` | `llama-3.3-70b` (`AZAI_VENICE_MODEL`) |
+
+Exact Ollama steps (also printed by `azai ollama` and `azai doctor`):
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh   # or https://ollama.com/download
+ollama serve                                      # 127.0.0.1:11434
+ollama pull llama3.2                              # or llama3.2:1b on a small machine
+azai doctor
+```
 
 Venice alt URL (if the primary 404s): `https://api.venice.ai/v1/chat/completions`
 (`AZAI_VENICE_URL`). Timeouts, no retry storms. Lamb Lens runs on the
@@ -135,7 +155,13 @@ Python 3.10+.
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
+bash scripts/setup-ollama.sh
 ```
+
+`scripts/setup-ollama.sh` installs or reuses Ollama, starts `ollama serve`
+if needed, and pulls `llama3.2` (override with `AZAI_OLLAMA_MODEL`).
+If install cannot finish (no sudo, no network), it prints the exact
+steps above and leaves AZAI usable with the JEEVES constitution stub.
 
 Optional extra `[voice]` is a marker only — engines are not vendored.
 
@@ -145,21 +171,22 @@ Optional extra `[voice]` is a marker only — engines are not vendored.
 azai version
 azai ui                 # 127.0.0.1:8860 loopback only
 azai serve              # same as ui, emphasize OpenAI-compat API
-azai chat --model blend --message "..."
+azai chat --model local --message "..."
 azai models
+azai ollama             # local base status + exact install steps
 azai integrity
 azai seal
 azai open
 azai receipts
-azai doctor             # local self-check (Lamb fixtures, loopback, no Worker keys)
+azai doctor             # Lamb, JEEVES, Ollama steps, loopback, no Worker keys
 azai import chat.json   # or .txt
 azai export --format json --out chat.json
 azai export --format md --out chat.md
 ```
 
 `azai ui --host 0.0.0.0` binds on-site LAN. **Risk:** anyone who can
-reach the port can spend the operator's GPT/Grok/Venice keys. Prefer
-127.0.0.1.
+reach the port can use the local Ollama base and, if present, spend the
+operator's GPT/Grok/Venice keys. Prefer 127.0.0.1.
 
 `AZAI_DEBUG=1` prints local stderr traces. Keys are never logged. No telemetry.
 
@@ -174,8 +201,8 @@ POST bodies larger than 1 MiB are rejected (413).
 - Sample prompt
 - Simple view (default) and Advanced view (blend labels + receipts)
 - Import `.txt` / JSON conversation; export chat + receipts as JSON or Markdown
-- Top status: Lamb / Integrity / Runtime / Jeeves / Providers (which
-  keys are present, never the keys)
+- Top status: Lamb / Integrity / Runtime / Jeeves / Ollama / Providers
+  (which keys are present, never the keys)
 - Seal Runtime (Advanced)
 
 Self-contained CSS, no CDN, no telemetry.
@@ -191,7 +218,7 @@ OPENAI_API_KEY=dummy
 
 | Method | Path | Notes |
 |--------|------|--------|
-| GET | `/v1/models` | blend, gpt, grok, venice, local |
+| GET | `/v1/models` | local, ollama, blend, gpt, grok, venice |
 | POST | `/v1/chat/completions` | `messages[]`, `model`, `stream` accepted (returned non-stream) |
 | GET | `/v1/health` | runtime + which keys present |
 | GET | `/openapi.json` | OpenAPI 3.1 |
@@ -243,7 +270,7 @@ Lamb fixtures, `azai doctor`, and import/export roundtrip.
 
 Isolated download counter for this project only. Worker
 `azai-download-tracker`, project `azai`, KV `AZAI_DOWNLOADS` bound as
-`DOWNLOADS`. GET `/download` **serves** `azai-0.2.0.tar.gz` (does not 302
+`DOWNLOADS`. GET `/download` **serves** `azai-0.3.0.tar.gz` (does not 302
 to GitHub) with HTTP 200 and `Content-Type: application/gzip`. See
 [workers/download-tracker/README.md](workers/download-tracker/README.md).
 
@@ -264,7 +291,8 @@ One-URL catalog: https://aziel-runtime.vibelock.workers.dev/openapi.json
 ## Layout
 
 ```
-azai/                 library (lamb, receipts, jeeves, providers, runtime, cli, ui, doctor, exchange)
+azai/                 library (lamb, receipts, jeeves, ollama, providers, runtime, cli, ui, doctor, exchange)
+scripts/              setup-ollama.sh, pack-tarball.sh
 azai/web/             loopback UI
 tests/                pytest (no network) + fixtures/
 docs/whitepaper.md    spec (honest scope)

@@ -3,11 +3,11 @@ const EXAMPLE_PAYLOAD = {
   "text": "hello"
 };
 
-const SKILL_MARKDOWN = "---\nname: AZAI\ndescription: Use when calling AZAI hosted /v1 or installing the local package. Author Aziel Eliab.\n---\n\n# AZAI\n\nAZAI is a local OpenAI-compatible runtime, not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Hosted /v1 is lamb-check ONLY, never a paid-key proxy. Author: Aziel Eliab.\n\n**THIS IS:** a local OpenAI-compatible runtime under the Lamb Lens. Jeeves is the instrument inside the shell.\n\n**THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware, a VPN, or a hosted paid-key proxy. Jeeves is not sovereign.\n\nAuthor: **Aziel Eliab**. Forks are welcome and always allowed. Apache-2.0.\n\nAlways send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.\n\n## Call these URLs\n\n- Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- Live skill (this markdown): `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n\nOps (do **not** increment downloads or views):\n\n| Method | Path | What |\n|--------|------|------|\n| GET | `/v1/health` | Liveness. Does not increment downloads. |\n| GET | `/v1/skill` | This markdown. Does not increment downloads. |\n| GET | `/v1/models` | Local model list. Hosted is not a paid proxy. |\n| POST | `/v1/lamb-check` | Lamb Lens check only. Hosted never spends paid keys. |\n\nGrok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.\n\n## Example\n\n```bash\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/health\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/skill\ncurl -s -A 'Mozilla/5.0' -X POST https://azai-download-tracker.vibelock.workers.dev/v1/lamb-check \\\n  -H 'content-type: application/json' \\\n  -d '{\"text\":\"peace clarity service\"}'\n```\n\n## Local (after one-click install)\n\n```bash\ncurl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash\nazai ui\n```\n\nThen open http://127.0.0.1:8860 (loopback only).\n\nCounted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.2.0.tar.gz\nGitHub: https://github.com/AzielEliab/azai\n\n## Catalog + local UI\n\nAuthor: **Aziel Eliab**. Honest scope: Local OpenAI-compatible runtime. Not a new foundation model. Jeeves is not sovereign.\n\n- Catalog product: https://aziel-runtime.vibelock.workers.dev/p/azai/\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- Catalog MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- This Worker skill: `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n- This Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Sample payload: `GET https://azai-download-tracker.vibelock.workers.dev/v1/example`\n\nLocal UI: **Import JSON file** (`type=file`) and **Export JSON**. Then `azai doctor`.\n\nGrok: import catalog or Worker OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.\n";
+const SKILL_MARKDOWN = "---\nname: AZAI\ndescription: Use when calling AZAI hosted /v1 or installing the local true-AI package. Author Aziel Eliab.\n---\n\n# AZAI\n\nAZAI packages a **true local AI** stack on an **Ollama** base with **JEEVES**.\nOpenAI-compatible local API. Not a hosted paid-key proxy. Author: **Aziel Eliab**.\n\n**THIS IS:** true local AI. Ollama is the local model base. JEEVES is the\nethics/assistant layer inside the shell. JEEVES is not sovereign — Lamb Lens\nand the operator govern it.\n\n**THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware,\na VPN, or a hosted paid-key proxy.\n\nAlways send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.\n\n## Call these URLs\n\n- Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- Live skill (this markdown): `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n\nOps (do **not** increment downloads or views):\n\n- `GET /v1/health` — liveness\n- `GET /v1/skill` — this file\n- Product POSTs listed in OpenAPI\n\nHosted `/v1` is **lamb-check ONLY**. It does not run Ollama and does not\nspend paid keys.\n\nGrok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.\n\n## Example\n\n```bash\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/health\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/skill\n```\n\n## Local (after one-click install)\n\n```bash\ncurl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash\nazai ui\nazai doctor\nazai ollama\n```\n\nThe install path:\n\n1. Downloads the counted tarball and `pip install -e .`\n2. Runs `scripts/setup-ollama.sh` — installs or reuses Ollama, starts\n   `ollama serve` if needed, pulls `llama3.2` (or `AZAI_OLLAMA_MODEL`)\n3. If Ollama cannot be installed here, the script prints the exact steps\n   and AZAI still runs with the JEEVES constitution stub\n\nThen open http://127.0.0.1:8860 (loopback only). Default model is `local`\n(Ollama + JEEVES). Point other software at:\n\n```bash\nexport OPENAI_BASE_URL=http://127.0.0.1:8860/v1\nexport OPENAI_API_KEY=dummy\n```\n\nExact Ollama steps if doctor reports the base missing:\n\n```bash\ncurl -fsSL https://ollama.com/install.sh | sh\nollama serve\nollama pull llama3.2\nazai doctor\n```\n\nCounted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.0.tar.gz\nGitHub: https://github.com/AzielEliab/azai\n\n## Catalog + local UI\n\nAuthor: **Aziel Eliab**. Honest scope: true local AI on an Ollama base with\nJEEVES. Not a new foundation model. JEEVES is not sovereign.\n\n- Catalog product: https://aziel-runtime.vibelock.workers.dev/p/azai/\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- Catalog MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- This Worker skill: `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n- This Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Sample payload: `GET https://azai-download-tracker.vibelock.workers.dev/v1/example`\n\nLocal UI: **Import JSON file** (`type=file`) and **Export JSON**. Then `azai doctor`.\n\nGrok: import catalog or Worker OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.\n";
 /**
  * AZAI download tracker (Cloudflare Worker).
  *
- * GET  /download?asset=azai-0.2.0.tar.gz
+ * GET  /download?asset=azai-0.3.0.tar.gz
  *      increments KV, serves the tarball via env.ASSETS.fetch
  *      (does not 302 to GitHub)
  * GET  /stats   JSON totals + per-repo + per-branch breakdown
@@ -24,7 +24,7 @@ const SKILL_MARKDOWN = "---\nname: AZAI\ndescription: Use when calling AZAI host
  */
 
 const PROJECT = "azai";
-const DEFAULT_ASSET = "azai-0.2.0.tar.gz";
+const DEFAULT_ASSET = "azai-0.3.0.tar.gz";
 const MAX_BODY = 1048576;
 const DEFAULT_OWNER = "AzielEliab";
 const DEFAULT_REPO = "azai";
@@ -249,7 +249,7 @@ async function githubStats(env) {
 }
 
 function installScript() {
-  return `#!/usr/bin/env bash\n# AZAI one-click install. Counted download via this Worker.\nset -euo pipefail\nHOST="${HOST}"\nASSET="${DEFAULT_ASSET}"\nWORKDIR="\${AZAI_HOME:-\$HOME/azai}"\nmkdir -p "\$WORKDIR"\ncd "\$WORKDIR"\necho "Downloading counted tarball from \${HOST}/download (User-Agent Mozilla/5.0)…"\ncurl -fsSL -A 'Mozilla/5.0' "\${HOST}/download?asset=\${ASSET}" -o "\${ASSET}"\ntar -xzf "\${ASSET}"\nDIR=\"\$(find . -maxdepth 1 -type d -name 'azai-*' | head -n 1)\"\nif [ -n "\${DIR}" ]; then\n  cd "\${DIR}"\nfi\npython3 -m venv .venv\n. .venv/bin/activate\npython -m pip install -U pip\npython -m pip install -e .\necho\necho "Installed AZAI."\necho "Run:  azai ui"\necho "Then open http://127.0.0.1:8860  (loopback only)"\necho "Author: Aziel Eliab."\n`;
+  return `#!/usr/bin/env bash\n# AZAI one-click install. Counted download via this Worker.\n# True local AI on an Ollama base. JEEVES is not sovereign.\nset -euo pipefail\nHOST="${HOST}"\nASSET="${DEFAULT_ASSET}"\nWORKDIR="\${AZAI_HOME:-\$HOME/azai}"\nmkdir -p "\$WORKDIR"\ncd "\$WORKDIR"\necho "Downloading counted tarball from \${HOST}/download (User-Agent Mozilla/5.0)…"\ncurl -fsSL -A 'Mozilla/5.0' "\${HOST}/download?asset=\${ASSET}" -o "\${ASSET}"\ntar -xzf "\${ASSET}"\nDIR=\"\$(find . -maxdepth 1 -type d -name 'azai-*' | head -n 1)\"\nif [ -n "\${DIR}" ]; then\n  cd "\${DIR}"\nfi\npython3 -m venv .venv\n. .venv/bin/activate\npython -m pip install -U pip\npython -m pip install -e .\necho\necho "Installed AZAI (true local AI on an Ollama base; JEEVES is not sovereign)."\nif [ -f scripts/setup-ollama.sh ]; then\n  bash scripts/setup-ollama.sh || true\nelse\n  echo "Exact Ollama steps: curl -fsSL https://ollama.com/install.sh | sh && ollama serve && ollama pull llama3.2 && azai doctor"\nfi\necho\necho "Run:  azai ui"\necho "Then open http://127.0.0.1:8860  (loopback only)"\necho "OPENAI_BASE_URL=http://127.0.0.1:8860/v1  OPENAI_API_KEY=dummy"\necho "Author: Aziel Eliab."\n`;
 }
 
 async function serveAsset(request, env, asset, { head = false } = {}) {
@@ -291,11 +291,11 @@ async function indexHtml(env) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AZAI — Aziel Eliab</title>
-<meta name="description" content="Local OpenAI-compatible runtime by Aziel Eliab that blends GPT, Grok, and Venice under the Lamb Lens.">
+<meta name="description" content="True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy.">
 <meta name="author" content="Aziel Eliab">
 <link rel="canonical" href="https://azai-download-tracker.vibelock.workers.dev/">
 <meta property="og:title" content="AZAI — Aziel Eliab">
-<meta property="og:description" content="Local OpenAI-compatible runtime by Aziel Eliab that blends GPT, Grok, and Venice under the Lamb Lens.">
+<meta property="og:description" content="True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy.">
 <meta property="og:url" content="https://azai-download-tracker.vibelock.workers.dev/">
 <meta property="og:type" content="website">
 <script type="application/ld+json">
@@ -311,7 +311,7 @@ async function indexHtml(env) {
   "downloadUrl": "https://azai-download-tracker.vibelock.workers.dev/download",
   "license": "https://www.apache.org/licenses/LICENSE-2.0",
   "url": "https://azai-download-tracker.vibelock.workers.dev/",
-  "description": "Local OpenAI-compatible runtime by Aziel Eliab that blends GPT, Grok, and Venice under the Lamb Lens."
+  "description": "True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy."
 }
 </script>
 <!-- gitbaby-seo -->
@@ -346,7 +346,7 @@ async function indexHtml(env) {
 <body>
   <h1>AZAI</h1>
   <p class="motto">Jeeves speaks inside the shell. Lamb Lens governs above the shell. Receipts witness what the shell permits. Author Aziel Eliab.</p>
-  <p class="banner">AZAI is a local OpenAI-compatible runtime, not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. Jeeves is not sovereign. Hosted /v1 is lamb-check ONLY, never a paid-key proxy. Author: Aziel Eliab.</p>
+  <p class="banner">AZAI packages a true local AI stack on an Ollama base with JEEVES. OpenAI-compatible local API. Not a hosted paid-key proxy. JEEVES is not sovereign. Hosted /v1 is lamb-check ONLY. Author: Aziel Eliab.</p>
   <div class="card">
     <div class="nums">
       <p class="count">${v}<span>Views</span></p>
@@ -358,7 +358,7 @@ async function indexHtml(env) {
       <button type="button" class="btn install" id="install-btn">One-click install</button>
     </div>
     <pre id="install-cmd">curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash</pre>
-    <p class="kid">Then run: <code>azai ui</code> and open http://127.0.0.1:8860 (this computer only).</p>
+    <p class="kid">Then run: <code>azai ui</code> and open http://127.0.0.1:8860 (this computer only). Install pulls Ollama + <code>llama3.2</code> when it can; otherwise it prints the exact steps. JEEVES is the ethics layer, not sovereign.</p>
     <p class="meta">The download count ticks on the Download click. The Worker serves the gzip (HTTP 200). No 302 to GitHub. Forks using this same link are counted automatically. ${DEFAULT_ASSET} — ${n} counted.</p>
     <p class="iso">Isolated counter: Worker <code>azai-download-tracker</code>, project <code>azai</code>, KV <code>AZAI_DOWNLOADS</code>. Not mixed with any other product. /v1 does not increment downloads.</p>
     
@@ -424,15 +424,15 @@ function openapiSpec(request) {
     openapi: "3.1.0",
     info: {
       title: "AZAI hosted runtime",
-      version: "0.2.0",
-      summary: "Hosted /v1 is lamb-check ONLY (plus health/models). Never a paid-key proxy. Jeeves is not sovereign.",
+      version: "0.3.0",
+      summary: "True local AI on an Ollama base with JEEVES. Hosted /v1 is lamb-check ONLY. Never a paid-key proxy. Jeeves is not sovereign.",
       description: engine.LIMITATION,
     },
     servers: [{ url: origin }],
     paths: {
             "/v1/example": { get: { operationId: "azaiExample", summary: "Sample JSON payload. Does not increment downloads.", responses: { "200": { description: "OK" } } } },
       "/v1/health": { get: { operationId: "azai_health", summary: "Liveness. Does not increment download KV. Not a provider proxy.", responses: { "200": { description: "ok" } } } },
-      "/v1/models": { get: { operationId: "azai_models", summary: "Protocol mirror of blend, gpt, grok, venice, local. Live blend is local azai serve.", responses: { "200": { description: "models" } } } },
+      "/v1/models": { get: { operationId: "azai_models", summary: "Protocol mirror of local, ollama, blend, gpt, grok, venice. Live Ollama+JEEVES is local azai serve.", responses: { "200": { description: "models" } } } },
       "/v1/lamb-check": {
         post: {
           operationId: "azai_lamb_check",
@@ -471,7 +471,7 @@ function aiHelpPage(request) {
 <p class="banner">${engine.LIMITATION}</p>
 <p>OpenAPI: <a href="${origin}/openapi.json">${origin}/openapi.json</a></p>
 <p>Catalog: <a href="https://aziel-runtime.vibelock.workers.dev/">aziel-runtime.vibelock.workers.dev</a></p>
-<p>Local blend backend: <code>azai serve</code> then <code>OPENAI_BASE_URL=http://127.0.0.1:8860/v1</code></p>
+<p>Local true-AI backend (Ollama + JEEVES): <code>azai serve</code> then <code>OPENAI_BASE_URL=http://127.0.0.1:8860/v1</code></p>
 <pre>curl ${origin}/v1/health
 curl ${origin}/v1/models
 curl -X POST ${origin}/v1/lamb-check -H 'content-type: application/json' \\
@@ -495,6 +495,9 @@ async function handleRuntime(request, url) {
       hosted_v1: "lamb-check-only",
       not_a_foundation_model: true,
       jeeves_sovereign: false,
+      jeeves_layer: "ethics/assistant",
+      local_ai: "ollama-base",
+      true_local_ai: true,
       limitation: engine.LIMITATION,
     });
   }
@@ -534,7 +537,7 @@ async function handleRuntime(request, url) {
     return json({
       error: "hosted /v1 is lamb-check ONLY, never a paid-key proxy",
       provider_proxy: false,
-      hint: "Paid GPT/Grok/Venice calls happen on local azai serve (127.0.0.1:8860).",
+      hint: "True local AI (Ollama + JEEVES) and optional paid calls happen on local azai serve (127.0.0.1:8860).",
       limitation: engine.LIMITATION,
     }, 403);
   }
