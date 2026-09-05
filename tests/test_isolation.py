@@ -117,3 +117,42 @@ def test_readme_honest_scope() -> None:
     assert "ask jeeves" in low
     assert "azielcorpuslibrary.net" in low
     assert "cannot modify scores" in low or "cannot modify scores" in readme.lower()
+    assert "## Use with Grok / ChatGPT / Venice" not in readme
+    assert "## Use with AI clients" in readme
+    for name in PUBLIC_ENGINE_CLIENTS:
+        assert name in readme, name
+    assert "paid GPT/Grok/Venice" in readme
+    assert "Lamb check does not call" in readme
+    assert "GPT/Grok/Venice" in readme
+
+
+PUBLIC_ENGINE_CLIENTS = (
+    "ChatGPT (GPT Actions / OpenAI)",
+    "Grok (xAI)",
+    "Claude (Anthropic)",
+    "Cursor (MCP)",
+    "Glama (MCP)",
+    "Perplexity",
+    "Microsoft Copilot / Bing",
+    "Google Gemini / Vertex",
+    "Mistral",
+    "Meta AI",
+    "Apple Intelligence",
+    "Amazon Q",
+    "DuckAssist",
+    "You.com",
+    "Cohere",
+    "MCP/OpenAPI-capable",
+)
+
+
+def test_skill_and_worker_full_client_list() -> None:
+    skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+    worker = (ROOT / "workers" / "download-tracker" / "src" / "index.js").read_text(
+        encoding="utf-8"
+    )
+    for text in (skill, worker):
+        assert "Author: **Aziel Eliab**" in text or "Author Aziel Eliab" in text
+        for name in PUBLIC_ENGINE_CLIENTS:
+            assert name in text, name
+        assert "Grok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools." not in text

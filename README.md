@@ -327,14 +327,16 @@ mobile/               Flutter companion (`flutter create .`)
 workers/download-tracker/   Cloudflare Worker
 ```
 
-## Use with Grok / ChatGPT / Venice
+## Use with AI clients
+
+Public engines accept any MCP/OpenAPI-capable assistant, including ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants.
 
 Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json
 Catalog MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`
 This Worker skill: https://azai-download-tracker.vibelock.workers.dev/v1/skill
 This Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json
 
-Grok: import the catalog or Worker OpenAPI as a custom tool. ChatGPT: GPT Actions (no auth). Venice: HTTP tools. Always send `User-Agent: Mozilla/5.0`.
+ChatGPT: GPT Actions (no auth). Grok: import the catalog or Worker OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP. Always send `User-Agent: Mozilla/5.0`.
 
 ## Cite this
 
