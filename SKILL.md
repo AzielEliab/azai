@@ -35,7 +35,7 @@ Ops (do **not** increment downloads or views):
 Hosted `/v1` is **lamb-check ONLY**. It does not run Ollama and does not
 spend paid keys. Jeeves chat runs on local `azai serve`.
 
-Grok: import OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.
+Public engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants. ChatGPT: GPT Actions. Grok: import OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP.
 
 ## Ask Jeeves (Corpus / Library research assistant)
 
@@ -140,4 +140,4 @@ is not sovereign.
 Local UI: **Ask Jeeves** research assistant, **Import JSON file** (`type=file`)
 and **Export JSON**. Then `azai doctor`.
 
-Grok: import catalog or Worker OpenAPI as a custom tool. ChatGPT: GPT Actions. Venice: HTTP tools.
+Public engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants. ChatGPT: GPT Actions. Grok: import catalog or Worker OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP.
