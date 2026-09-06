@@ -91,6 +91,17 @@ def test_worker_isolated() -> None:
     assert "/v1/jeeves" in src
     assert "Ask Jeeves" in src
     assert "azielcorpuslibrary.net" in src
+    idx = src.find('url.pathname === "/count"')
+    assert idx != -1
+    count_block = src[idx : idx + 500]
+    assert "project:" in count_block or "project :" in count_block
+    assert "views" in count_block
+    assert "downloads" in count_block
+    assert "total" in count_block
+    worker_readme = (ROOT / "workers" / "download-tracker" / "README.md").read_text(
+        encoding="utf-8"
+    )
+    assert "{project, views, downloads, total}" in worker_readme
     lowered = src.lower().replace("-", "").replace("_", "").replace(" ", "")
     assert "forgereceipts" not in lowered
     assert "godlock" not in lowered

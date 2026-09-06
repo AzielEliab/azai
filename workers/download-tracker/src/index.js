@@ -635,9 +635,17 @@ export default {
       });
     }
 
-    if (url.pathname === "/count" && request.method === "GET") {
+    if ((url.pathname === "/count" || url.pathname === "/count/") && request.method === "GET") {
       const stats = await collectStats(env);
-      return json({ project: PROJECT, total: stats.total || 0 });
+      const downloads = Number(stats.downloads != null ? stats.downloads : stats.total) || 0;
+      const views = Number(stats.views) || 0;
+      const total = Number(stats.total) || downloads;
+      return json({
+        project: PROJECT,
+        views,
+        downloads,
+        total,
+      });
     }
 
     if (url.pathname === "/stats" && request.method === "GET") {

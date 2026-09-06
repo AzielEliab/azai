@@ -40,7 +40,7 @@ KV id in `wrangler.toml`: `155f641feb8244bea7fa245133128a32`. Binding name MUST 
 |--------|------|----------|
 | GET | `/` | Isolated homepage: live count on the download button |
 | GET | `/download?repo=&tag=&asset=` | Increment KV, serve the asset from `ASSETS` |
-| GET | `/count` | JSON `{project, total}` |
+| GET | `/count` | JSON `{project, views, downloads, total}` |
 | GET | `/stats` | JSON totals plus per-repo and per-branch breakdown |
 | POST | `/event` | A fork reports a download |
 
