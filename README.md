@@ -50,7 +50,7 @@ Direct tarball (also counted):
 - Live count JSON: [https://azai-download-tracker.vibelock.workers.dev/stats](https://azai-download-tracker.vibelock.workers.dev/stats)
 - OpenAPI: [https://azai-download-tracker.vibelock.workers.dev/openapi.json](https://azai-download-tracker.vibelock.workers.dev/openapi.json)
 - Skill: [https://azai-download-tracker.vibelock.workers.dev/v1/skill](https://azai-download-tracker.vibelock.workers.dev/v1/skill)
-- Suite mesh proxy: [https://azai-download-tracker.vibelock.workers.dev/v1/mesh](https://azai-download-tracker.vibelock.workers.dev/v1/mesh) — default OFF; QNM live / locked / isolated
+- Suite mesh proxy: [https://azai-download-tracker.vibelock.workers.dev/v1/mesh](https://azai-download-tracker.vibelock.workers.dev/v1/mesh) — default OFF; QNM live / locked / isolated; QNS-CD-1.0 hub cite (photon QNS1 packet transfer; not a public qnsd proxy)
 - One-click install: [https://azai-download-tracker.vibelock.workers.dev/install.sh](https://azai-download-tracker.vibelock.workers.dev/install.sh)
 - GitHub: [https://github.com/AzielEliab/azai](https://github.com/AzielEliab/azai)
 
@@ -306,7 +306,7 @@ models). It is not a chat proxy and does not hold paid keys.
 - `GET https://azai-download-tracker.vibelock.workers.dev/v1/models`
 - `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`
 - `GET https://azai-download-tracker.vibelock.workers.dev/v1/jeeves` (Ask Jeeves contract; not chat)
-- `GET https://azai-download-tracker.vibelock.workers.dev/v1/mesh` (suite mesh PROXY; default OFF; QNM live|locked|isolated)
+- `GET https://azai-download-tracker.vibelock.workers.dev/v1/mesh` (suite mesh PROXY; default OFF; QNM live|locked|isolated; QNS-CD-1.0 hub cite — not a Softwares-tab product, not a public qnsd proxy)
 - `POST https://azai-download-tracker.vibelock.workers.dev/v1/lamb-check` `{text}`
 - OpenAPI 3.1: https://azai-download-tracker.vibelock.workers.dev/openapi.json
 - Help: https://azai-download-tracker.vibelock.workers.dev/ai
@@ -334,7 +334,7 @@ workers/download-tracker/   Cloudflare Worker
 Public engines accept any MCP/OpenAPI-capable assistant, including ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants.
 
 Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json
-Catalog MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`. Suite mesh `/v1/mesh/*` PROXY via `AZIEL_RUNTIME` (default OFF; QNM-BUILD-1.0 live|locked|isolated; no Node Gate). Catalog MCP `mesh_*` + FragGate `slug=mesh`.
+Catalog MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`. Suite mesh `/v1/mesh/*` PROXY via `AZIEL_RUNTIME` (default OFF; QNM-BUILD-1.0 live|locked|isolated; no Node Gate). QNS-CD-1.0 is a hub cite / Worker mesh cross-map only (photon QNS1 packet transfer; local qnsd in [qnm-node](https://github.com/AzielEliab/qnm-node); runtime cites in [aziel-runtime](https://github.com/AzielEliab/aziel-runtime)). Not a Softwares-tab product. Not a public qnsd proxy. Catalog MCP `mesh_*` + FragGate `slug=mesh`.
 This Worker skill: https://azai-download-tracker.vibelock.workers.dev/v1/skill
 This Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json
 
