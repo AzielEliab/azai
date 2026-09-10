@@ -98,10 +98,12 @@ sovereign and is not GPT.
 
 The Worker homepage shows a suite Live Nodes strip. `/v1/mesh/*` PROXY
 to aziel-runtime. Suite mesh default OFF. QNM rollup is
-live|locked|isolated counts only. No Node Gate. No auto-heal. Not an
-anonymity network. Anon-broadcast is not a publish path. AZAI remains
-true local AI on an Ollama base with JEEVES. Hosted `/v1` is still
-lamb-check ONLY.
+live|locked|isolated counts only. QNS-CD-1.0 is a hub cite / Worker mesh
+cross-map only (photon QNS1 packet transfer; local qnsd in qnm-node;
+runtime cites in aziel-runtime). No Node Gate. No public qnsd proxy. No
+auto-heal. Not an anonymity network. Not a Softwares-tab product.
+Anon-broadcast is not a publish path. AZAI remains true local AI on an
+Ollama base with JEEVES. Hosted `/v1` is still lamb-check ONLY.
 
 ## v0.3.0
 
