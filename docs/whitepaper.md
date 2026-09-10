@@ -96,6 +96,13 @@ shortcut. CLI `azai jeeves`, UI copy, Worker `/v1/skill` + `/v1/jeeves`
 + OpenAPI document how the Corpus calls local AZAI. JEEVES remains not
 sovereign and is not GPT.
 
+The Worker homepage shows a suite Live Nodes strip. `/v1/mesh/*` PROXY
+to aziel-runtime. Suite mesh default OFF. QNM rollup is
+live|locked|isolated counts only. No Node Gate. No auto-heal. Not an
+anonymity network. Anon-broadcast is not a publish path. AZAI remains
+true local AI on an Ollama base with JEEVES. Hosted `/v1` is still
+lamb-check ONLY.
+
 ## v0.3.0
 
 Ollama is the true local base. `scripts/setup-ollama.sh` installs or

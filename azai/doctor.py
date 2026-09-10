@@ -102,8 +102,13 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
         key_hits = []
         for marker in WORKER_KEY_MARKERS:
             if marker == "Bearer " and "bearer " in lowered:
-                # hosted /v1 never sends Authorization: Bearer to a provider
-                if "authorization" in lowered and "bearer" in lowered:
+                # hosted /v1 never sends Authorization: Bearer to a provider.
+                # Suite mesh PROXY may forward an operator bearer to aziel-runtime
+                # and CORS/docs may mention Authorization / bearer. That is not a key.
+                provider_bearer = "authorization" in lowered and "bearer" in lowered and any(
+                    host in lowered for host in WORKER_PROVIDER_HOSTS
+                )
+                if provider_bearer:
                     key_hits.append("Authorization Bearer")
             elif marker == "sk-" and "sk-" in wsrc:
                 key_hits.append("sk-")
