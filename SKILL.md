@@ -1,6 +1,6 @@
 ---
 name: AZAI
-description: Use when calling AZAI hosted /v1 or installing the local true-AI package. Ask Jeeves research assistant for the public Corpus/Library. Author Aziel Eliab.
+description: Use when calling AZAI hosted /v1 or installing the local true-AI package. Dual surface: Worker /v1 + catalog MCP. This Worker /v1/mesh/* PROXY to aziel-runtime via AZIEL_RUNTIME. Suite mesh default OFF. QNM-BUILD-1.0 live|locked|isolated. No Node Gate. No auto-heal. Not anonymity. Ask Jeeves research assistant for the public Corpus/Library. Author Aziel Eliab.
 ---
 
 # AZAI
@@ -24,12 +24,16 @@ Always send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent
 - Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json
 - MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`
 - Live skill (this markdown): `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`
+- Suite mesh: `GET https://azai-download-tracker.vibelock.workers.dev/v1/mesh` (PROXY; default OFF)
 
 Ops (do **not** increment downloads or views):
 
 - `GET /v1/health` — liveness
 - `GET /v1/skill` — this file
 - `GET /v1/jeeves` — Ask Jeeves research-assistant contract (not chat)
+- `GET /v1/mesh` — PROXY suite mesh status. Default OFF. QNM live|locked|isolated. Never enables.
+- `GET /v1/mesh/nodes` — PROXY Live Nodes roster (5-minute presence).
+- `POST /v1/mesh/{enable,disable,join,heartbeat,leave,broadcast}` — PROXY. Bearer required to enable. No auto-heal. Anon-broadcast is not a publish path.
 - Product POSTs listed in OpenAPI
 
 Hosted `/v1` is **lamb-check ONLY**. It does not run Ollama and does not
@@ -83,6 +87,7 @@ card only). Hosted AZAI `/v1` does **not** run Jeeves chat.
 curl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/health
 curl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/skill
 curl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/jeeves
+curl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/mesh
 ```
 
 ## Local (after one-click install)
@@ -136,8 +141,9 @@ is not sovereign.
 - This Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json
 - Ask Jeeves card: `GET https://azai-download-tracker.vibelock.workers.dev/v1/jeeves`
 - Sample payload: `GET https://azai-download-tracker.vibelock.workers.dev/v1/example`
+- Suite mesh: `GET https://azai-download-tracker.vibelock.workers.dev/v1/mesh` PROXY (default OFF)
 
 Local UI: **Ask Jeeves** research assistant, **Import JSON file** (`type=file`)
-and **Export JSON**. Then `azai doctor`.
+and **Export JSON**. Then `azai doctor`. Worker homepage Live Nodes strip polls `GET /v1/mesh` (default OFF).
 
 Public engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants. ChatGPT: GPT Actions. Grok: import catalog or Worker OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP.

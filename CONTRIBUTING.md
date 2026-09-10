@@ -43,8 +43,11 @@ in-process. Do not set live API keys in CI.
    spreader, or remote OS takeover.
 9. **Do not merge this product** into AZ-OS, GodLock, or any sibling tree.
 10. **Do not mix the download tracker** with any other product's Worker or KV.
-11. New behavior needs a test that fails without the change.
-12. Keep the Python Lamb Lens and Worker JS port in lockstep.
+11. **Door vs local op.** `/v1/mesh/*` PROXY to aziel-runtime. Local ops are `/v1/{op}` only.
+    Suite mesh default OFF; QNM rollup live|locked|isolated; no Node Gate;
+    no auto-heal; not anonymity.
+12. New behavior needs a test that fails without the change.
+13. Keep the Python Lamb Lens and Worker JS port in lockstep.
 
 ## Where to change things
 
@@ -63,6 +66,7 @@ in-process. Do not set live API keys in CI.
 - Source papers: `docs/source/`
 - Flutter companion: `mobile/`
 - Isolated counter + hosted gate: `workers/download-tracker/`
+- Suite mesh / QNM Live Nodes: `workers/download-tracker/src/mesh.js` (`/v1/mesh/*` PROXY to aziel-runtime).
 
 ## License of contributions
 

@@ -30,6 +30,7 @@ Isolated counter: Worker `azai-download-tracker`, project `azai`.
 | Binding     | Type | Purpose |
 |-------------|------|---------|
 | `DOWNLOADS` | KV   | Counters keyed `project|owner|repo|branch|fork` |
+| `AZIEL_RUNTIME` | service | Suite mesh PROXY to aziel-runtime (`/v1/mesh/*`) |
 
 KV id in `wrangler.toml`: `155f641feb8244bea7fa245133128a32`. Binding name MUST stay `DOWNLOADS` (not
 `AZAI_DOWNLOADS` — that is the Cloudflare namespace title).
@@ -71,3 +72,7 @@ Lamb check is the JS port of `azai/lamb.py`. No provider proxy.
 Help page: `/ai`. Combined catalog: https://aziel-runtime.vibelock.workers.dev/
 
 POST `/v1/lamb-check` rejects bodies larger than 1 MiB (413). No API keys live in this Worker.
+
+`/v1/mesh/*` PROXY to aziel-runtime suite mesh (`AZIEL_RUNTIME` / `https://aziel-runtime.vibelock.workers.dev`). Default OFF. QNM-BUILD-1.0 live|locked|isolated. No Node Gate. No auto-heal. Not anonymity. Human UI Live Nodes strip polls `GET /v1/mesh`.
+
+Verify: `curl -sS -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/mesh/status` returns MESH-OK style JSON with `enabled: false` by default.
