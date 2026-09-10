@@ -60,8 +60,8 @@ def test_mesh_proxies_via_aziel_runtime() -> None:
 def test_index_routes_mesh_before_runtime_catchall() -> None:
     assert 'from "./mesh.js"' in INDEX
     assert "handleMeshApi" in INDEX
-    mesh_idx = INDEX.index("handleMeshApi(request, url, env)")
-    runtime_idx = INDEX.index("handleRuntime(request, url)")
+    mesh_idx = INDEX.index("const mesh = await handleMeshApi(request, url, env)")
+    runtime_idx = INDEX.index("const runtime = await handleRuntime(request, url)")
     assert mesh_idx < runtime_idx
     not_found = INDEX.rindex('return json({ error: "not found" }, 404)')
     assert mesh_idx < not_found
