@@ -137,6 +137,35 @@ def test_readme_honest_scope() -> None:
     assert "GPT/Grok/Venice" in readme
 
 
+BRAND_MARK = (
+    '<div class="brandrow"><img class="brandmark" src="/sigil.png" '
+    'width="40" height="40" alt="" decoding="async"></div>'
+)
+
+
+def test_worker_brand_mark_is_wordless_rose_star() -> None:
+    src = (ROOT / "workers" / "download-tracker" / "src" / "index.js").read_text(
+        encoding="utf-8"
+    )
+    assert src.count(BRAND_MARK) == 2
+    assert ".brandrow" in src and ".brandmark" in src
+    sigil = ROOT / "workers" / "download-tracker" / "public" / "sigil.png"
+    assert sigil.is_file()
+    size = sigil.stat().st_size
+    assert 70_000 <= size <= 80_000, size
+    assert sigil.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+    # Public mark has no words (empty alt). Do not scrub verify
+    # contracts that require Everblooming header/skill strings.
+    mark_alts = [
+        line for line in src.splitlines() if "class=\"brandmark\"" in line
+    ]
+    assert mark_alts
+    for line in mark_alts:
+        assert 'alt=""' in line
+        assert "everblooming sigil" not in line.lower()
+        assert "Everblooming" not in line
+
+
 PUBLIC_ENGINE_CLIENTS = (
     "ChatGPT (GPT Actions / OpenAI)",
     "Grok (xAI)",
