@@ -76,3 +76,15 @@ POST `/v1/lamb-check` rejects bodies larger than 1 MiB (413). No API keys live i
 `/v1/mesh/*` PROXY to aziel-runtime suite mesh (`AZIEL_RUNTIME` / `https://aziel-runtime.vibelock.workers.dev`). Default OFF. QNM-BUILD-1.0 live|locked|isolated. QNS-CD-1.0 hub cite / Worker mesh cross-map (photon QNS1 packet transfer; local qnsd in [qnm-node](https://github.com/AzielEliab/qnm-node); runtime cites in [aziel-runtime](https://github.com/AzielEliab/aziel-runtime)). No Node Gate. No public qnsd proxy. No auto-heal. Not anonymity. Not a Softwares-tab product. Human UI Live Nodes strip polls `GET /v1/mesh`.
 
 Verify: `curl -sS -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/mesh/status` returns MESH-OK style JSON with `enabled: false` by default and a `qns_cd` / `qns_cd_spec` cross-map (`QNS-CD-1.0`).
+
+## Human / bot schema (`/stats` and `/count`)
+
+Additive dual-count (Whitestone canary). Classification lives in `src/classify.js`
+and response shaping in `src/stats-shape.js`.
+
+Invariant: `views === views_human + views_bot` and
+`downloads === downloads_human + downloads_bot`.
+
+Legacy strategy (b): existing KV totals are never reset. Pre-split remainder
+is shown as bot on read (`views_bot = views - views_human`). Author: Aziel Eliab only.
+
