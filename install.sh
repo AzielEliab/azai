@@ -27,8 +27,8 @@ python -m pip install -U pip
 python -m pip install -e .
 
 echo
-echo "Installed AZAI (true local AI on an Ollama base; JEEVES is not sovereign)."
-echo "Next: local Ollama + default model (llama3.2 unless AZAI_OLLAMA_MODEL is set)."
+echo "Installed AZAI."
+echo "Next: local Ollama and the default model (llama3.2 unless AZAI_OLLAMA_MODEL is set)."
 echo
 
 if [ -f scripts/setup-ollama.sh ]; then
@@ -42,8 +42,8 @@ else
 fi
 
 echo
-echo "Run:  azai ui"
-echo "Then open http://127.0.0.1:8860  (loopback only)"
-echo "OpenAI-compatible: OPENAI_BASE_URL=http://127.0.0.1:8860/v1  OPENAI_API_KEY=dummy"
+echo "Next:"
+echo "  azai ui"
+echo "Then open http://127.0.0.1:8860/"
 echo "Self-check: azai doctor"
 echo "Author: Aziel Eliab."

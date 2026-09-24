@@ -8,6 +8,7 @@ no telemetry. Max POST body 1 MiB.
 from __future__ import annotations
 
 import json
+import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib.resources import files
 from typing import Any
@@ -218,14 +219,11 @@ def serve(
 ) -> None:
     httpd = make_server(host, port, data_dir=data_dir)
     bound_host, bound_port = httpd.server_address[:2]
-    extra = "OpenAI-compat at /v1 (OPENAI_BASE_URL=http://%s:%s/v1)." % (bound_host, bound_port)
+    print(f"Open http://{bound_host}:{bound_port}/")
+    if emphasize_api:
+        print(f"Other software can use http://{bound_host}:{bound_port}/v1")
     if host not in LOOPBACK:
-        extra += " " + LAN_RISK
-    kind = "AZAI serve" if emphasize_api else "AZAI UI"
-    print(
-        f"{kind} http://{bound_host}:{bound_port} "
-        f"(Ollama base; Ask Jeeves research assistant, not sovereign; Lamb Lens first; {extra} no telemetry)"
-    )
+        print(LAN_RISK, file=sys.stderr)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

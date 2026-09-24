@@ -225,12 +225,23 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
 
 def format_report(payload: dict[str, Any]) -> str:
     lines = [
-        f"AZAI doctor {payload.get('version')}  "
-        "(true local AI on Ollama; Ask Jeeves research assistant; JEEVES is not sovereign)"
+        f"AZAI doctor {payload.get('version')}",
+        "Local check for this install.",
+        "",
     ]
     for c in payload.get("checks") or []:
         mark = "PASS" if c.get("ok") else "FAIL"
-        detail = f"  {c.get('detail')}" if c.get("detail") else ""
-        lines.append(f"{mark}  {c.get('id')}{detail}")
-    lines.append("all ok" if payload.get("ok") else "doctor found problems")
+        detail = str(c.get("detail") or "")
+        if "\n" in detail:
+            lines.append(f"{mark}  {c.get('id')}")
+            for part in detail.splitlines():
+                lines.append(f"      {part}")
+        else:
+            extra = f"  {detail}" if detail else ""
+            lines.append(f"{mark}  {c.get('id')}{extra}")
+    lines.append("")
+    if payload.get("ok"):
+        lines.append("All checks passed.")
+    else:
+        lines.append("Doctor found problems. Read the FAIL lines above, then try: azai doctor")
     return "\n".join(lines)

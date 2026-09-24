@@ -51,4 +51,40 @@ def test_cli_ollama_status(capsys) -> None:
 
 def test_cli_memory_requires_confirm(capsys) -> None:
     assert main(["remember", "--text", "note"]) == 2
+    err = capsys.readouterr().err
+    assert "confirm" in err.lower()
     assert main(["remember", "--text", "note", "--confirm"]) == 0
+
+
+def test_cli_welcome_and_help(capsys) -> None:
+    assert main([]) == 0
+    out = capsys.readouterr().out
+    assert "azai ui" in out
+    assert "Aziel Eliab" in out
+    assert "following arguments are required" not in out
+    assert main(["--help"]) == 0
+    help_out = capsys.readouterr().out
+    assert "azai ui" in help_out
+    assert "Advanced" in help_out
+    assert "following arguments are required" not in help_out
+    assert main(["--json"]) == 0
+    payload = capsys.readouterr().out
+    assert '"product": "azai"' in payload
+    assert '"version": "0.3.1"' in payload
+
+
+def test_cli_unknown_command_has_next_step(capsys) -> None:
+    assert main(["bogus"]) == 2
+    err = capsys.readouterr().err
+    assert 'Unknown command "bogus"' in err
+    assert "azai --help" in err
+    assert main(["chat"]) == 2
+    chat_err = capsys.readouterr().err
+    assert "azai chat --message" in chat_err
+
+
+def test_cli_seal_json_shape(capsys, tmp_path) -> None:
+    assert main(["seal", "--json", "--data", str(tmp_path)]) == 0
+    out = capsys.readouterr().out
+    assert '"sealed": true' in out
+    assert '"ok": true' in out

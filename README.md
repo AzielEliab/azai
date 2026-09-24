@@ -1,52 +1,43 @@
-# AZAI (Aziel Artificial Intelligence)
+# AZAI
 
-**True local AI** on an **Ollama** base. **JEEVES** is the ethics/assistant
-layer inside the shell. JEEVES is not sovereign — Lamb Lens and the
-operator govern it. OpenAI-compatible local API. **Not a hosted paid-key
-proxy.** Hub is a blank key: it does not interpret meaning.
+Ask a question on this machine. Jeeves answers through Ollama. Lamb Lens reads Service, Clarity, and Peace.
 
 **Author:** Aziel Eliab
-**Date:** 2026
 **Version:** 0.3.1
 **License:** [Apache-2.0](LICENSE)
 
-> Not a new foundation model, not a kernel, not a worm, not IP-blocking
-> malware, not a VPN. The local base is Ollama on this machine. Optional
-> paid GPT/Grok/Venice calls happen only on the operator's local
-> `azai serve`. The hosted Worker `/v1` is **lamb-check ONLY**,
-> never a paid-key proxy.
+## Start
 
-See the spec: [docs/whitepaper.md](docs/whitepaper.md). Source papers:
-[docs/source/](docs/source/). How to contribute: [CONTRIBUTING.md](CONTRIBUTING.md).
+1. **Install**
+
+```bash
+python -m venv .venv && source .venv/bin/activate && pip install -e .
+```
+
+2. **Open the app**
+
+```bash
+azai ui
+```
+
+3. **Go to** [http://127.0.0.1:8860](http://127.0.0.1:8860) and press **Send**.
+
+`azai` with no command prints this same next step. `azai doctor` checks the install. `azai --help` lists commands. Add `--json` when another program needs machine output.
+
+See [RUN.txt](RUN.txt) for the same three steps. Spec: [docs/whitepaper.md](docs/whitepaper.md). Contribute: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 **Forks are welcome and always allowed.**
 
-
-## One-click install
+## Counted download
 
 ```bash
 curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash
 ```
 
-The script curls the **counted** tarball from this project's Worker
-(`/download`, User-Agent `Mozilla/5.0`), extracts, makes a venv, and
-`pip install -e .`, then `scripts/setup-ollama.sh` (installs/uses Ollama
-and pulls `llama3.2` unless `AZAI_OLLAMA_MODEL` is set). Then run `azai ui`.
+The script downloads the counted tarball (User-Agent `Mozilla/5.0`), creates a virtualenv, runs `pip install -e .`, then `scripts/setup-ollama.sh` (Ollama and `llama3.2`, unless `AZAI_OLLAMA_MODEL` is set). Then run `azai ui`.
 
-Or tap **Download** / **One-click install** on the Worker homepage
-(a 6th-grader can tap it):
-https://azai-download-tracker.vibelock.workers.dev/
-
-## Counted download (Cloudflare Worker)
-
-**This is the counted download.** GitHub releases exist as a mirror.
-The Worker serves the gzip itself (HTTP 200, no 302 to GitHub).
-
-# → [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/) ←
-
-Direct tarball (also counted):
-[azai-0.3.1.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz)
-
+- Home: [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/)
+- Tarball: [azai-0.3.1.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz)
 - Live count JSON: [https://azai-download-tracker.vibelock.workers.dev/stats](https://azai-download-tracker.vibelock.workers.dev/stats)
 - OpenAPI: [https://azai-download-tracker.vibelock.workers.dev/openapi.json](https://azai-download-tracker.vibelock.workers.dev/openapi.json)
 - Skill: [https://azai-download-tracker.vibelock.workers.dev/v1/skill](https://azai-download-tracker.vibelock.workers.dev/v1/skill)
@@ -54,41 +45,14 @@ Direct tarball (also counted):
 - One-click install: [https://azai-download-tracker.vibelock.workers.dev/install.sh](https://azai-download-tracker.vibelock.workers.dev/install.sh)
 - GitHub: [https://github.com/AzielEliab/azai](https://github.com/AzielEliab/azai)
 
-Isolated counter: Worker `azai-download-tracker`, KV `AZAI_DOWNLOADS`. Not mixed with any other product. `/v1` does not increment downloads.
+Isolated counter: Worker `azai-download-tracker`, KV `AZAI_DOWNLOADS`. The Worker serves the gzip itself (HTTP 200, no 302 to GitHub). `/v1` does not increment downloads.
 
-
-## Quick start (3 steps)
-
-1. **Install**
-
-```bash
-python -m venv .venv && source .venv/bin/activate && pip install -e ".[dev]"
-```
-
-2. **Run**
-
-```bash
-azai ui
-```
-
-3. **Open** [http://127.0.0.1:8860](http://127.0.0.1:8860) — one chat box, **Send**, **Check this text**. Loopback only. No CDN, no telemetry. Default model is **local** (Ollama + JEEVES).
-
-That is the whole start. Type a question or press **Sample prompt**. Peace / Clarity / Service chips show the Lamb Lens. Simple view is the default (6th-grader easy). Advanced view shows blend labels and receipts.
-
-Point other software / crawlers at this machine:
+Other software on this machine:
 
 ```bash
 export OPENAI_BASE_URL=http://127.0.0.1:8860/v1
 export OPENAI_API_KEY=dummy
 ```
-
-Counted download: [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/)
-
-Direct tarball (also counted): [azai-0.3.1.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz)
-
-GitHub: [https://github.com/AzielEliab/azai](https://github.com/AzielEliab/azai)
-
-Self-check: `azai doctor` (loopback Ollama probe is advisory; prints exact install steps if the base is missing)
 
 ---
 
@@ -97,10 +61,10 @@ Self-check: `azai doctor` (loopback Ollama probe is advisory; prints exact insta
 - **True local AI on an Ollama base.** Default `model=local` talks to
   Ollama at `http://127.0.0.1:11434` through JEEVES. Default model tag:
   `llama3.2` (`AZAI_OLLAMA_MODEL`). No OpenAI key is required for local.
-- **Not a new foundation model.** AZAI is a local runtime / shell.
-  JEEVES is the ethics/assistant layer inside it. Without Ollama, a
-  constitution stub still runs (Lamb Lens + receipts) and does **not**
-  pretend to be GPT.
+- **Not a new foundation model.** AZAI is a local runtime / shell,
+  not a kernel. JEEVES is the ethics/assistant layer inside it. Without
+  Ollama, a constitution stub still runs (Lamb Lens + receipts) and does
+  **not** pretend to be GPT.
 - **JEEVES is not sovereign.** **Ask Jeeves** is the research-assistant
   mode for the public Corpus/Library. Lamb Lens first — public Corpus
   posture; never the operator. Jeeves cannot modify scores (same rights
@@ -118,8 +82,10 @@ Self-check: `azai doctor` (loopback Ollama probe is advisory; prints exact insta
 - **Do not treat Phoenix / "static block IP routing" as implemented.**
   This package does not block IPs, spread, or take over a remote OS.
 - Standalone from AZ-OS, GodLock, ForgeReceipts.
-- Loopback UI, no telemetry. Hosted `/v1` is lamb-check ONLY and never
-  spends the author's paid keys and never proxies chat to GPT/Grok/Venice.
+- Loopback UI, no telemetry. Optional paid GPT/Grok/Venice calls happen
+  on the operator's local `azai serve`. Hosted `/v1` is lamb-check ONLY
+  and never spends the author's paid keys and never proxies chat to
+  GPT/Grok/Venice.
 
 Motto: *Jeeves speaks inside the shell. Lamb Lens governs above the
 shell. Receipts witness what the shell permits.*
@@ -169,22 +135,28 @@ Optional extra `[voice]` is a marker only — engines are not vendored.
 
 ## CLI
 
+People get short text. Add `--json` on a command when a program needs the machine payload. HTTP JSON paths are unchanged.
+
 ```bash
-azai version
-azai ui                 # 127.0.0.1:8860 loopback only
-azai serve              # same as ui, emphasize OpenAI-compat API
-azai chat --model local --message "..."
-azai jeeves             # Ask Jeeves research-assistant contract
+azai                    # welcome and the next step
+azai ui                 # prints: Open http://127.0.0.1:8860/
+azai chat --message "Explain receipts in one sentence"
+azai doctor
 azai models
-azai ollama             # local base status + exact install steps
+azai ollama
+azai version
+
+azai jeeves             # research-assistant contract
 azai integrity
+azai receipts
 azai seal
 azai open
-azai receipts
-azai doctor             # Lamb, JEEVES, Ollama steps, loopback, no Worker keys
+azai remember --text "note" --confirm
 azai import chat.json   # or .txt
 azai export --format json --out chat.json
 azai export --format md --out chat.md
+azai serve              # same server, for other software
+azai doctor --json
 ```
 
 `azai ui --host 0.0.0.0` binds on-site LAN. **Risk:** anyone who can
@@ -197,19 +169,13 @@ POST bodies larger than 1 MiB are rejected (413).
 
 ## UI
 
-`azai ui` binds **127.0.0.1:8860** only by default. Black / gold.
+`azai ui` prints `Open http://127.0.0.1:8860/` and binds **127.0.0.1:8860** by default.
 
-- **Ask Jeeves** research assistant (Corpus/Library; not sovereign)
-- One chat box, **Send**, **Check this text** (Lamb only — no provider call)
-- Peace / Clarity / Service chips
-- Sample prompt
-- Simple view (default) and Advanced view (blend labels + receipts)
-- Import `.txt` / JSON conversation; export chat + receipts as JSON or Markdown
-- Top status: Lamb / Integrity / Runtime / Jeeves / Ollama / Providers
-  (which keys are present, never the keys)
-- Seal Runtime (Advanced)
+The first screen has one message box and **Send**. **Check this text** runs Lamb Lens and does not call a model. **Sample prompt** fills an example. Service, Clarity, and Peace show as a short status line.
 
-Self-contained CSS, no CDN, no telemetry.
+**Advanced** stays collapsed. It holds the model list, Simple and full answers, seal / open, receipts, import, export, and About. Light and dark follow the system. Focus uses a gold ring. The page fits a 390px-wide screen.
+
+Self-contained CSS, no CDN, no telemetry. Keys are never shown.
 
 ## Backend for other software (on site)
 
