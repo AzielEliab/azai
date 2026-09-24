@@ -371,12 +371,12 @@ async function indexHtml(env) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AZAI — Aziel Eliab</title>
-<meta name="description" content="True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy.">
+<meta name="description" content="True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. One counted download.">
 <meta name="author" content="Aziel Eliab">
 <link rel="canonical" href="https://azai-download-tracker.vibelock.workers.dev/">
 <link rel="icon" href="/sigil.png" type="image/png">
 <meta property="og:title" content="AZAI — Aziel Eliab">
-<meta property="og:description" content="True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy.">
+<meta property="og:description" content="True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. One counted download.">
 <meta property="og:url" content="https://azai-download-tracker.vibelock.workers.dev/">
 <meta property="og:image" content="https://azai-download-tracker.vibelock.workers.dev/sigil.png">
 <meta property="og:type" content="website">
@@ -393,59 +393,107 @@ async function indexHtml(env) {
   "downloadUrl": "https://azai-download-tracker.vibelock.workers.dev/download",
   "license": "https://www.apache.org/licenses/LICENSE-2.0",
   "url": "https://azai-download-tracker.vibelock.workers.dev/",
-  "description": "True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy."
+  "description": "True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. One counted download."
 }
 </script>
 <!-- gitbaby-seo -->
 <style>
-  :root { color-scheme: dark; }
-  body { font: 16px/1.45 system-ui, sans-serif; max-width: 42rem; margin: 3rem auto; padding: 0 1.25rem 4rem; background: #0e1014; color: #e8eaef; }
-  h1 { font-size: 1.75rem; margin: 0 0 .35rem; }
-  .motto { color: #9aa3b2; margin: 0 0 1.5rem; }
-  .card { border: 1px solid #2a3140; border-radius: 12px; padding: 1.25rem 1.35rem; background: #151922; }
-  .nums { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin: 0 0 1rem; }
-  .count { font-size: 2.2rem; font-variant-numeric: tabular-nums; font-weight: 700; margin: 0; }
-  .count span { display: block; font-size: .95rem; font-weight: 500; color: #9aa3b2; }
-  .kid { font-size: 1.05rem; margin: 0 0 1rem; }
-  .btns { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: 0 0 .85rem; }
-  @media (max-width: 520px) { .btns { grid-template-columns: 1fr; } }
-  a.btn, button.btn { display: block; width: 100%; box-sizing: border-box; text-align: center; font: inherit; font-size: 1.2rem; font-weight: 750; padding: 1rem 1.1rem; border-radius: 10px; border: 0; cursor: pointer; text-decoration: none; }
-  a.btn.primary { background: #e8eaef; color: #0e1014; }
-  button.btn.install { background: #c9a227; color: #14110a; }
-  button.btn.install.copied { background: #7dcf9a; color: #0e1014; }
-  .meta { margin-top: 1.1rem; color: #9aa3b2; font-size: .92rem; }
-  .meta a { color: #c9d4ff; }
-  .iso { margin-top: .85rem; font-size: .85rem; color: #7d8696; }
-  .banner { border: 1px solid #5c4a1a; background: #241c0d; color: #f0d78c; padding: .85rem 1rem; border-radius: 8px; margin: 0 0 1.2rem; font-size: .92rem; }
-  pre { background: #0e1014; padding: .75rem .9rem; overflow: auto; border-radius: 8px; font-size: .82rem; }
-  code { font-size: .88rem; }
-
-  .cite { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid #2a3140; }
-  .cite h2 { font-size: 1.05rem; margin: 0 0 .4rem; }
-  .cite p { color: #c5ccd8; font-size: .95rem; }
-  .cite a { color: #c9d4ff; }
-  #meshStrip { border: 1px solid #c9a227; border-radius: 12px; padding: .85rem 1rem; background: #151922; margin: 0 0 1.2rem; display: flex; flex-wrap: wrap; align-items: center; gap: .7rem 1rem; font-size: .88rem; color: #9aa3b2; }
-  #meshStrip .live { color: #e8eaef; }
-  #meshStrip .live b { color: #c9a227; font-size: 1.35rem; margin-right: .35rem; }
-  #meshStrip .rollup b { color: #c9a227; }
-  #meshStrip button { font: 700 .78rem/1 ui-monospace, Menlo, Consolas, monospace; height: 2rem; padding: 0 .75rem; border-radius: 8px; background: #101010; color: #e8eaef; border: 1px solid #c9a227; cursor: pointer; }
-  #meshStrip button:hover { background: #241c0d; color: #c9a227; }
-  #meshStrip input { width: 10rem; padding: .4rem .55rem; border: 1px solid #c9a227; border-radius: 8px; background: #0e0e0e; color: #e8eaef; font: inherit; }
-  #meshProducts { flex-basis: 100%; margin: 0; }
-  .brandrow { display: flex; align-items: center; justify-content: flex-start; gap: 12px; margin: 0 0 1.15rem; }
+  :root {
+    color-scheme: dark;
+    --bg: #101114; --ink: #f2f3f5; --muted: #c5cad3; --panel: #181b22;
+    --line: #8d96a8; --gold: #e4c15a; --gold-line: #c9a227;
+    --btn: #f4f1ea; --btn-ink: #141414; --focus: #9ec5ff; --focus-inset: #0b4f9c;
+    --banner-bg: #2a2416; --banner-ink: #f6e7b8; --banner-line: #c9a227;
+    --field: #101114; --ok: #b7ebc9; --ok-ink: #06210f; --link: #d5def9;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      color-scheme: light;
+      --bg: #f7f5f1; --ink: #1c1b19; --muted: #3f3d38; --panel: #ffffff;
+      --line: #6e675c; --gold: #6d5208; --gold-line: #6d5208;
+      --btn: #1c1b19; --btn-ink: #f7f5f1; --focus: #0b4f9c; --focus-inset: #9ec5ff;
+      --banner-bg: #f3ead0; --banner-ink: #3a2e0c; --banner-line: #6d5208;
+      --field: #ffffff; --ok: #1f6b45; --ok-ink: #ffffff; --link: #0b4f9c;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body { font: 16px/1.5 system-ui, "Segoe UI", sans-serif; max-width: 42rem; margin: 0 auto; padding: 1.15rem 1rem 3rem; overflow-wrap: break-word; }
+  img { max-width: 100%; }
+  a { color: var(--link); }
+  a:not(.btn) { text-underline-offset: .15em; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  a.btn.block.primary:focus-visible { box-shadow: inset 0 0 0 3px var(--focus-inset); }
+  a.skip { position: absolute; left: -999px; top: 0; }
+  a.skip:focus, a.skip:focus-visible { left: .75rem; top: .75rem; z-index: 5; background: var(--btn); color: var(--btn-ink); padding: .45rem .7rem; text-decoration: none; border-radius: 8px; }
+  .brandrow { display: flex; align-items: center; justify-content: flex-start; gap: 12px; margin: 0 0 .85rem; }
   .brandmark { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; flex: 0 0 auto; box-shadow: 0 0 0 1px #d4af3733; }
+  h1 { font-size: 2rem; font-weight: 650; letter-spacing: .02em; margin: 0 0 .2rem; line-height: 1.15; }
+  h2 { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 650; margin: 1.15rem 0 .55rem; }
+  .motto { color: var(--gold); font-style: italic; margin: 0 0 .85rem; font-size: 1.08rem; }
+  .lede, .kid { color: var(--muted); margin: 0 0 .9rem; }
+  .hero { margin: 0 0 .35rem; }
+  a.btn.block.primary { display: block; width: 100%; margin: 0 0 .55rem; padding: 1.05rem 1.2rem; border: 1px solid transparent; border-radius: 10px; background: var(--btn); color: var(--btn-ink); text-align: center; text-decoration: none; font: 700 1.25rem/1.1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: .03em; }
+  a.btn.block.primary:hover { filter: brightness(1.06); }
+  .asset-note { color: var(--muted); font-size: .92rem; margin: 0 0 .85rem; }
+  .features { display: grid; grid-template-columns: 1fr; gap: .4rem 1rem; margin: 0 0 .95rem; padding: 0; list-style: none; }
+  .features li { margin: 0; padding-left: .95rem; position: relative; }
+  .features li::before { content: ""; position: absolute; left: 0; top: .55em; width: .35rem; height: .35rem; border-radius: 50%; background: var(--gold); }
+  @media (min-width: 720px) {
+    body { padding: 2rem 1.25rem 4rem; }
+    .features { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .banner { border: 1px solid var(--banner-line); background: var(--banner-bg); color: var(--banner-ink); padding: .85rem 1rem; border-radius: 10px; margin: 0 0 1.15rem; font-size: .95rem; }
+  .card, .cite { border: 1px solid var(--line); border-radius: 12px; padding: 1.05rem 1rem 1.15rem; background: var(--panel); margin: 0 0 1.1rem; }
+  .nums { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin: 0 0 1rem; }
+  .count { font-size: 2rem; font-variant-numeric: tabular-nums; font-weight: 700; margin: 0; color: var(--ink); }
+  .count span { display: block; font-size: .95rem; font-weight: 500; color: var(--muted); }
+  button.btn.install { display: block; width: 100%; text-align: center; font: 700 1rem/1.1 ui-monospace, Menlo, Consolas, monospace; padding: .75rem 1rem; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+  button.btn.install:hover { background: var(--banner-bg); color: var(--banner-ink); border-color: var(--banner-line); }
+  button.btn.install.copied { background: var(--ok); color: var(--ok-ink); border-color: transparent; }
+  pre { background: var(--field); color: var(--ink); padding: .75rem .9rem; border-radius: 8px; font-size: .82rem; white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid var(--line); margin: .75rem 0 0; }
+  code { font-size: .88em; overflow-wrap: anywhere; }
+  .meta { margin-top: 1rem; color: var(--muted); font-size: .92rem; }
+  .iso { margin-top: .75rem; font-size: .85rem; color: var(--muted); }
+  .cite h2 { margin-top: 0; }
+  .cite p { margin: .35rem 0; }
+  footer.quiet { color: var(--muted); font-size: .9rem; margin: .2rem 0 0; }
+  footer.quiet p { margin: .3rem 0; }
+  #meshStrip { border: 1px solid var(--gold-line); border-radius: 12px; padding: .85rem 1rem; background: var(--panel); margin: 0 0 1.15rem; display: flex; flex-wrap: wrap; align-items: center; gap: .7rem 1rem; font-size: .88rem; color: var(--muted); min-width: 0; }
+  #meshStrip .live { color: var(--ink); }
+  #meshStrip .live b { color: var(--gold); font-size: 1.35rem; margin-right: .35rem; }
+  #meshStrip .rollup b { color: var(--gold); }
+  #meshStrip button { font: 700 .78rem/1 ui-monospace, Menlo, Consolas, monospace; height: 2rem; padding: 0 .75rem; border-radius: 8px; background: transparent; color: var(--ink); border: 1px solid var(--gold-line); cursor: pointer; }
+  #meshStrip button:hover { background: var(--banner-bg); color: var(--banner-ink); }
+  #meshStrip input { width: min(16rem, 100%); max-width: 100%; padding: .4rem .55rem; border: 1px solid var(--gold-line); border-radius: 8px; background: var(--field); color: var(--ink); font: inherit; }
+  #meshStrip input::placeholder { color: var(--muted); opacity: 1; }
+  .mesh-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; width: 100%; min-width: 0; }
+  #meshProducts { flex-basis: 100%; margin: 0; overflow-wrap: anywhere; }
+  ul { padding-left: 1.15rem; margin: .35rem 0 0; }
+  li { overflow-wrap: anywhere; }
 </style>
 <body>
+  <a class="skip" href="#downloadBtn">Skip to download</a>
+  <header class="hero">
   <div class="brandrow"><img class="brandmark" src="/sigil.png" width="40" height="40" alt="" decoding="async"></div>
   <h1>AZAI</h1>
-  <p class="motto">Ask Jeeves research assistant. Jeeves speaks inside the shell. Lamb Lens first — public Corpus posture; never the operator. Author Aziel Eliab.</p>
-  <p class="banner">AZAI packages a true local AI stack on an Ollama base with JEEVES (Ask Jeeves research assistant). OpenAI-compatible local API. Not a hosted paid-key proxy. JEEVES is not sovereign. Hosted /v1 is lamb-check ONLY. Author: Aziel Eliab.</p>
+  <p class="motto">Ask Jeeves research assistant.</p>
+  <a class="btn block primary dl" id="downloadBtn" href="/download?asset=${DEFAULT_ASSET}">Download</a>
+  <p class="asset-note" id="downloadNote">${n} downloads · ${DEFAULT_ASSET} · counted on this Worker for every branch and fork</p>
+  <p class="lede">Jeeves speaks inside the shell. Lamb Lens holds the public Corpus posture, and the operator remains in charge. Author Aziel Eliab.</p>
+  <ul class="features">
+    <li>Download saves the gzip from this Worker</li>
+    <li>Ask Jeeves runs on this computer after <code>azai ui</code></li>
+    <li>OpenAI-compatible local API at 127.0.0.1:8860</li>
+  </ul>
+  </header>
+  <p class="banner">AZAI is a local stack on an Ollama base. Ask Jeeves is the research assistant inside the shell. Hosted /v1 answers a Lamb check. Chat runs on this computer. Author: Aziel Eliab.</p>
   <div id="meshStrip" aria-label="Suite Live Nodes">
     <div class="live"><b id="meshLiveCount">0</b> Live Nodes</div>
     <div id="meshLine">Suite mesh: off (default). QNM-BUILD-1.0. QNS-CD-1.0 cite. Not an anonymity network.</div>
     <div class="rollup">live <b id="qnmLive">0</b> · locked <b id="qnmLocked">0</b> · isolated <b id="qnmIsolated">0</b></div>
     <div>No Node Gate · No auto-heal · Aziel Eliab only</div>
-    <div>
+    <div class="mesh-actions">
       <input id="meshBearer" type="text" maxlength="80" placeholder="bearer (required to enable)" aria-label="mesh bearer">
       <button id="meshEnable" type="button" title="Enable suite mesh. Declared bearer required. Default off.">Enable</button>
       <button id="meshDisable" type="button" title="Disable suite mesh (always allowed)">Disable</button>
@@ -454,19 +502,16 @@ async function indexHtml(env) {
     </div>
     <p id="meshProducts">Catalog MCP mesh_* · FragGate slug=mesh · QNS-CD-1.0 cite · /v1/mesh/* PROXY · not AnonBroadcast · not AZMail ring · not a Node Gate · not a Softwares-tab product · not a public qnsd proxy</p>
   </div>
-  <div class="card">
+  <div class="card" id="install">
+    <h2>Counted on this Worker</h2>
     <div class="nums">
       <p class="count">${v}<span>Views</span></p>
       <p class="count">${n}<span>Downloads</span></p>
     </div>
-    <p class="kid"><strong>Two big buttons.</strong> Download saves the gzip (the Downloads number goes up). One-click install copies a Terminal command. After it finishes, type <code>azai ui</code>.</p>
-    <div class="btns">
-      <a class="btn primary dl" href="/download?asset=${DEFAULT_ASSET}">Download</a>
-      <button type="button" class="btn install" id="install-btn">One-click install</button>
-    </div>
+    <p class="kid">One-click install copies a Terminal command. After it finishes, run <code>azai ui</code> and open http://127.0.0.1:8860 on this computer. Install pulls Ollama and <code>llama3.2</code> when it can, and prints the exact steps when it cannot.</p>
+    <button type="button" class="btn install" id="install-btn">One-click install</button>
     <pre id="install-cmd">curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash</pre>
-    <p class="kid">Then run: <code>azai ui</code> and open http://127.0.0.1:8860 (this computer only). Install pulls Ollama + <code>llama3.2</code> when it can; otherwise it prints the exact steps. Ask Jeeves is the research assistant. JEEVES is the ethics layer, not sovereign.</p>
-    <p class="meta">The download count ticks on the Download click. The Worker serves the gzip (HTTP 200). No 302 to GitHub. Forks using this same link are counted automatically. ${DEFAULT_ASSET} — ${n} counted.</p>
+    <p class="meta">The download count ticks on the Download click. The Worker serves the gzip (HTTP 200). Forks using this same link are counted on their own key, and the total includes them. ${DEFAULT_ASSET} — ${n} counted.</p>
     <p class="iso">Isolated counter: Worker <code>azai-download-tracker</code>, project <code>azai</code>, KV <code>AZAI_DOWNLOADS</code>. Not mixed with any other product. /v1 does not increment downloads.</p>
     
     <p class="meta"><a href="/stats">JSON stats</a> · <a href="/openapi.json">OpenAPI</a> · <a href="/v1/mesh">/v1/mesh</a> · <a href="/v1/skill">Skill</a> · <a href="/ai">AI runtime</a> · <a href="${GITHUB_REPO}">GitHub</a> · <a href="${GITHUB_LATEST}">releases</a></p>
@@ -605,6 +650,10 @@ async function indexHtml(env) {
   <p>Aziel Eliab. AZAI. https://github.com/AzielEliab/azai. https://azai-download-tracker.vibelock.workers.dev.</p>
   <p><a href="https://aziel-runtime.vibelock.workers.dev/">Catalog</a> · <a href="https://github.com/AzielEliab/azai">GitHub</a> · <a href="https://azai-download-tracker.vibelock.workers.dev/download">Download</a> · <a href="https://azai-download-tracker.vibelock.workers.dev/cite.json">cite.json</a></p>
 </section>
+<footer class="quiet">
+  <p>Apache-2.0 · Aziel Eliab · AZAI v0.3.1</p>
+  <p>Forks are welcome. The same download link counts each branch and fork.</p>
+</footer>
 <!-- /gitbaby-seo -->
 </body>
 </html>`;

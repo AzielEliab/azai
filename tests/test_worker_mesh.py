@@ -96,6 +96,18 @@ def test_runtime_advertises_mesh_proxy_and_pointer() -> None:
     assert 'path === "/v1/mesh"' in INDEX or 'path.startsWith("/v1/mesh/")' in INDEX
 
 
+def test_home_download_is_the_primary_action() -> None:
+    assert 'id="downloadBtn"' in INDEX
+    assert 'href="/download?asset=${DEFAULT_ASSET}"' in INDEX
+    assert 'class="btn block primary dl"' in INDEX
+    assert 'const DEFAULT_ASSET = "azai-0.3.1.tar.gz"' in INDEX
+    assert '<footer class="quiet">' in INDEX
+    assert ":focus-visible" in INDEX
+    assert "prefers-color-scheme: light" in INDEX
+    assert 'id="install-btn"' in INDEX
+    assert 'id="meshLiveCount"' in INDEX
+
+
 def test_home_live_nodes_strip_no_node_gate() -> None:
     assert 'id="meshStrip"' in INDEX
     assert 'id="meshLiveCount"' in INDEX
