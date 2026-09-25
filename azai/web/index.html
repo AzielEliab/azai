@@ -8,167 +8,175 @@
 </head>
 <body data-view="simple">
   <header class="top">
-    <div class="brand">
-      <div class="tag">AZAI · v0.3.1 · Ask Jeeves research assistant · Ollama base · not sovereign</div>
-      <h1>AZAI</h1>
-      <p class="motto">Jeeves speaks inside the shell. Lamb Lens governs above the shell. Receipts witness what the shell permits.</p>
-    </div>
-    <div id="status" class="status" aria-live="polite">
-      <span data-k="lamb">Lamb —</span>
-      <span data-k="integrity">Integrity —</span>
-      <span data-k="runtime">Runtime —</span>
-      <span data-k="jeeves">Jeeves —</span>
-      <span data-k="ollama">Ollama —</span>
-      <span data-k="providers">Providers —</span>
+    <p class="eyebrow">Aziel Eliab</p>
+    <h1>AZAI</h1>
+    <p class="lede">Ask Jeeves a question on this machine. Answers come through Ollama.</p>
+    <p id="status-line" class="status-line" role="status">Checking this install…</p>
+    <div id="chips" class="chips" aria-label="Lamb Lens">
+      <span class="chip" data-axis="service">Service —</span>
+      <span class="chip" data-axis="clarity">Clarity —</span>
+      <span class="chip" data-axis="peace">Peace —</span>
     </div>
   </header>
 
-  <aside class="banner limit" role="note">
-    <strong>Ask Jeeves</strong> is the research assistant for the public Corpus/Library
-    (especially <code>www.azielcorpuslibrary.net</code>). True local AI on an <strong>Ollama</strong> base.
-    <strong>JEEVES</strong> is the ethics/assistant layer and is not sovereign — Lamb Lens first;
-    public Corpus posture; never the operator. Jeeves cannot modify scores.
-    <strong>Check this text</strong> runs the Lamb Lens only — it does not call Ollama or paid providers.
-    Hosted cloud <code>/v1</code> is lamb-check only, never a paid-key proxy.
-    Point other software at <code>OPENAI_BASE_URL=http://127.0.0.1:8860/v1</code> with a dummy key.
-  </aside>
-
-  <div class="toolbar">
-    <div class="view-toggle" role="group" aria-label="View">
-      <button type="button" id="view-simple" class="on">Simple</button>
-      <button type="button" id="view-advanced">Advanced</button>
-    </div>
-    <div id="chips" class="chips" aria-label="Lamb Lens">
-      <span class="chip" data-axis="peace">Peace —</span>
-      <span class="chip" data-axis="clarity">Clarity —</span>
-      <span class="chip" data-axis="service">Service —</span>
-    </div>
-  </div>
-
-  <main class="layout">
-    <section class="chat" id="workspace">
-      <div class="chat-head advanced-only">
-        <label for="model">
-          <span class="kicker">Model</span>
-        </label>
-        <select id="model">
-          <option value="local" selected>local — Ollama + JEEVES</option>
-          <option value="ollama">ollama — local base through JEEVES</option>
-          <option value="blend">blend — optional gpt + grok + venice, labeled</option>
-          <option value="gpt">gpt</option>
-          <option value="grok">grok</option>
-          <option value="venice">venice</option>
-        </select>
-        <button type="button" id="seal">Seal Runtime</button>
-        <button type="button" id="open" class="ghost">Open Runtime</button>
+  <main>
+    <section class="chat" id="workspace" aria-labelledby="composer-label">
+      <div class="stage">
+        <div id="empty-state" class="empty">
+          <p>Type a question, then press Send.</p>
+          <p class="empty-next">Sample prompt fills an example. Check this text runs Lamb Lens on the draft.</p>
+        </div>
+        <div id="transcript" class="transcript" aria-live="polite"></div>
       </div>
-      <div id="transcript" class="transcript" aria-live="polite"></div>
       <form id="prompt-form">
-        <label for="prompt"><span class="kicker">One chat box</span></label>
-        <textarea id="prompt" rows="3" placeholder="Ask Jeeves. Try a library question, or the sample prompt."></textarea>
+        <label id="composer-label" for="prompt">Message</label>
+        <textarea id="prompt" rows="3" placeholder="Ask Jeeves…"></textarea>
         <div class="actions">
           <button type="submit" id="send">Send</button>
-          <button type="button" id="lamb-btn">Check this text</button>
+          <button type="button" id="lamb-btn" class="ghost">Check this text</button>
           <button type="button" id="sample-btn" class="ghost">Sample prompt</button>
-          <button type="button" id="integrity-btn" class="ghost advanced-only">Integrity</button>
         </div>
-        <div class="actions files">
+      </form>
+    </section>
+
+    <details id="advanced-panel" class="advanced">
+      <summary>Advanced</summary>
+      <div class="advanced-body">
+        <p class="hint">Simple answers are the default. Open this when you need models, files, or the receipt chain.</p>
+
+        <div class="view-toggle" role="group" aria-label="Answer style">
+          <button type="button" id="view-simple" class="on">Simple</button>
+          <button type="button" id="view-advanced">Advanced</button>
+        </div>
+
+        <div id="status" class="status" aria-label="Install details">
+          <span data-k="lamb">Lamb —</span>
+          <span data-k="integrity">Integrity —</span>
+          <span data-k="runtime">Runtime —</span>
+          <span data-k="jeeves">Jeeves —</span>
+          <span data-k="ollama">Ollama —</span>
+          <span data-k="providers">Providers —</span>
+        </div>
+
+        <div class="field">
+          <label for="model">Model</label>
+          <select id="model">
+            <option value="local" selected>local — Ollama + Jeeves</option>
+            <option value="ollama">ollama — local base</option>
+            <option value="blend">blend — gpt, grok, and venice, labeled</option>
+            <option value="gpt">gpt</option>
+            <option value="grok">grok</option>
+            <option value="venice">venice</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="seal" class="ghost">Seal runtime</button>
+          <button type="button" id="open" class="ghost">Open runtime</button>
+          <button type="button" id="integrity-btn" class="ghost">Refresh integrity</button>
+        </div>
+
+        <h2>Receipts</h2>
+        <ol id="receipts" class="receipts"></ol>
+        <div id="integrity" class="integrity">
+          <p>Service —</p>
+          <p>Clarity —</p>
+          <p>Peace —</p>
+        </div>
+
+        <h2>Files</h2>
+        <div class="actions">
           <button type="button" id="import-btn" class="ghost">Import .txt / JSON</button>
           <button type="button" id="export-json" class="ghost">Export JSON</button>
           <button type="button" id="export-md" class="ghost">Export Markdown</button>
           <input type="file" id="import-file" accept=".txt,.json,text/plain,application/json" hidden>
         </div>
-      </form>
-    </section>
 
-    <aside class="rail advanced-only">
-      <h2>Receipts</h2>
-      <ol id="receipts" class="receipts"></ol>
-      <h2>Integrity</h2>
-      <div id="integrity" class="integrity">
-        <p>Peace —</p>
-        <p>Clarity —</p>
-        <p>Service —</p>
+        <section class="card" id="aziel-json-io">
+          <h2>Import / Export JSON</h2>
+          <p class="hint">Import JSON file reads a local file into this page. Export JSON saves the fields on this page. Nothing is uploaded.</p>
+          <input id="aziel-import-json" type="file" accept="application/json,.json">
+          <div class="actions">
+            <button type="button" id="aziel-import-json-btn" class="ghost">Import JSON file</button>
+            <button type="button" id="aziel-export-json-btn" class="ghost">Export JSON</button>
+          </div>
+          <p class="hint" id="aziel-json-status" role="status"></p>
+        </section>
+
+        <details id="about-panel" class="about">
+          <summary>About</summary>
+          <div class="about-body">
+            <p>AZAI is local AI on this machine. Ask Jeeves is the research assistant. When Ollama is running, answers use that local base. When it is not, Jeeves answers from the local stub and says so.</p>
+            <p>Lamb Lens reads Service, Clarity, and Peace. Jeeves is not sovereign and cannot modify scores. Jeeves has the same rights as a normal user.</p>
+            <p>Optional gpt, grok, and venice run on this machine when you choose them and a key is set here. The hosted checker runs Lamb Lens.</p>
+            <p>Author: Aziel Eliab. This page stays on 127.0.0.1.</p>
+          </div>
+        </details>
       </div>
-    </aside>
-  
-<section class="card" id="aziel-json-io">
-  <h2>Import / Export JSON</h2>
-  <p class="help">Tap Import JSON file to pick a .json. Export JSON saves the current session locally. Nothing is uploaded.</p>
-  <input id="aziel-import-json" type="file" accept="application/json,.json">
-  <p>
-    <button type="button" id="aziel-import-json-btn">Import JSON file</button>
-    <button type="button" id="aziel-export-json-btn">Export JSON</button>
-  </p>
-  <p class="help" id="aziel-json-status"></p>
-</section>
-
-</main>
+    </details>
+  </main>
 
   <p id="debug-strip" class="debug-strip" hidden></p>
 
   <footer>
-    <p>Apache-2.0 · Aziel Eliab · 2026 · Bound to 127.0.0.1:8860 · Forks welcome and always allowed.</p>
-    <p class="foot-note">Voice is optional extra; MVP is text. Push-to-talk only; no wake word; no passive recording. No telemetry.</p>
+    <p>Apache-2.0 · Aziel Eliab · 2026 · 127.0.0.1:8860</p>
   </footer>
   <script src="/app.js"></script>
-
-<script>
-(function(){
-  var file = document.getElementById("aziel-import-json");
-  var imp = document.getElementById("aziel-import-json-btn");
-  var exp = document.getElementById("aziel-export-json-btn");
-  var status = document.getElementById("aziel-json-status");
-  if (!file || !imp || !exp) return;
-  function say(m){ if (status) status.textContent = m; }
-  function collect(){
-    var data = { product: document.title || "", exported_at: new Date().toISOString(), author: "Aziel Eliab" };
-    document.querySelectorAll("input, select, textarea").forEach(function(el){
-      if (!el.id || el.type === "file" || el.type === "password") return;
-      data[el.id] = el.type === "checkbox" ? el.checked : el.value;
-    });
-    if (window.__azielLastJson && typeof window.__azielLastJson === "object") {
-      data.last = window.__azielLastJson;
+  <script>
+  (function(){
+    var file = document.getElementById("aziel-import-json");
+    var imp = document.getElementById("aziel-import-json-btn");
+    var exp = document.getElementById("aziel-export-json-btn");
+    var status = document.getElementById("aziel-json-status");
+    if (!file || !imp || !exp) return;
+    function say(m){ if (status) status.textContent = m; }
+    function collect(){
+      var data = { product: document.title || "", exported_at: new Date().toISOString(), author: "Aziel Eliab" };
+      document.querySelectorAll("input, select, textarea").forEach(function(el){
+        if (!el.id || el.type === "file" || el.type === "password") return;
+        data[el.id] = el.type === "checkbox" ? el.checked : el.value;
+      });
+      if (window.__azielLastJson && typeof window.__azielLastJson === "object") {
+        data.last = window.__azielLastJson;
+      }
+      return data;
     }
-    return data;
-  }
-  function apply(obj){
-    if (!obj || typeof obj !== "object") return;
-    window.__azielLastJson = obj;
-    Object.keys(obj).forEach(function(k){
-      if (k === "last" || k === "product" || k === "exported_at" || k === "author") return;
-      var el = document.getElementById(k);
-      if (!el || el.type === "file" || el.type === "password") return;
-      if (el.type === "checkbox") el.checked = !!obj[k];
-      else if ("value" in el) el.value = obj[k];
-    });
-    var ta = document.querySelector("textarea");
-    if (ta && obj && !obj[ta.id] && typeof obj === "object") {
-      try { if (!ta.value) ta.value = JSON.stringify(obj, null, 2); } catch (e) {}
+    function apply(obj){
+      if (!obj || typeof obj !== "object") return;
+      window.__azielLastJson = obj;
+      Object.keys(obj).forEach(function(k){
+        if (k === "last" || k === "product" || k === "exported_at" || k === "author") return;
+        var el = document.getElementById(k);
+        if (!el || el.type === "file" || el.type === "password") return;
+        if (el.type === "checkbox") el.checked = !!obj[k];
+        else if ("value" in el) el.value = obj[k];
+      });
+      var ta = document.querySelector("textarea");
+      if (ta && obj && !obj[ta.id] && typeof obj === "object") {
+        try { if (!ta.value) ta.value = JSON.stringify(obj, null, 2); } catch (e) {}
+      }
     }
-  }
-  imp.addEventListener("click", function(){ file.click(); });
-  file.addEventListener("change", function(){
-    var f = file.files && file.files[0];
-    if (!f) return;
-    var r = new FileReader();
-    r.onload = function(){
-      try { apply(JSON.parse(String(r.result || "{}"))); say("Imported " + f.name); }
-      catch (e) { say("Invalid JSON"); }
-    };
-    r.readAsText(f);
-  });
-  exp.addEventListener("click", function(){
-    var blob = new Blob([JSON.stringify(collect(), null, 2)], {type: "application/json"});
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "session.json";
-    a.click();
-    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 800);
-    say("Exported JSON");
-  });
-})();
-</script>
-
+    imp.addEventListener("click", function(){ file.click(); });
+    file.addEventListener("change", function(){
+      var f = file.files && file.files[0];
+      if (!f) return;
+      var r = new FileReader();
+      r.onload = function(){
+        try { apply(JSON.parse(String(r.result || "{}"))); say("Imported " + f.name); }
+        catch (e) { say("That file is not valid JSON. Choose another .json file."); }
+      };
+      r.readAsText(f);
+    });
+    exp.addEventListener("click", function(){
+      var blob = new Blob([JSON.stringify(collect(), null, 2)], {type: "application/json"});
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "session.json";
+      a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 800);
+      say("Exported JSON");
+    });
+  })();
+  </script>
 </body>
 </html>

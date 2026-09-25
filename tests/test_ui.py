@@ -31,7 +31,14 @@ def test_ui_get_root_contains_azai_and_jeeves(tmp_path) -> None:
         assert "Peace" in html and "Clarity" in html and "Service" in html
         assert "Sample prompt" in html
         assert "Simple" in html and "Advanced" in html
+        assert "<summary>Advanced</summary>" in html
         assert "Import" in html and "Export" in html
+        assert 'name="viewport"' in html
+        with urllib.request.urlopen(f"http://127.0.0.1:{port}/style.css", timeout=3) as resp:
+            css = resp.read().decode("utf-8")
+        assert "prefers-color-scheme" in css
+        assert ":focus-visible" in css
+        assert "#c9a227" in css or "--gold" in css
         assert "cdnjs" not in html.lower()
         assert "unpkg" not in html.lower()
         with urllib.request.urlopen(f"http://127.0.0.1:{port}/v1/models", timeout=3) as resp:
