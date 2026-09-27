@@ -9,12 +9,14 @@ UI_PORT = 8860
 DATA_DIR_NAME = "AZAI_DATA"
 CONSTITUTION_VERSION = "1.0"
 
-# Ollama is the true local base. JEEVES is the ethics/assistant layer on top.
+# Default core is local: constitution and guide. No weights. No Ollama probe.
+# Ollama is an optional slot (AZAI_BACKEND=ollama or model=ollama).
 # Optional paid blend (gpt/grok/venice) stays on the operator's machine only.
 MODELS = ("local", "ollama", "blend", "gpt", "grok", "venice")
 DEFAULT_MODEL = "local"
 
 OLLAMA_URL = "http://127.0.0.1:11434"
+# Suggested tag for the optional Ollama slot only. Never pulled by default.
 OLLAMA_MODEL = "llama3.2"
 OLLAMA_PROBE_TIMEOUT = 0.8
 OLLAMA_CHAT_TIMEOUT = 120.0
@@ -22,17 +24,20 @@ OLLAMA_TAGS_PATH = "/api/tags"
 OLLAMA_CHAT_PATH = "/v1/chat/completions"
 
 OLLAMA_INSTALL_STEPS = (
+    "Optional Ollama slot only. The default AZAI core does not require Ollama or any GGUF weights.\n"
+    "Use this only after you opt in with AZAI_BACKEND=ollama or model=ollama.\n"
     "1. Install Ollama (Linux/macOS): curl -fsSL https://ollama.com/install.sh | sh\n"
     "   Windows: https://ollama.com/download\n"
     "   No sudo? download the binary from https://ollama.com/download, place it on PATH\n"
     "   (example: mkdir -p \"$HOME/.local/bin\" && install the ollama binary there).\n"
+    "   Or run: bash scripts/setup-ollama.sh\n"
     "2. Start the local server if it is not already running: ollama serve\n"
     "   Default listen: 127.0.0.1:11434 (loopback). Override with AZAI_OLLAMA_URL.\n"
-    "3. Pull the default model: ollama pull llama3.2\n"
+    "3. Pull a model for this slot only: ollama pull llama3.2\n"
     "   Smaller machine: AZAI_OLLAMA_MODEL=llama3.2:1b ollama pull llama3.2:1b\n"
-    "4. Confirm: curl -s http://127.0.0.1:11434/api/tags && azai doctor\n"
-    "5. Run AZAI: azai ui   then open http://127.0.0.1:8860\n"
-    "AZAI talks to Ollama on this machine. No hosted paid-key proxy. No OpenAI key required for local."
+    "4. Confirm the slot: curl -s http://127.0.0.1:11434/api/tags && azai ollama\n"
+    "5. AZAI itself is already runnable: azai ui   then open http://127.0.0.1:8860\n"
+    "The default model is local. No hosted paid-key proxy. No OpenAI key required."
 )
 
 GPT_URL = "https://api.openai.com/v1/chat/completions"
@@ -79,18 +84,19 @@ WORKER_PROVIDER_HOSTS = (
 )
 
 LIMITATION = (
-    "AZAI packages a true local AI stack on an Ollama base with JEEVES. "
-    "OpenAI-compatible local API. Not a hosted paid-key proxy. "
-    "AZAI is not a new foundation model, not a kernel, not a worm, "
-    "not IP-blocking malware, not a VPN. "
+    "AZAI is true local AI: a standalone local core, an OpenAI-shaped process on this machine. "
+    "The default core does not require Ollama or model weights. "
     "JEEVES is the Ask Jeeves research assistant (ethics/assistant layer) "
     "and is not sovereign. "
-    "System policy: Lamb Lens first — public Corpus posture; never the operator. "
+    "Lamb Lens first — Service → Clarity → Peace; public Corpus posture; never the operator. "
     "Jeeves cannot modify scores; same rights as a normal user. "
     "Hub is a blank key: it does not interpret meaning. "
-    "Default model=local uses Ollama through JEEVES. "
+    "Default model=local is the constitution and guide, with light adaptive "
+    "session notes and site_context. It never probes Ollama as the success path. "
+    "Ollama is an optional slot (AZAI_BACKEND=ollama or model=ollama). "
     "Optional paid blend (gpt / grok / venice) is labeled, then a short synthesis. "
-    "Without Ollama, the JEEVES constitution stub still runs and does not pretend to be GPT. "
+    "AZAI is not a new foundation model, not a kernel, not a worm, "
+    "not IP-blocking malware, not a VPN, and not a hosted paid-key proxy. "
     "Voice is optional extra [voice]; MVP is text. Push-to-talk only; no wake word; "
     "no passive recording; voice does not execute commands. "
     "Memory writes require explicit confirm. Session-only by default. "
@@ -107,8 +113,8 @@ LIMITATION = (
 LAN_RISK = (
     "Binding a non-loopback --host exposes the OpenAI-compatible API on that "
     "interface with no auth beyond a dummy key. Anyone who can reach the port "
-    "can use the local Ollama base and, if present, spend the operator's "
-    "GPT/Grok/Venice keys. Prefer 127.0.0.1. "
+    "can use the local core and, if you opted into the Ollama slot or set paid "
+    "keys, use those too. Prefer 127.0.0.1. "
     "On-site LAN is for a trusted network only."
 )
 

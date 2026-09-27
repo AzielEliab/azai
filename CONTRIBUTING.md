@@ -19,9 +19,12 @@ in-process. Do not set live API keys in CI.
 
 ## Ground rules
 
-1. **True local AI on an Ollama base.** Default `model=local` uses
-   Ollama through JEEVES. Local JEEVES does not pretend to be GPT.
-   Not a hosted paid-key proxy.
+1. **True local AI, standalone local core.** Default `model=local` is
+   the constitution and guide. It does not require Ollama or model
+   weights and does not probe Ollama. Local JEEVES does not pretend to
+   be GPT. Not a hosted paid-key proxy. Ollama is optional
+   (`AZAI_BACKEND=ollama` or `model=ollama`). Lamb Lens order is
+   Service → Clarity → Peace.
 2. **JEEVES is not sovereign.** It is the ethics/assistant layer
    (**Ask Jeeves** research assistant). Lamb Lens first — public Corpus
    posture; never the operator. Jeeves cannot modify scores. Hub is a
@@ -53,7 +56,7 @@ in-process. Do not set live API keys in CI.
 
 - Lamb Lens: `azai/lamb.py` and `workers/download-tracker/src/engine.js`
 - Providers: `azai/providers.py`
-- Ollama base: `azai/ollama.py`, `scripts/setup-ollama.sh`
+- Optional Ollama slot: `azai/ollama.py`, `scripts/setup-ollama.sh`
 - JEEVES layer: `azai/jeeves.py`
 - Runtime / blend / seal: `azai/runtime.py`
 - Receipts: `azai/receipts.py`

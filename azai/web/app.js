@@ -39,12 +39,13 @@ function setChips(lamb) {
 function plainStatus(status) {
   const runtime = status.runtime || "";
   const ol = status.ollama || {};
-  let base;
-  if (ol.reachable && ol.model_present) base = "Ollama is ready";
-  else if (ol.reachable) base = "Ollama is up. Pull the model, then ask again";
-  else base = "Ollama is not running yet, so Jeeves uses the local stub";
-  if (runtime === "SEALED") return `Chat is locked. Use Open under Advanced. ${base}.`;
-  return `Ready to chat. ${base}.`;
+  let slot = "Ollama is optional.";
+  if (ol.opt_in && ol.reachable && ol.model_present) slot = "Ollama slot is ready.";
+  else if (ol.opt_in && ol.reachable) slot = "Ollama slot is up. Pull a model if you want that slot.";
+  else if (ol.opt_in) slot = "Ollama slot was requested and is not running. The local core still answers.";
+  const base = `Local core is ready. No model weights required. ${slot}`;
+  if (runtime === "SEALED") return `Chat is locked. Use Open under Advanced. ${base}`;
+  return `Ready to chat. ${base}`;
 }
 
 async function jget(path) {
@@ -166,7 +167,10 @@ async function refresh() {
   badge(bar, "runtime", "Runtime", status.runtime || "—");
   badge(bar, "jeeves", "Jeeves", status.jeeves || "—");
   const ol = status.ollama || {};
-  const olabel = ol.reachable ? (ol.model_present ? "READY" : "PULL") : "SETUP";
+  let olabel = "OPTIONAL";
+  if (ol.opt_in && ol.reachable && ol.model_present) olabel = "READY";
+  else if (ol.opt_in && ol.reachable) olabel = "PULL";
+  else if (ol.opt_in) olabel = "OFF";
   badge(bar, "ollama", "Ollama", olabel);
   const prov = status.providers || {};
   const present = Object.entries(prov)

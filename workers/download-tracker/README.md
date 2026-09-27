@@ -16,7 +16,7 @@ not 302 to GitHub. `Cache-Control: private, no-store`.
 
 No secrets belong in this directory.
 
-True local AI on an Ollama base with JEEVES. Not a new foundation model.
+True local AI: a standalone local core with JEEVES. Ollama is optional. Not a new foundation model.
 JEEVES is not sovereign. Hosted `/v1` is lamb-check ONLY (plus health/models).
 Never a paid-key proxy. Forks are welcome and always allowed.
 

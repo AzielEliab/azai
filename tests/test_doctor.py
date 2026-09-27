@@ -30,8 +30,12 @@ def test_doctor_run_ok(tmp_path) -> None:
         assert ids[needed]["ok"] is True, needed + " " + str(ids[needed])
     assert payload["version"] == "0.3.1"
     assert payload["jeeves_sovereign"] is False
-    assert payload["local_ai"] == "ollama-base"
+    assert payload["local_ai"] == "local-core"
+    assert payload["weights_required"] is False
+    assert payload["ollama_required"] is False
     assert payload["hosted_v1"] == "lamb-check-only"
+    ollama = ids["ollama"]
+    assert "not required" in str(ollama["detail"]).lower()
 
 
 def test_cli_doctor(capsys) -> None:

@@ -1,4 +1,4 @@
-"""One-shot Ask Jeeves research-assistant turn (Ollama base; stub if Ollama is down)."""
+"""One-shot Ask Jeeves turn on the standalone local core (no Ollama required)."""
 
 from azai.runtime import Runtime
 

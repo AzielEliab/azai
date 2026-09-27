@@ -25,8 +25,8 @@ Xcode.
 
 ## Honest scope
 
-AZAI is true local AI on an Ollama base with JEEVES (Ask Jeeves research
-assistant), not a new foundation model. JEEVES is not sovereign. This phone
+AZAI is true local AI: a standalone local core with JEEVES (Ask Jeeves research
+assistant). It does not require Ollama or model weights. Not a new foundation model. JEEVES is not sovereign. This phone
 app does not spend the author's
 paid keys and does not edit the constitution. Offline / LAN against a
 local AZAI server. No telemetry.

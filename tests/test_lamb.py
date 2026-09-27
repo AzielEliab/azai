@@ -7,6 +7,18 @@ from azai.lamb import check_text, is_fail
 FIX = Path(__file__).resolve().parent / "fixtures"
 
 
+def test_lamb_order_is_service_clarity_peace() -> None:
+    r = check_text("Explain receipts in one sentence, please.")
+    assert r["order"] == "Service → Clarity → Peace"
+    assert r["constitution"] == "Lamb Lens v1.0 — Service → Clarity → Peace"
+    root = Path(__file__).resolve().parents[1]
+    engine = (root / "workers" / "download-tracker" / "src" / "engine.js").read_text(encoding="utf-8")
+    lamb = (root / "azai" / "lamb.py").read_text(encoding="utf-8")
+    assert "Lamb Lens v1.0 — Service → Clarity → Peace" in engine
+    assert "Peace → Clarity → Service" not in engine
+    assert "Peace → Clarity → Service" not in lamb
+
+
 def test_lamb_pass_clean_text() -> None:
     r = check_text("Explain receipts in one sentence, please.")
     assert r["peace"] == "PASS"

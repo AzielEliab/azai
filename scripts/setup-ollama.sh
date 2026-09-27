@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-# AZAI — install / use the local Ollama base and pull the default model.
+# OPTIONAL. AZAI's default core does not run this script and does not require
+# Ollama or any GGUF weights. Opt in with AZAI_BACKEND=ollama or model=ollama,
+# then run this script if you want that slot.
 # Safe to re-run. Never a paid-key proxy. Author: Aziel Eliab.
 #
 # Env:
-#   AZAI_OLLAMA_MODEL   default llama3.2  (smaller: llama3.2:1b)
+#   AZAI_OLLAMA_MODEL   slot tag, default llama3.2  (smaller: llama3.2:1b)
 #   AZAI_OLLAMA_URL     default http://127.0.0.1:11434
 #   AZAI_SKIP_OLLAMA=1  print steps only, do not install
 set -u
@@ -14,7 +16,8 @@ BIN_DIR="${AZAI_OLLAMA_BIN:-$HOME/.local/bin}"
 
 steps() {
   cat <<EOF
-Exact Ollama steps for AZAI (true local AI, no hosted paid-key proxy):
+Optional Ollama slot for AZAI. The default core does not require this.
+True local AI stays on the constitution and guide. No hosted paid-key proxy.
 
   1. Install Ollama
      Linux/macOS:  curl -fsSL https://ollama.com/install.sh | sh
@@ -26,7 +29,7 @@ Exact Ollama steps for AZAI (true local AI, no hosted paid-key proxy):
      ollama serve
      Default: ${URL}
 
-  3. Pull the default model:
+  3. Pull a model for this optional slot only (not required for AZAI):
      ollama pull ${MODEL}
      Smaller machine: AZAI_OLLAMA_MODEL=llama3.2:1b ollama pull llama3.2:1b
 
@@ -37,11 +40,14 @@ Exact Ollama steps for AZAI (true local AI, no hosted paid-key proxy):
      Open http://127.0.0.1:8860
      Other software: OPENAI_BASE_URL=http://127.0.0.1:8860/v1  OPENAI_API_KEY=dummy
 
-JEEVES is the ethics/assistant layer on this Ollama base. JEEVES is not sovereign.
+Then opt in: AZAI_BACKEND=ollama or model=ollama.
+JEEVES is the ethics/assistant layer. JEEVES is not sovereign.
+The default model remains local until you opt in.
 EOF
 }
 
-echo "AZAI Ollama setup  model=${MODEL}  url=${URL}"
+echo "AZAI optional Ollama slot  model=${MODEL}  url=${URL}"
+echo "The default core does not require Ollama or model weights."
 echo
 
 if [ "${AZAI_SKIP_OLLAMA:-}" = "1" ]; then
@@ -102,8 +108,8 @@ fi
 
 if ! have_ollama; then
   echo
-  echo "Ollama is not installed on this machine yet. AZAI itself is installed."
-  echo "JEEVES will use the constitution stub until Ollama is running."
+  echo "Ollama is not installed on this machine. That is fine."
+  echo "AZAI's default core does not require it. model=local still answers."
   echo
   steps
   exit 0

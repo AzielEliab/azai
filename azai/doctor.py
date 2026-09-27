@@ -13,7 +13,6 @@ from typing import Any
 from azai import __version__
 from azai.config import (
     MAX_BODY_BYTES,
-    OLLAMA_INSTALL_STEPS,
     SAMPLE_PROMPT,
     TELEMETRY_FORBIDDEN,
     UI_HOST,
@@ -139,19 +138,35 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
         skill_txt = skill.read_text(encoding="utf-8") if skill.is_file() else ""
         skill_ok = (
             "true local AI" in skill_txt
-            and "Ollama" in skill_txt
+            and "does not require Ollama" in skill_txt
             and "JEEVES" in skill_txt
             and "not sovereign" in skill_txt.lower()
             and "Ask Jeeves" in skill_txt
             and "azielcorpuslibrary.net" in skill_txt
+            and "Service → Clarity → Peace" in skill_txt
+            and "Peace → Clarity → Service" not in skill_txt
         )
-        checks.append(_check("skill_true_local", skill_ok, "SKILL.md names Ollama + Ask Jeeves"))
+        checks.append(_check("skill_true_local", skill_ok, "SKILL.md: local core, Ollama optional, Ask Jeeves"))
 
         install = (root / "install.sh").read_text(encoding="utf-8") if (root / "install.sh").is_file() else ""
         setup = root / "scripts" / "setup-ollama.sh"
         setup_txt = setup.read_text(encoding="utf-8") if setup.is_file() else ""
-        install_ok = "ollama" in install.lower() and "ollama pull" in setup_txt.lower()
-        checks.append(_check("install_ollama", install_ok, "install.sh + scripts/setup-ollama.sh"))
+        install_ok = (
+            setup.is_file()
+            and "optional" in install.lower()
+            and "setup-ollama.sh" in install
+            and "bash scripts/setup-ollama.sh" not in install
+            and "optional" in setup_txt.lower()
+            and "ollama pull" in setup_txt.lower()
+            and "does not require Ollama" in install
+        )
+        checks.append(
+            _check(
+                "install_ollama",
+                install_ok,
+                "setup-ollama.sh optional; install does not pull weights",
+            )
+        )
     else:
         checks.append(_check("no_telemetry", True, "web not in this install"))
         checks.append(_check("worker_no_keys", True, "worker not in this install"))
@@ -188,15 +203,22 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
 
     ollama = ollama_probe()
     if ollama.get("reachable") and ollama.get("model_present"):
-        ollama_detail = f"ready {ollama.get('url')} model={ollama.get('model')}"
+        ollama_detail = (
+            f"optional slot ready {ollama.get('url')} model={ollama.get('model')} "
+            "(not required)"
+        )
     elif ollama.get("reachable"):
         ollama_detail = (
-            f"server up at {ollama.get('url')} but model {ollama.get('model')} not pulled. "
-            f"Run: ollama pull {ollama.get('model')}"
+            f"optional slot: server up at {ollama.get('url')} but model "
+            f"{ollama.get('model')} is not pulled. Not required for model=local."
         )
     else:
-        ollama_detail = "not detected — exact steps:\n" + OLLAMA_INSTALL_STEPS
-    # Advisory: doctor stays green without Ollama so CI/offline installs work.
+        ollama_detail = (
+            "optional slot, not detected. Not required. "
+            "Default core is local (constitution and guide, no weights). "
+            "Opt in with AZAI_BACKEND=ollama or model=ollama, then scripts/setup-ollama.sh."
+        )
+    # Advisory: doctor stays green without Ollama. The slot is not the success path.
     checks.append(_check("ollama", True, ollama_detail))
 
     checks.append(
@@ -216,7 +238,9 @@ def run(data_dir: str | None = None) -> dict[str, Any]:
         "jeeves_sovereign": False,
         "jeeves_layer": "ethics/assistant",
         "ask_jeeves": True,
-        "local_ai": "ollama-base",
+        "local_ai": "local-core",
+        "weights_required": False,
+        "ollama_required": False,
         "hosted_v1": "lamb-check-only",
         "ollama": ollama,
         "checks": checks,

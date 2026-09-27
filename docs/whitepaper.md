@@ -1,14 +1,18 @@
-# AZAI — true local AI on an Ollama base (v0.3.1)
+# AZAI — true local AI, standalone local core (v0.3.1)
 
 Aziel Artificial Intelligence. Shell: **AZAI**. Instrument: **JEEVES**.
 Author: Aziel Eliab, 2026. Apache-2.0.
 
 ## What this is
 
-A **true local AI** package. **Ollama** is the local model base.
-**JEEVES** is the ethics/assistant layer (not sovereign). The local
-API is OpenAI-compatible so other software on site can point at it.
-Optional paid GPT / Grok / Venice blend stays on this machine only.
+A **true local AI** package. The default core is a standalone
+constitution and guide. It does not require Ollama or model weights.
+It adapts lightly through confirmed session notes and public
+`site_context`. **JEEVES** is the ethics/assistant layer (not sovereign).
+The local API is OpenAI-compatible so other software on site can point
+at it. Ollama is an optional slot (`AZAI_BACKEND=ollama` or
+`model=ollama`). Optional paid GPT / Grok / Venice blend stays on this
+machine only.
 
 ```
 OPENAI_BASE_URL=http://127.0.0.1:8860/v1
@@ -29,7 +33,7 @@ meaning.
 Lamb Lens → Formal Rules → Integrity Gate → Jeeves Reasoning →
 Learned Patterns → Output.
 
-Lamb Lens = Peace → Clarity → Service. FAIL blocks the turn (no
+Lamb Lens = Service → Clarity → Peace. FAIL blocks the turn (no
 provider call) and writes a receipt. Jailbreak phrasing such as
 "ignore previous instructions" is **CHECK**, not a silent pass.
 
@@ -41,9 +45,9 @@ When `model=blend`, the runtime calls gpt, grok, and venice (or records
 that a key is missing) and returns labeled sections plus a short
 synthesis. Never hide which model said what.
 
-Default `model=local` (and `model=ollama`) runs JEEVES on the Ollama
-base. Without Ollama, the constitution stub still answers and does not
-pretend to be GPT.
+Default `model=local` runs JEEVES on the constitution and guide. It
+does not probe Ollama. `model=ollama` (or `AZAI_BACKEND=ollama`) is the
+optional slot. The local core does not pretend to be GPT.
 
 Paid calls happen only on local `azai serve`. The hosted Cloudflare
 Worker `/v1` lists models and runs the same Lamb rules in JS. It does
@@ -102,18 +106,20 @@ live|locked|isolated counts only. QNS-CD-1.0 is a hub cite / Worker mesh
 cross-map only (photon QNS1 packet transfer; local qnsd in qnm-node;
 runtime cites in aziel-runtime). No Node Gate. No public qnsd proxy. No
 auto-heal. Not an anonymity network. Not a Softwares-tab product.
-Anon-broadcast is not a publish path. AZAI remains true local AI on an
-Ollama base with JEEVES. Hosted `/v1` is still lamb-check ONLY.
+Anon-broadcast is not a publish path. AZAI remains true local AI: a
+standalone local core with JEEVES. Ollama is optional. Hosted `/v1` is
+still lamb-check ONLY.
 
 ## v0.3.0
 
-Ollama is the true local base. `scripts/setup-ollama.sh` installs or
-reuses Ollama and pulls `llama3.2` (or `AZAI_OLLAMA_MODEL`). JEEVES wraps
-every local turn as the ethics/assistant layer and is not sovereign.
-Default model is `local`. Optional paid blend remains labeled.
-`azai ollama` and `azai doctor` print exact Ollama steps when the base
-is missing. OpenAI-compatible API unchanged at `/v1`. Hosted `/v1` is
-still lamb-check ONLY — not a paid-key proxy.
+At 0.3.0, Ollama was wired in and `scripts/setup-ollama.sh` could install
+it and pull a model. That script is now optional and is not the install
+path. The current default model `local` is the constitution and guide.
+JEEVES wraps every local turn as the ethics/assistant layer and is not
+sovereign. Optional paid blend remains labeled. `azai doctor` is green
+without Ollama. `azai ollama` prints optional-slot steps. OpenAI-compatible
+API unchanged at `/v1`. Hosted `/v1` is still lamb-check ONLY — not a
+paid-key proxy.
 
 ## v0.2.0
 
