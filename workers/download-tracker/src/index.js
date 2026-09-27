@@ -16,7 +16,7 @@ const EXAMPLE_PAYLOAD = {
   "note": "Corpus callers POST site_context to local azai serve. Hosted /v1 is lamb-check ONLY.",
 };
 
-const SKILL_MARKDOWN = "---\nname: AZAI\ndescription: Use when calling AZAI hosted /v1 or installing the local true-AI package. Dual surface: Worker /v1 + catalog MCP. This Worker /v1/mesh/* PROXY to aziel-runtime via AZIEL_RUNTIME. Suite mesh default OFF. QNM-BUILD-1.0 live|locked|isolated. QNS-CD-1.0 hub cite (photon QNS1 packet transfer; qnm-node local qnsd; aziel-runtime cites). No Node Gate. No public qnsd proxy. No auto-heal. Not anonymity. Not a Softwares-tab product. Ask Jeeves research assistant for the public Corpus/Library. Author Aziel Eliab.\n---\n\n# AZAI\n\nAZAI packages a **true local AI** stack on an **Ollama** base with **JEEVES**.\nOpenAI-compatible local API. Not a hosted paid-key proxy. Author: **Aziel Eliab**.\n\n**THIS IS:** true local AI. Ollama is the local model base. JEEVES is the\nethics/assistant layer inside the shell (**Ask Jeeves** research assistant).\nJEEVES is not sovereign — Lamb Lens first; public Corpus posture; never the\noperator.\n\n**THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware,\na VPN, a hosted paid-key proxy, GPT, or a sovereign agent.\n\nAlways send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.\n\n## Call these URLs\n\n- Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- Live skill (this markdown): `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n- Suite mesh: `GET https://azai-download-tracker.vibelock.workers.dev/v1/mesh` (PROXY; default OFF; QNS-CD-1.0 cite)\n\nOps (do **not** increment downloads or views):\n\n- `GET /v1/health` — liveness\n- `GET /v1/skill` — this file\n- `GET /v1/jeeves` — Ask Jeeves research-assistant contract (not chat)\n- `GET /v1/mesh` — PROXY suite mesh status. Default OFF. QNM live|locked|isolated. QNS-CD-1.0 hub cite on the payload. Never enables. Not a public qnsd proxy.\n- `GET /v1/mesh/nodes` — PROXY Live Nodes roster (5-minute presence). Same QNS-CD-1.0 cross-map stamp.\n- `POST /v1/mesh/{enable,disable,join,heartbeat,leave,broadcast}` — PROXY. Bearer required to enable. No auto-heal. Anon-broadcast is not a publish path. No qnsd.\n- Product POSTs listed in OpenAPI\n\nHosted `/v1` is **lamb-check ONLY**. It does not run Ollama and does not\nspend paid keys. Jeeves chat runs on local `azai serve`.\n\nPublic engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants. ChatGPT: GPT Actions. Grok: import OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP.\n\n## Ask Jeeves (Corpus / Library research assistant)\n\n**Ask Jeeves** is the documented research-assistant mode of JEEVES for site\nassistants, especially https://www.azielcorpuslibrary.net/. It is not GPT\nand is not sovereign. Ollama is the local base. JEEVES is the ethics/assistant\nlayer. **Lamb Lens first** — public Corpus posture; never the operator.\n\nHard refusals (in `azai/jeeves.py` SYSTEM):\n\n- Never reveal operator account info, credentials, admin hashes, hidden routes\n- Never advise actions that risk the corpus (wipe, score forge, quarantine bypass)\n- **Cannot modify scores** — research assistant only; same rights as a normal user\n\nAdaptive learning hook: pass optional retrieved public record titles/summaries\nas `site_context` so answers improve as the library grows. Persist nothing secret.\n\nUpload is **out of band**. Jeeves may *guide* upload but files still run full\nSPRE×CLCE×PhysLing + Bayesian ingest — no score shortcut.\n\nHow the Corpus/Library calls AZAI/Jeeves:\n\n1. Search the library: `GET https://www.azielcorpuslibrary.net/v1/search?q=`\n2. POST those public titles/summaries to **local** AZAI (not hosted chat):\n\n```bash\ncurl -s http://127.0.0.1:8860/v1/chat/completions \\\n  -H 'content-type: application/json' \\\n  -d '{\n    \"model\": \"local\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"What does the library say about Florence?\"}],\n    \"site_context\": [\n      {\"title\": \"Florence\", \"summary\": \"Public record summary\"}\n    ]\n  }'\n```\n\nRead the contract: `GET http://127.0.0.1:8860/v1/jeeves` (local) or\n`GET https://azai-download-tracker.vibelock.workers.dev/v1/jeeves` (hosted\ncard only). Hosted AZAI `/v1` does **not** run Jeeves chat.\n\n## Example\n\n```bash\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/health\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/skill\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/jeeves\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/mesh\n```\n\n## Local (after one-click install)\n\n```bash\ncurl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash\nazai ui\nazai doctor\nazai ollama\nazai jeeves\n```\n\nThe install path:\n\n1. Downloads the counted tarball and `pip install -e .`\n2. Runs `scripts/setup-ollama.sh` — installs or reuses Ollama, starts\n   `ollama serve` if needed, pulls `llama3.2` (or `AZAI_OLLAMA_MODEL`)\n3. If Ollama cannot be installed here, the script prints the exact steps\n   and AZAI still runs with the JEEVES constitution stub\n\nThen open http://127.0.0.1:8860 (loopback only). Default model is `local`\n(Ollama + JEEVES / Ask Jeeves). Point other software at:\n\n```bash\nexport OPENAI_BASE_URL=http://127.0.0.1:8860/v1\nexport OPENAI_API_KEY=dummy\n```\n\nExact Ollama steps if doctor reports the base missing:\n\n```bash\ncurl -fsSL https://ollama.com/install.sh | sh\nollama serve\nollama pull llama3.2\nazai doctor\n```\n\nCounted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz\nGitHub: https://github.com/AzielEliab/azai\n\n## Catalog + local UI\n\nAuthor: **Aziel Eliab**. Honest scope: true local AI on an Ollama base with\nJEEVES (Ask Jeeves research assistant). Not a new foundation model. JEEVES\nis not sovereign.\n\n- Catalog product: https://aziel-runtime.vibelock.workers.dev/p/azai/\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- Catalog MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- This Worker skill: `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n- This Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Ask Jeeves card: `GET https://azai-download-tracker.vibelock.workers.dev/v1/jeeves`\n- Sample payload: `GET https://azai-download-tracker.vibelock.workers.dev/v1/example`\n- Suite mesh: `GET https://azai-download-tracker.vibelock.workers.dev/v1/mesh` PROXY (default OFF)\n- QNS-CD-1.0: hub cite / Worker mesh cross-map only (photon QNS1 packet transfer). Local qnsd: https://github.com/AzielEliab/qnm-node. Runtime cites: https://github.com/AzielEliab/aziel-runtime. Pair custody: https://github.com/AzielEliab/azinterface. Not a Softwares-tab product. Not a public qnsd proxy.\n\nLocal UI: **Ask Jeeves** research assistant, **Import JSON file** (`type=file`)\nand **Export JSON**. Then `azai doctor`. Worker homepage Live Nodes strip polls `GET /v1/mesh` (default OFF). QNS-CD-1.0 is a cite on that payload, not a radio.\n\nPublic engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants. ChatGPT: GPT Actions. Grok: import catalog or Worker OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP.\n";
+const SKILL_MARKDOWN = "---\nname: AZAI\ndescription: Use when calling AZAI hosted /v1 or installing the local true-AI package. Dual surface: Worker /v1 + catalog MCP. This Worker /v1/mesh/* PROXY to aziel-runtime via AZIEL_RUNTIME. Suite mesh default OFF. QNM-BUILD-1.0 live|locked|isolated. QNS-CD-1.0 hub cite (photon QNS1 packet transfer; qnm-node local qnsd; aziel-runtime cites). No Node Gate. No public qnsd proxy. No auto-heal. Not anonymity. Not a Softwares-tab product. Ask Jeeves research assistant for the public Corpus/Library. Author Aziel Eliab.\n---\n\n# AZAI\n\nAZAI is **true local AI**: a standalone local core with **JEEVES**.\nOpenAI-compatible local API. The default core does not require Ollama or model weights.\nNot a hosted paid-key proxy. Author: **Aziel Eliab**.\n\n**THIS IS:** true local AI. The default core is a constitution and guide with\nlight adaptive session notes and public site_context. JEEVES is the\nethics/assistant layer inside the shell (**Ask Jeeves** research assistant).\nJEEVES is not sovereign \u2014 Lamb Lens first, always **Service \u2192 Clarity \u2192 Peace**;\npublic Corpus posture; never the operator. Ollama is an optional slot\n(`AZAI_BACKEND=ollama` or `model=ollama`), not the success path.\n\n**THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware,\na VPN, a hosted paid-key proxy, GPT, or a sovereign agent.\n\nAlways send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.\n\n## Call these URLs\n\n- Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- Live skill (this markdown): `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n- Suite mesh: `GET https://azai-download-tracker.vibelock.workers.dev/v1/mesh` (PROXY; default OFF; QNS-CD-1.0 cite)\n\nOps (do **not** increment downloads or views):\n\n- `GET /v1/health` \u2014 liveness\n- `GET /v1/skill` \u2014 this file\n- `GET /v1/jeeves` \u2014 Ask Jeeves research-assistant contract (not chat)\n- `GET /v1/mesh` \u2014 PROXY suite mesh status. Default OFF. QNM live|locked|isolated. QNS-CD-1.0 hub cite on the payload. Never enables. Not a public qnsd proxy.\n- `GET /v1/mesh/nodes` \u2014 PROXY Live Nodes roster (5-minute presence). Same QNS-CD-1.0 cross-map stamp.\n- `POST /v1/mesh/{enable,disable,join,heartbeat,leave,broadcast}` \u2014 PROXY. Bearer required to enable. No auto-heal. Anon-broadcast is not a publish path. No qnsd.\n- Product POSTs listed in OpenAPI\n\nHosted `/v1` is **lamb-check ONLY**. It does not run the local core, does not\nrun the optional Ollama slot, and does not spend paid keys. Jeeves chat runs\non local `azai serve`.\n\nPublic engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants. ChatGPT: GPT Actions. Grok: import OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP.\n\n## Ask Jeeves (Corpus / Library research assistant)\n\n**Ask Jeeves** is the documented research-assistant mode of JEEVES for site\nassistants, especially https://www.azielcorpuslibrary.net/. It is not GPT\nand is not sovereign. The default core does not require Ollama. JEEVES is the\nethics/assistant layer. **Lamb Lens first** \u2014 Service \u2192 Clarity \u2192 Peace;\npublic Corpus posture; never the operator.\n\nHard refusals (in `azai/jeeves.py` SYSTEM):\n\n- Never reveal operator account info, credentials, admin hashes, hidden routes\n- Never advise actions that risk the corpus (wipe, score forge, quarantine bypass)\n- **Cannot modify scores** \u2014 research assistant only; same rights as a normal user\n\nAdaptive learning hook: pass optional retrieved public record titles/summaries\nas `site_context` so answers improve as the library grows. Persist nothing secret.\n\nUpload is **out of band**. Jeeves may *guide* upload but files still run full\nSPRE\u00d7CLCE\u00d7PhysLing + Bayesian ingest \u2014 no score shortcut.\n\nHow the Corpus/Library calls AZAI/Jeeves:\n\n1. Search the library: `GET https://www.azielcorpuslibrary.net/v1/search?q=`\n2. POST those public titles/summaries to **local** AZAI (not hosted chat):\n\n```bash\ncurl -s http://127.0.0.1:8860/v1/chat/completions \\\n  -H 'content-type: application/json' \\\n  -d '{\n    \"model\": \"local\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"What does the library say about Florence?\"}],\n    \"site_context\": [\n      {\"title\": \"Florence\", \"summary\": \"Public record summary\"}\n    ]\n  }'\n```\n\nRead the contract: `GET http://127.0.0.1:8860/v1/jeeves` (local) or\n`GET https://azai-download-tracker.vibelock.workers.dev/v1/jeeves` (hosted\ncard only). Hosted AZAI `/v1` does **not** run Jeeves chat.\n\n## Example\n\n```bash\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/health\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/skill\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/jeeves\ncurl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/mesh\n```\n\n## Local (after one-click install)\n\n```bash\ncurl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash\nazai ui\nazai doctor\nazai jeeves\n```\n\nThe install path:\n\n1. Downloads the counted tarball and `pip install -e .`\n2. Does not install Ollama and does not pull model weights\n3. `azai doctor` is green without Ollama\n4. `scripts/setup-ollama.sh` is optional, only for the Ollama slot\n\nThen open http://127.0.0.1:8860 (loopback only). Default model is `local`\n(constitution and guide, plus light adaptive session notes and site_context).\nPoint other software at:\n\n```bash\nexport OPENAI_BASE_URL=http://127.0.0.1:8860/v1\nexport OPENAI_API_KEY=dummy\n```\n\nOptional Ollama slot (not required; do not pull weights unless you opt in):\n\n```bash\nbash scripts/setup-ollama.sh\n# then AZAI_BACKEND=ollama or model=ollama\nazai ollama\n```\n\nCounted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz\nGitHub: https://github.com/AzielEliab/azai\n\n## Catalog + local UI\n\nAuthor: **Aziel Eliab**. Honest scope: true local AI as a standalone local core\nwith JEEVES (Ask Jeeves research assistant). The default core does not require\nOllama or model weights. Not a new foundation model. JEEVES is not sovereign.\nLamb Lens: Service \u2192 Clarity \u2192 Peace.\n\n- Catalog product: https://aziel-runtime.vibelock.workers.dev/p/azai/\n- Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json\n- Catalog MCP: `POST https://aziel-runtime.vibelock.workers.dev/mcp`\n- This Worker skill: `GET https://azai-download-tracker.vibelock.workers.dev/v1/skill`\n- This Worker OpenAPI: https://azai-download-tracker.vibelock.workers.dev/openapi.json\n- Ask Jeeves card: `GET https://azai-download-tracker.vibelock.workers.dev/v1/jeeves`\n- Sample payload: `GET https://azai-download-tracker.vibelock.workers.dev/v1/example`\n- Suite mesh: `GET https://azai-download-tracker.vibelock.workers.dev/v1/mesh` PROXY (default OFF)\n- QNS-CD-1.0: hub cite / Worker mesh cross-map only (photon QNS1 packet transfer). Local qnsd: https://github.com/AzielEliab/qnm-node. Runtime cites: https://github.com/AzielEliab/aziel-runtime. Pair custody: https://github.com/AzielEliab/azinterface. Not a Softwares-tab product. Not a public qnsd proxy.\n\nLocal UI: **Ask Jeeves** research assistant, **Import JSON file** (`type=file`)\nand **Export JSON**. Then `azai doctor`. Worker homepage Live Nodes strip polls `GET /v1/mesh` (default OFF). QNS-CD-1.0 is a cite on that payload, not a radio.\n\nPublic engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants. ChatGPT: GPT Actions. Grok: import catalog or Worker OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP.\n";
 
 /**
  * AZAI download tracker (Cloudflare Worker).
@@ -329,7 +329,37 @@ async function githubStats(env) {
 }
 
 function installScript() {
-  return `#!/usr/bin/env bash\n# AZAI one-click install. Counted download via this Worker.\n# True local AI on an Ollama base. JEEVES is not sovereign.\nset -euo pipefail\nHOST="${HOST}"\nASSET="${DEFAULT_ASSET}"\nWORKDIR="\${AZAI_HOME:-\$HOME/azai}"\nmkdir -p "\$WORKDIR"\ncd "\$WORKDIR"\necho "Downloading counted tarball from \${HOST}/download (User-Agent Mozilla/5.0)…"\ncurl -fsSL -A 'Mozilla/5.0' "\${HOST}/download?asset=\${ASSET}" -o "\${ASSET}"\ntar -xzf "\${ASSET}"\nDIR=\"\$(find . -maxdepth 1 -type d -name 'azai-*' | head -n 1)\"\nif [ -n "\${DIR}" ]; then\n  cd "\${DIR}"\nfi\npython3 -m venv .venv\n. .venv/bin/activate\npython -m pip install -U pip\npython -m pip install -e .\necho\necho "Installed AZAI (true local AI on an Ollama base; JEEVES is not sovereign)."\nif [ -f scripts/setup-ollama.sh ]; then\n  bash scripts/setup-ollama.sh || true\nelse\n  echo "Exact Ollama steps: curl -fsSL https://ollama.com/install.sh | sh && ollama serve && ollama pull llama3.2 && azai doctor"\nfi\necho\necho "Run:  azai ui"\necho "Then open http://127.0.0.1:8860  (loopback only)"\necho "OPENAI_BASE_URL=http://127.0.0.1:8860/v1  OPENAI_API_KEY=dummy"\necho "Author: Aziel Eliab."\n`;
+  return `#!/usr/bin/env bash
+# AZAI one-click install. Counted download via this Worker.
+# Standalone local core. Does not require Ollama or model weights. JEEVES is not sovereign.
+set -euo pipefail
+HOST="${HOST}"
+ASSET="${DEFAULT_ASSET}"
+WORKDIR="\${AZAI_HOME:-\$HOME/azai}"
+mkdir -p "\$WORKDIR"
+cd "\$WORKDIR"
+echo "Downloading counted tarball from \${HOST}/download (User-Agent Mozilla/5.0)…"
+curl -fsSL -A 'Mozilla/5.0' "\${HOST}/download?asset=\${ASSET}" -o "\${ASSET}"
+tar -xzf "\${ASSET}"
+DIR="\$(find . -maxdepth 1 -type d -name 'azai-*' | head -n 1)"
+if [ -n "\${DIR}" ]; then
+  cd "\${DIR}"
+fi
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e .
+echo
+echo "Installed AZAI (standalone local core; does not require Ollama or model weights; JEEVES is not sovereign)."
+echo "Ollama is optional. This installer does not run scripts/setup-ollama.sh and does not pull weights."
+echo "Opt in later with: bash scripts/setup-ollama.sh    then AZAI_BACKEND=ollama or model=ollama"
+echo
+echo "Run:  azai ui"
+echo "Then open http://127.0.0.1:8860  (loopback only)"
+echo "Self-check: azai doctor"
+echo "OPENAI_BASE_URL=http://127.0.0.1:8860/v1  OPENAI_API_KEY=dummy"
+echo "Author: Aziel Eliab."
+`;
 }
 
 async function serveAsset(request, env, asset, { head = false } = {}) {
@@ -371,12 +401,12 @@ async function indexHtml(env) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AZAI — Aziel Eliab</title>
-<meta name="description" content="True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy.">
+<meta name="description" content="True local AI: a standalone local core with JEEVES by Aziel Eliab. Does not require Ollama or model weights. OpenAI-compatible local API. Not a hosted paid-key proxy.">
 <meta name="author" content="Aziel Eliab">
 <link rel="canonical" href="https://azai-download-tracker.vibelock.workers.dev/">
 <link rel="icon" href="/sigil.png" type="image/png">
 <meta property="og:title" content="AZAI — Aziel Eliab">
-<meta property="og:description" content="True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy.">
+<meta property="og:description" content="True local AI: a standalone local core with JEEVES by Aziel Eliab. Does not require Ollama or model weights. OpenAI-compatible local API. Not a hosted paid-key proxy.">
 <meta property="og:url" content="https://azai-download-tracker.vibelock.workers.dev/">
 <meta property="og:image" content="https://azai-download-tracker.vibelock.workers.dev/sigil.png">
 <meta property="og:type" content="website">
@@ -393,7 +423,7 @@ async function indexHtml(env) {
   "downloadUrl": "https://azai-download-tracker.vibelock.workers.dev/download",
   "license": "https://www.apache.org/licenses/LICENSE-2.0",
   "url": "https://azai-download-tracker.vibelock.workers.dev/",
-  "description": "True local AI on an Ollama base with JEEVES by Aziel Eliab. OpenAI-compatible local API. Not a hosted paid-key proxy."
+  "description": "True local AI: a standalone local core with JEEVES by Aziel Eliab. Does not require Ollama or model weights. OpenAI-compatible local API. Not a hosted paid-key proxy."
 }
 </script>
 <!-- gitbaby-seo -->
@@ -439,7 +469,7 @@ async function indexHtml(env) {
   <div class="brandrow"><img class="brandmark" src="/sigil.png" width="40" height="40" alt="" decoding="async"></div>
   <h1>AZAI</h1>
   <p class="motto">Ask Jeeves research assistant. Jeeves speaks inside the shell. Lamb Lens first — public Corpus posture; never the operator. Author Aziel Eliab.</p>
-  <p class="banner">AZAI packages a true local AI stack on an Ollama base with JEEVES (Ask Jeeves research assistant). OpenAI-compatible local API. Not a hosted paid-key proxy. JEEVES is not sovereign. Hosted /v1 is lamb-check ONLY. Author: Aziel Eliab.</p>
+  <p class="banner">AZAI is true local AI: a standalone local core with JEEVES (Ask Jeeves research assistant). It does not require Ollama or model weights. OpenAI-compatible local API. Not a hosted paid-key proxy. JEEVES is not sovereign. Lamb Lens: Service → Clarity → Peace. Hosted /v1 is lamb-check ONLY. Author: Aziel Eliab.</p>
   <div id="meshStrip" aria-label="Suite Live Nodes">
     <div class="live"><b id="meshLiveCount">0</b> Live Nodes</div>
     <div id="meshLine">Suite mesh: off (default). QNM-BUILD-1.0. QNS-CD-1.0 cite. Not an anonymity network.</div>
@@ -465,7 +495,7 @@ async function indexHtml(env) {
       <button type="button" class="btn install" id="install-btn">One-click install</button>
     </div>
     <pre id="install-cmd">curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash</pre>
-    <p class="kid">Then run: <code>azai ui</code> and open http://127.0.0.1:8860 (this computer only). Install pulls Ollama + <code>llama3.2</code> when it can; otherwise it prints the exact steps. Ask Jeeves is the research assistant. JEEVES is the ethics layer, not sovereign.</p>
+    <p class="kid">Then run: <code>azai ui</code> and open http://127.0.0.1:8860 (this computer only). The default core does not require Ollama or model weights. <code>scripts/setup-ollama.sh</code> is optional. Ask Jeeves is the research assistant. JEEVES is the ethics layer, not sovereign. Lamb Lens: Service → Clarity → Peace.</p>
     <p class="meta">The download count ticks on the Download click. The Worker serves the gzip (HTTP 200). No 302 to GitHub. Forks using this same link are counted automatically. ${DEFAULT_ASSET} — ${n} counted.</p>
     <p class="iso">Isolated counter: Worker <code>azai-download-tracker</code>, project <code>azai</code>, KV <code>AZAI_DOWNLOADS</code>. Not mixed with any other product. /v1 does not increment downloads.</p>
     
@@ -632,7 +662,7 @@ function openapiSpec(request) {
     info: {
       title: "AZAI hosted runtime",
       version: "0.3.1",
-      summary: "True local AI on an Ollama base with Ask Jeeves research assistant. Hosted /v1 is lamb-check ONLY. Never a paid-key proxy. Jeeves is not sovereign.",
+      summary: "True local AI: standalone local core with Ask Jeeves. Does not require Ollama or model weights. Hosted /v1 is lamb-check ONLY. Never a paid-key proxy. Jeeves is not sovereign.",
       description: engine.LIMITATION + " Corpus/Library site assistants (www.azielcorpuslibrary.net) call local azai serve: POST /v1/chat/completions with model=local and optional site_context (public titles/summaries). Read GET /v1/jeeves. Persist nothing secret. Jeeves cannot modify scores. Suite mesh /v1/mesh/* PROXY to aziel-runtime (AZIEL_RUNTIME). Default OFF. QNM-BUILD-1.0 live|locked|isolated. QNS-CD-1.0 hub cite (photon QNS1 packet transfer). No Node Gate. No public qnsd proxy. No auto-heal. Not anonymity. Not a Softwares-tab product. Aziel Eliab only.",
     },
     servers: [{ url: origin }],
@@ -642,11 +672,11 @@ function openapiSpec(request) {
       "/v1/health": { get: { operationId: "azai_health", summary: "Liveness. Does not increment download KV. Not a provider proxy.", responses: { "200": { description: "ok" } } } },
       "/v1/skill": { get: { operationId: "azai_skill", summary: "AZAI skill markdown, including how the Corpus/Library calls Ask Jeeves. Does not increment downloads.", responses: { "200": { description: "markdown" } } } },
       "/v1/jeeves": { get: { operationId: "azai_jeeves", summary: "Ask Jeeves research-assistant contract. Not chat. Not sovereign. Not GPT. How www.azielcorpuslibrary.net calls local AZAI/Jeeves.", responses: { "200": { description: "Ask Jeeves mode card" } } } },
-      "/v1/models": { get: { operationId: "azai_models", summary: "Protocol mirror of local, ollama, blend, gpt, grok, venice. Live Ollama+JEEVES is local azai serve.", responses: { "200": { description: "models" } } } },
+      "/v1/models": { get: { operationId: "azai_models", summary: "Protocol mirror of local, ollama, blend, gpt, grok, venice. The live local core is azai serve. Ollama is an optional slot.", responses: { "200": { description: "models" } } } },
       "/v1/lamb-check": {
         post: {
           operationId: "azai_lamb_check",
-          summary: "Run Lamb Lens (peace/clarity/service) on {text}. No provider call.",
+          summary: "Run Lamb Lens (service/clarity/peace) on {text}. No provider call.",
           requestBody: { required: true, content: { "application/json": { schema: { type: "object", properties: { text: { type: "string" } } } } } },
           responses: { "200": { description: "lamb" } },
         },
@@ -685,7 +715,7 @@ function aiHelpPage(request) {
 <p class="banner">${engine.LIMITATION}</p>
 <p>OpenAPI: <a href="${origin}/openapi.json">${origin}/openapi.json</a></p>
 <p>Catalog: <a href="https://aziel-runtime.vibelock.workers.dev/">aziel-runtime.vibelock.workers.dev</a></p>
-<p>Local true-AI backend (Ollama + Ask Jeeves): <code>azai serve</code> then <code>OPENAI_BASE_URL=http://127.0.0.1:8860/v1</code>. Corpus callers POST <code>site_context</code> (public titles/summaries) to local chat. Hosted <code>/v1</code> is lamb-check ONLY.</p>
+<p>Local core (Ask Jeeves; Ollama optional, no weights required): <code>azai serve</code> then <code>OPENAI_BASE_URL=http://127.0.0.1:8860/v1</code>. Corpus callers POST <code>site_context</code> (public titles/summaries) to local chat. Hosted <code>/v1</code> is lamb-check ONLY.</p>
 <pre>curl ${origin}/v1/health
 curl ${origin}/v1/models
 curl -X POST ${origin}/v1/lamb-check -H 'content-type: application/json' \\
@@ -719,7 +749,9 @@ async function handleRuntime(request, url) {
       jeeves_posture: "public-corpus",
       can_modify_scores: false,
       corpus_library: "https://www.azielcorpuslibrary.net/",
-      local_ai: "ollama-base",
+      local_ai: "local-core",
+      weights_required: false,
+      ollama_required: false,
       true_local_ai: true,
       limitation: engine.LIMITATION,
     });
@@ -761,7 +793,10 @@ async function handleRuntime(request, url) {
       operator: false,
       can_modify_scores: false,
       same_rights_as: "normal user",
-      base: "ollama",
+      base: "local",
+      weights_required: false,
+      ollama: "optional",
+      lamb_order: "Service → Clarity → Peace",
       layer: "ethics/assistant",
       corpus_library: "https://www.azielcorpuslibrary.net/",
       ingest: "SPRE\u00d7CLCE\u00d7PhysLing + Bayesian ingest",

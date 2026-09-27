@@ -1,5 +1,6 @@
-"""Ollama — true local AI base for AZAI.
+"""Optional Ollama slot for AZAI.
 
+Not the default core. Used only when AZAI_BACKEND=ollama or model=ollama.
 Loopback by default (127.0.0.1:11434). No paid keys. Not a hosted proxy.
 Tests inject TEST_HOOKS so urllib is never called.
 """
@@ -107,7 +108,8 @@ def status() -> dict[str, Any]:
         "env": "AZAI_OLLAMA_URL / AZAI_OLLAMA_MODEL",
         "url": info.get("url") or ollama_url(),
         "model": info.get("model") or ollama_model(),
-        "role": "local Ollama base",
+        "role": "optional Ollama slot",
+        "required": False,
         "paid_key": False,
     }
 

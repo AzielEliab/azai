@@ -195,12 +195,14 @@ class Runtime:
                 f"Optional paid blend. Present: {', '.join(available)}. "
                 "Each instrument is labeled above; nothing is hidden. "
                 "JEEVES is not sovereign. Lamb Lens gated this turn. "
-                "The true local base is Ollama + JEEVES (model=local)."
+                "The default local core is the constitution and guide (model=local). "
+                "Ollama is an optional slot."
             )
         else:
             synth = (
                 "No live paid providers (keys missing or hooks empty). "
-                "Falling back to local JEEVES on the Ollama base — not GPT, not a hosted proxy."
+                "Falling back to the local constitution and guide — not GPT, "
+                "not a hosted proxy, and not an Ollama call unless that slot is opted in."
             )
             prompt = messages[-1]["content"] if messages else ""
             parts.append(local_reply(prompt, check_text(prompt), messages=messages))
@@ -247,7 +249,7 @@ class Runtime:
         messages = wrap_messages(messages, site_context=cleaned_context)
 
         if model in {"local", "ollama"}:
-            content = local_reply(prompt, lamb_in, messages=messages)
+            content = local_reply(prompt, lamb_in, messages=messages, model=model)
         elif model == "blend":
             content = self._blend(messages)
         else:
@@ -255,7 +257,7 @@ class Runtime:
             if ok:
                 content = f"[{model}]\n{text.strip()}"
             else:
-                content = local_reply(prompt, lamb_in, messages=messages) + f"\n\n({model} {text})"
+                content = local_reply(prompt, lamb_in, messages=messages, model="local") + f"\n\n({model} {text})"
 
         lamb_out = check_text(content)
         if is_fail(lamb_out):

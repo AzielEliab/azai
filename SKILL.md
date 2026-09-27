@@ -5,13 +5,16 @@ description: Use when calling AZAI hosted /v1 or installing the local true-AI pa
 
 # AZAI
 
-AZAI packages a **true local AI** stack on an **Ollama** base with **JEEVES**.
-OpenAI-compatible local API. Not a hosted paid-key proxy. Author: **Aziel Eliab**.
+AZAI is **true local AI**: a standalone local core with **JEEVES**.
+OpenAI-compatible local API. The default core does not require Ollama or model weights.
+Not a hosted paid-key proxy. Author: **Aziel Eliab**.
 
-**THIS IS:** true local AI. Ollama is the local model base. JEEVES is the
+**THIS IS:** true local AI. The default core is a constitution and guide with
+light adaptive session notes and public site_context. JEEVES is the
 ethics/assistant layer inside the shell (**Ask Jeeves** research assistant).
-JEEVES is not sovereign — Lamb Lens first; public Corpus posture; never the
-operator.
+JEEVES is not sovereign — Lamb Lens first, always **Service → Clarity → Peace**;
+public Corpus posture; never the operator. Ollama is an optional slot
+(`AZAI_BACKEND=ollama` or `model=ollama`), not the success path.
 
 **THIS IS NOT:** a new foundation model, a kernel, a worm, IP-blocking malware,
 a VPN, a hosted paid-key proxy, GPT, or a sovereign agent.
@@ -36,8 +39,9 @@ Ops (do **not** increment downloads or views):
 - `POST /v1/mesh/{enable,disable,join,heartbeat,leave,broadcast}` — PROXY. Bearer required to enable. No auto-heal. Anon-broadcast is not a publish path. No qnsd.
 - Product POSTs listed in OpenAPI
 
-Hosted `/v1` is **lamb-check ONLY**. It does not run Ollama and does not
-spend paid keys. Jeeves chat runs on local `azai serve`.
+Hosted `/v1` is **lamb-check ONLY**. It does not run the local core, does not
+run the optional Ollama slot, and does not spend paid keys. Jeeves chat runs
+on local `azai serve`.
 
 Public engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot / Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other MCP/OpenAPI-capable assistants. ChatGPT: GPT Actions. Grok: import OpenAPI as a custom tool. Venice: HTTP tools. Claude, Cursor, Glama, and other MCP clients: catalog MCP.
 
@@ -45,8 +49,9 @@ Public engines accept ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude
 
 **Ask Jeeves** is the documented research-assistant mode of JEEVES for site
 assistants, especially https://www.azielcorpuslibrary.net/. It is not GPT
-and is not sovereign. Ollama is the local base. JEEVES is the ethics/assistant
-layer. **Lamb Lens first** — public Corpus posture; never the operator.
+and is not sovereign. The default core does not require Ollama. JEEVES is the
+ethics/assistant layer. **Lamb Lens first** — Service → Clarity → Peace;
+public Corpus posture; never the operator.
 
 Hard refusals (in `azai/jeeves.py` SYSTEM):
 
@@ -96,33 +101,31 @@ curl -s -A 'Mozilla/5.0' https://azai-download-tracker.vibelock.workers.dev/v1/m
 curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash
 azai ui
 azai doctor
-azai ollama
 azai jeeves
 ```
 
 The install path:
 
 1. Downloads the counted tarball and `pip install -e .`
-2. Runs `scripts/setup-ollama.sh` — installs or reuses Ollama, starts
-   `ollama serve` if needed, pulls `llama3.2` (or `AZAI_OLLAMA_MODEL`)
-3. If Ollama cannot be installed here, the script prints the exact steps
-   and AZAI still runs with the JEEVES constitution stub
+2. Does not install Ollama and does not pull model weights
+3. `azai doctor` is green without Ollama
+4. `scripts/setup-ollama.sh` is optional, only for the Ollama slot
 
 Then open http://127.0.0.1:8860 (loopback only). Default model is `local`
-(Ollama + JEEVES / Ask Jeeves). Point other software at:
+(constitution and guide, plus light adaptive session notes and site_context).
+Point other software at:
 
 ```bash
 export OPENAI_BASE_URL=http://127.0.0.1:8860/v1
 export OPENAI_API_KEY=dummy
 ```
 
-Exact Ollama steps if doctor reports the base missing:
+Optional Ollama slot (not required; do not pull weights unless you opt in):
 
 ```bash
-curl -fsSL https://ollama.com/install.sh | sh
-ollama serve
-ollama pull llama3.2
-azai doctor
+bash scripts/setup-ollama.sh
+# then AZAI_BACKEND=ollama or model=ollama
+azai ollama
 ```
 
 Counted download (gzip HTTP 200, no 302): https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz
@@ -130,9 +133,10 @@ GitHub: https://github.com/AzielEliab/azai
 
 ## Catalog + local UI
 
-Author: **Aziel Eliab**. Honest scope: true local AI on an Ollama base with
-JEEVES (Ask Jeeves research assistant). Not a new foundation model. JEEVES
-is not sovereign.
+Author: **Aziel Eliab**. Honest scope: true local AI as a standalone local core
+with JEEVES (Ask Jeeves research assistant). The default core does not require
+Ollama or model weights. Not a new foundation model. JEEVES is not sovereign.
+Lamb Lens: Service → Clarity → Peace.
 
 - Catalog product: https://aziel-runtime.vibelock.workers.dev/p/azai/
 - Catalog OpenAPI: https://aziel-runtime.vibelock.workers.dev/openapi.json

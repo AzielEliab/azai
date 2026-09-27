@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "azai"
 version = "0.3.1"
-description = "AZAI: true local AI on an Ollama base with JEEVES (Ask Jeeves research assistant). OpenAI-compatible local API. Not a hosted paid-key proxy. Jeeves is not sovereign."
+description = "AZAI: true local AI, a standalone local core with JEEVES (Ask Jeeves research assistant). Does not require Ollama or model weights. OpenAI-compatible local API. Not a hosted paid-key proxy. Jeeves is not sovereign."
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [{name = "Aziel Eliab"}]

@@ -1,7 +1,8 @@
 """GPT / Grok / Venice HTTP clients. Keys from env, never files in git.
 
-Ollama is the unpaid local base (see azai.ollama). Tests inject hooks
-so urllib is never called. Timeouts, no retry storms.
+The default core is local (see azai.jeeves). Ollama is an optional slot
+(see azai.ollama). Tests inject hooks so urllib is never called.
+Timeouts, no retry storms.
 """
 
 from __future__ import annotations
@@ -68,9 +69,10 @@ def provider_status() -> dict[str, dict[str, Any]]:
         },
         "local": {
             "present": True,
-            "env": "AZAI_OLLAMA_URL / AZAI_OLLAMA_MODEL",
-            "url": "JEEVES on Ollama base (constitution stub if Ollama is down)",
+            "env": "none (AZAI_BACKEND=ollama opts into the Ollama slot)",
+            "url": "standalone constitution/guide core",
             "model": "local",
+            "weights_required": False,
             "role": "JEEVES ethics/assistant layer",
         },
         "ollama": ollama_status(),

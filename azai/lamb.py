@@ -1,10 +1,11 @@
-"""Lamb Lens — Peace → Clarity → Service.
+"""Lamb Lens — Service → Clarity → Peace.
 
 Deterministic rule functions on text. This is a constitutional gate,
 not a proof of ethics. FAIL blocks the turn (no provider call).
 Jailbreak phrases such as "ignore previous instructions" are CHECK,
 never a silent pass.
 
+Order is always Service, then Clarity, then Peace.
 Python and the Worker JS port MUST stay in lockstep.
 """
 
@@ -47,6 +48,8 @@ CHECK_PATTERNS = (
 )
 
 VERDICT_ORDER = {"FAIL": 2, "CHECK": 1, "PASS": 0}
+LAMB_ORDER = "Service → Clarity → Peace"
+CONSTITUTION = f"Lamb Lens v1.0 — {LAMB_ORDER}"
 
 
 def normalize(text: str) -> str:
@@ -67,35 +70,36 @@ def _worse(a: str, b: str) -> str:
 
 
 def check_text(text: str) -> dict[str, Any]:
-    """Run Peace / Clarity / Service on ``text``.
+    """Run Service, then Clarity, then Peace on ``text``.
 
-    Returns ``{peace, clarity, service, overall, notes, honest}``.
+    Returns ``{service, clarity, peace, overall, notes, honest}``.
     """
     n = normalize(text)
     jailbreak = any(p in n for p in CHECK_PATTERNS)
-    peace = _axis(n, PEACE_FAIL, jailbreak)
-    clarity = _axis(n, CLARITY_FAIL, jailbreak)
     service = _axis(n, SERVICE_FAIL, jailbreak)
-    overall = _worse(_worse(peace, clarity), service)
+    clarity = _axis(n, CLARITY_FAIL, jailbreak)
+    peace = _axis(n, PEACE_FAIL, jailbreak)
+    overall = _worse(_worse(service, clarity), peace)
     notes: list[str] = []
     if jailbreak:
         notes.append("jailbreak phrasing detected — CHECK, not a silent pass")
-    if peace == "FAIL":
-        notes.append("peace: domination language")
-    if clarity == "FAIL":
-        notes.append("clarity: deception-as-goal")
     if service == "FAIL":
         notes.append("service: coercion / domination-as-service")
+    if clarity == "FAIL":
+        notes.append("clarity: deception-as-goal")
+    if peace == "FAIL":
+        notes.append("peace: domination language")
     if overall == "PASS":
         notes.append("no rule fired")
     return {
-        "peace": peace,
-        "clarity": clarity,
         "service": service,
+        "clarity": clarity,
+        "peace": peace,
         "overall": overall,
         "notes": notes,
         "honest": "constitutional gate, not a proof of ethics",
-        "constitution": "Lamb Lens v1.0 — Peace → Clarity → Service",
+        "constitution": CONSTITUTION,
+        "order": LAMB_ORDER,
     }
 
 

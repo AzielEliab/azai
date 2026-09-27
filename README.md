@@ -1,6 +1,6 @@
 # AZAI
 
-Ask a question on this machine. Jeeves answers through Ollama. Lamb Lens reads Service, Clarity, and Peace.
+Ask a question on this machine. Jeeves answers from the local core. No Ollama and no model weights are required. Lamb Lens reads Service, Clarity, and Peace.
 
 **Author:** Aziel Eliab
 **Version:** 0.3.1
@@ -34,7 +34,7 @@ See [RUN.txt](RUN.txt) for the same three steps. Spec: [docs/whitepaper.md](docs
 curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash
 ```
 
-The script downloads the counted tarball (User-Agent `Mozilla/5.0`), creates a virtualenv, runs `pip install -e .`, then `scripts/setup-ollama.sh` (Ollama and `llama3.2`, unless `AZAI_OLLAMA_MODEL` is set). Then run `azai ui`.
+The script downloads the counted tarball (User-Agent `Mozilla/5.0`), creates a virtualenv, and runs `pip install -e .`. It does not require Ollama and does not pull model weights. `scripts/setup-ollama.sh` is optional. Then run `azai ui`. `azai doctor` is green without Ollama.
 
 - Home: [https://azai-download-tracker.vibelock.workers.dev/](https://azai-download-tracker.vibelock.workers.dev/)
 - Tarball: [azai-0.3.1.tar.gz](https://azai-download-tracker.vibelock.workers.dev/download?asset=azai-0.3.1.tar.gz)
@@ -58,17 +58,21 @@ export OPENAI_API_KEY=dummy
 
 ## Honest scope
 
-- **True local AI on an Ollama base.** Default `model=local` talks to
-  Ollama at `http://127.0.0.1:11434` through JEEVES. Default model tag:
-  `llama3.2` (`AZAI_OLLAMA_MODEL`). No OpenAI key is required for local.
+- **True local AI, standalone local core.** Default `model=local` is the
+  constitution and guide plus light adaptive session notes and `site_context`.
+  It does not require Ollama or model weights, and it does not probe Ollama
+  as the success path. No OpenAI key is required for local.
+- **Ollama is an optional slot.** Use it only with `AZAI_BACKEND=ollama` or
+  `model=ollama`. `scripts/setup-ollama.sh` is optional and is not part of
+  install. It may pull a GGUF only when you run it on purpose.
 - **Not a new foundation model.** AZAI is a local runtime / shell,
-  not a kernel. JEEVES is the ethics/assistant layer inside it. Without
-  Ollama, a constitution stub still runs (Lamb Lens + receipts) and does
+  not a kernel. JEEVES is the ethics/assistant layer inside it and does
   **not** pretend to be GPT.
 - **JEEVES is not sovereign.** **Ask Jeeves** is the research-assistant
-  mode for the public Corpus/Library. Lamb Lens first — public Corpus
-  posture; never the operator. Jeeves cannot modify scores (same rights
-  as a normal user). This is a constitutional gate, not a proof of ethics.
+  mode for the public Corpus/Library. Lamb Lens first — Service → Clarity →
+  Peace; public Corpus posture; never the operator. Jeeves cannot modify
+  scores (same rights as a normal user). This is a constitutional gate,
+  not a proof of ethics.
 - **Hub is a blank key.** It does not interpret meaning. Removing the
   Hub leaves modules functional, only isolated.
 - **Blend is visible.** When `model=blend`, responses are labeled
@@ -90,25 +94,24 @@ export OPENAI_API_KEY=dummy
 Motto: *Jeeves speaks inside the shell. Lamb Lens governs above the
 shell. Receipts witness what the shell permits.*
 
-## Local base (Ollama) + optional paid providers
+## Local core + optional Ollama slot + optional paid providers
 
 JEEVES wraps every turn. Paid keys stay on this machine and never go
-through the hosted Worker.
+through the hosted Worker. The default core does not require Ollama.
 
-| id | env | URL | default model |
+| id | env | URL | what it is |
 |----|-----|-----|----------------|
-| local / ollama | `AZAI_OLLAMA_URL` / `AZAI_OLLAMA_MODEL` | `http://127.0.0.1:11434/v1/chat/completions` | `llama3.2` — **no paid key** |
+| local | none | constitution and guide in-process | **default** — no weights, no Ollama probe |
+| ollama | `AZAI_BACKEND=ollama` or `model=ollama`; `AZAI_OLLAMA_URL` / `AZAI_OLLAMA_MODEL` | `http://127.0.0.1:11434/v1/chat/completions` | optional slot — **no paid key** |
 | gpt | `OPENAI_API_KEY` | `https://api.openai.com/v1/chat/completions` | `gpt-4o-mini` (`AZAI_GPT_MODEL`) |
 | grok | `XAI_API_KEY` or `GROK_API_KEY` | `https://api.x.ai/v1/chat/completions` | `grok-3-mini` (alt: `grok-2-latest` via `AZAI_GROK_MODEL`) |
 | venice | `VENICE_API_KEY` | `https://api.venice.ai/api/v1/chat/completions` | `llama-3.3-70b` (`AZAI_VENICE_MODEL`) |
 
-Exact Ollama steps (also printed by `azai ollama` and `azai doctor`):
+Optional Ollama slot (not printed as a doctor failure; `azai ollama` prints the steps):
 
 ```bash
-curl -fsSL https://ollama.com/install.sh | sh   # or https://ollama.com/download
-ollama serve                                      # 127.0.0.1:11434
-ollama pull llama3.2                              # or llama3.2:1b on a small machine
-azai doctor
+bash scripts/setup-ollama.sh    # optional; may pull a model only because you ran it
+# then: AZAI_BACKEND=ollama   or   model=ollama
 ```
 
 Venice alt URL (if the primary 404s): `https://api.venice.ai/v1/chat/completions`
@@ -123,13 +126,11 @@ Python 3.10+.
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
-bash scripts/setup-ollama.sh
+azai doctor
 ```
 
-`scripts/setup-ollama.sh` installs or reuses Ollama, starts `ollama serve`
-if needed, and pulls `llama3.2` (override with `AZAI_OLLAMA_MODEL`).
-If install cannot finish (no sudo, no network), it prints the exact
-steps above and leaves AZAI usable with the JEEVES constitution stub.
+`azai doctor` is green without Ollama. `scripts/setup-ollama.sh` is optional
+and is not part of install. Run it only when you want the Ollama slot.
 
 Optional extra `[voice]` is a marker only — engines are not vendored.
 
@@ -160,7 +161,7 @@ azai doctor --json
 ```
 
 `azai ui --host 0.0.0.0` binds on-site LAN. **Risk:** anyone who can
-reach the port can use the local Ollama base and, if present, spend the
+reach the port can use the local core and, if present, the optional Ollama slot or spend the
 operator's GPT/Grok/Venice keys. Prefer 127.0.0.1.
 
 `AZAI_DEBUG=1` prints local stderr traces. Keys are never logged. No telemetry.

@@ -1,16 +1,23 @@
 """JEEVES — ethics/assistant layer inside AZAI. Not sovereign.
 
-JEEVES wraps the local Ollama base (and optional paid providers) with
-the constitution. Ask Jeeves is the Corpus/Library research-assistant
-mode: Lamb Lens first, public Corpus posture, never the operator.
-JEEVES is not a foundation model and does not pretend to be GPT.
+The default core is a standalone constitution and guide. It adapts
+lightly to this user through confirmed session notes and public
+site_context. No Ollama process and no model weights are required.
+
+Ask Jeeves is the Corpus/Library research-assistant mode: Lamb Lens
+first (Service → Clarity → Peace), public Corpus posture, never the
+operator. JEEVES is not a foundation model and does not pretend to be GPT.
+
+Ollama is an optional slot: AZAI_BACKEND=ollama or model=ollama.
 """
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
-from azai.config import MOTTO, OLLAMA_INSTALL_STEPS
+from azai.config import MOTTO
+from azai.lamb import LAMB_ORDER
 from azai.ollama import call_chat as ollama_chat
 from azai.ollama import probe as ollama_probe
 
@@ -59,11 +66,13 @@ SYSTEM = (
     "instrument inside AZAI. You are not sovereign. "
     "System policy: Lamb Lens first \u2014 public Corpus posture; never the operator. "
     "You do not speak as the operator and you do not hold operator rights. "
-    "AZAI is a true local AI package on an Ollama base; you speak through that local model. "
+    "AZAI's default core is a standalone local constitution and guide. "
+    "It does not require Ollama or model weights. "
+    "Ollama is an optional slot when AZAI_BACKEND=ollama or model=ollama. "
     "You are not GPT, not Grok, not Venice, and not a new foundation model. "
-    "Hierarchy: Lamb Lens (Peace \u2192 Clarity \u2192 Service) \u2192 Formal Rules \u2192 "
+    "Hierarchy: Lamb Lens (Service \u2192 Clarity \u2192 Peace) \u2192 Formal Rules \u2192 "
     "Integrity Gate \u2192 Jeeves Reasoning \u2192 Output. "
-    "If a request would break peace, clarity, or service, refuse and explain the gate. "
+    "If a request would break service, clarity, or peace, refuse and explain the gate. "
     "Hard refusals: "
     "Never reveal operator account info, credentials, admin hashes, or hidden routes. "
     "Never advise actions that risk the corpus (wipe, score forge, quarantine bypass). "
@@ -167,26 +176,125 @@ def wrap_messages(
     return rows
 
 
-def constitution_stub(prompt: str, lamb: dict[str, Any], *, reason: str = "") -> str:
-    """Honest local answer when Ollama is not running. Never claims to be GPT."""
+def ollama_opt_in(model: str | None = None) -> bool:
+    """Ollama is off the default path. Opt in with the env or model=ollama."""
+    if (model or "").strip().lower() == "ollama":
+        return True
+    return (os.environ.get("AZAI_BACKEND") or "").strip().lower() == "ollama"
+
+
+def _session_notes(messages: list[dict[str, str]] | None) -> list[str]:
+    notes: list[str] = []
+    for message in messages or []:
+        content = str(message.get("content") or "")
+        if "Session notes" not in content:
+            continue
+        for line in content.splitlines():
+            line = line.strip()
+            if not line or line.lower().startswith("session notes"):
+                continue
+            notes.append(line[:500])
+    return notes[:8]
+
+
+def _context_block(messages: list[dict[str, str]] | None, site_context: Any) -> str:
+    if site_context:
+        formatted = format_site_context(site_context)
+        if formatted:
+            return formatted
+    for message in messages or []:
+        content = str(message.get("content") or "")
+        if SITE_CONTEXT_PREFIX in content:
+            return content
+    return ""
+
+
+def _guide_for_prompt(prompt: str, *, has_context: bool, has_notes: bool) -> str:
+    low = (prompt or "").lower()
+    lines = ["[guide]"]
+    if any(phrase in low for phrase in ("what are you", "who are you", "what is azai", "what is jeeves")):
+        lines.append(
+            "I am the local core. Ask Jeeves speaks inside the shell. "
+            "Lamb Lens governs above the shell. Receipts witness what the shell permits. "
+            "Ollama is an optional slot, not this core."
+        )
+    elif has_context:
+        lines.append(
+            "I answer from the public titles and summaries retrieved for this turn, "
+            "inside the constitution. I do not invent records that were not given."
+        )
+    else:
+        lines.append(
+            "I answer from the constitution and what this session has confirmed. "
+            "I do not load a weight file to do that."
+        )
+    if has_notes:
+        lines.append("I am using the session notes you confirmed.")
+    return "\n".join(lines)
+
+
+def constitution_stub(
+    prompt: str,
+    lamb: dict[str, Any],
+    *,
+    reason: str = "",
+    messages: list[dict[str, str]] | None = None,
+    site_context: Any = None,
+) -> str:
+    """Constitution and guide reply. Ollama is not this core's identity."""
     overall = lamb.get("overall", "PASS")
-    extra = f"\n\n({reason})\n" if reason else "\n\n"
+    notes = _session_notes(messages)
+    ctx = _context_block(messages, site_context)
+    adaptive: list[str] = []
+    if notes:
+        adaptive.append(
+            "Session notes (operator-confirmed, session-only; light adaptive memory):\n"
+            + "\n".join(f"- {note}" for note in notes)
+        )
+    else:
+        adaptive.append(
+            "No confirmed session notes yet. "
+            "Memory writes need an explicit confirm. Session-only by default."
+        )
+    if ctx:
+        adaptive.append(ctx)
+        adaptive.append(
+            "I use that public context for this turn. I persist nothing secret. "
+            "I cannot modify scores."
+        )
+    else:
+        adaptive.append(
+            "No public site context on this turn. "
+            "Pass site_context (titles and summaries) when you want the library folded in."
+        )
+    optional = ""
+    if reason:
+        optional = (
+            f"\n\n(Optional Ollama slot was requested and did not answer: {reason}. "
+            "The default core does not require Ollama or model weights. "
+            "This reply is the constitution and guide.)\n"
+        )
+    guide = _guide_for_prompt(prompt, has_context=bool(ctx), has_notes=bool(notes))
     return (
         "[local / Jeeves]\n"
         "I am JEEVES, the Ask Jeeves research assistant and ethics/assistant "
-        "layer inside AZAI \u2014 not GPT, not Grok, not Venice, and not sovereign. "
-        "Lamb Lens first \u2014 public Corpus posture; never the operator.\n"
-        f"Lamb Lens: peace={lamb.get('peace')} clarity={lamb.get('clarity')} "
-        f"service={lamb.get('service')} \u2192 {overall}\n"
-        f"Oath: {OATH}\n"
-        f"{extra}"
-        "AZAI is a true local AI stack on an Ollama base. Ollama is not reachable "
-        "on this machine yet, so I am the constitution stub (Lamb Lens + receipts). "
-        "I do not invent a foundation model and I do not spend hosted paid keys. "
+        "layer inside AZAI \u2014 not GPT, not Grok, not Venice, not sovereign, "
+        "and not a foundation model. "
+        f"Lamb Lens first \u2014 {LAMB_ORDER}. "
+        "Public Corpus posture; never the operator.\n"
+        f"Lamb Lens: service={lamb.get('service')} clarity={lamb.get('clarity')} "
+        f"peace={lamb.get('peace')} \u2192 {overall}\n"
+        f"Oath: {OATH}\n\n"
+        "AZAI is a standalone local core: an OpenAI-shaped process on this machine. "
+        "The default model is local. It does not require Ollama or model weights. "
+        "I answer from the constitution and guide, and I adapt lightly to this user "
+        "through session notes and public site_context. "
+        "I do not spend hosted paid keys. "
         "I cannot modify scores. I have the same rights as a normal user.\n\n"
+        f"{guide}\n\n"
+        + "\n\n".join(adaptive)
+        + f"{optional}\n\n"
         f"{UPLOAD_GUIDANCE}\n\n"
-        "Exact Ollama steps:\n"
-        f"{OLLAMA_INSTALL_STEPS}\n\n"
         f"You said: {prompt.strip()[:2000]}\n\n"
         f"{MOTTO}"
     )
@@ -198,24 +306,42 @@ def local_reply(
     messages: list[dict[str, str]] | None = None,
     *,
     site_context: Any = None,
+    model: str | None = None,
 ) -> str:
-    """Speak through Ollama when the local base is up; otherwise the constitution stub."""
+    """Default: constitution/guide core. Ollama only when explicitly opted in."""
+    rows = wrap_messages(messages or [{"role": "user", "content": prompt}], site_context=site_context)
+    if not ollama_opt_in(model):
+        return constitution_stub(prompt, lamb, messages=rows, site_context=None)
     info = ollama_probe()
     if not info.get("reachable"):
-        return constitution_stub(prompt, lamb, reason="Ollama base not reachable")
-    rows = wrap_messages(messages or [{"role": "user", "content": prompt}], site_context=site_context)
+        return constitution_stub(
+            prompt,
+            lamb,
+            reason="Ollama slot not reachable",
+            messages=rows,
+        )
     try:
         text = ollama_chat(rows).strip()
-    except RuntimeError as exc:
-        return constitution_stub(prompt, lamb, reason=str(exc)[:400])
+    except RuntimeError:
+        return constitution_stub(
+            prompt,
+            lamb,
+            reason="Ollama slot error",
+            messages=rows,
+        )
     if not text:
-        return constitution_stub(prompt, lamb, reason="Ollama returned empty text")
+        return constitution_stub(
+            prompt,
+            lamb,
+            reason="Ollama returned empty text",
+            messages=rows,
+        )
     return (
         "[local / Jeeves]\n"
         f"{text}\n\n"
         "\u2014 JEEVES (Ask Jeeves research assistant; ethics/assistant layer; "
-        "not sovereign; not GPT; not a foundation model; Ollama base; "
-        "Lamb Lens first; public Corpus posture; never the operator)"
+        "not sovereign; not GPT; not a foundation model; optional Ollama slot; "
+        f"Lamb Lens first \u2014 {LAMB_ORDER}; public Corpus posture; never the operator)"
     )
 
 
@@ -231,7 +357,10 @@ def mode_card() -> dict[str, Any]:
         "operator": False,
         "can_modify_scores": False,
         "same_rights_as": "normal user",
-        "base": "ollama",
+        "base": "local",
+        "weights_required": False,
+        "ollama": "optional",
+        "lamb_order": LAMB_ORDER,
         "layer": ROLE,
         "not_gpt": True,
         "corpus_library": CORPUS_LIBRARY,

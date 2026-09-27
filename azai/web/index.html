@@ -10,7 +10,7 @@
   <header class="top">
     <p class="eyebrow">Aziel Eliab</p>
     <h1>AZAI</h1>
-    <p class="lede">Ask Jeeves a question on this machine. Answers come through Ollama.</p>
+    <p class="lede">Ask Jeeves a question on this machine. The local core answers. No model weights required.</p>
     <p id="status-line" class="status-line" role="status">Checking this install…</p>
     <div id="chips" class="chips" aria-label="Lamb Lens">
       <span class="chip" data-axis="service">Service —</span>
@@ -61,8 +61,8 @@
         <div class="field">
           <label for="model">Model</label>
           <select id="model">
-            <option value="local" selected>local — Ollama + Jeeves</option>
-            <option value="ollama">ollama — local base</option>
+            <option value="local" selected>local — constitution and guide</option>
+            <option value="ollama">ollama — optional slot</option>
             <option value="blend">blend — gpt, grok, and venice, labeled</option>
             <option value="gpt">gpt</option>
             <option value="grok">grok</option>
@@ -106,7 +106,7 @@
         <details id="about-panel" class="about">
           <summary>About</summary>
           <div class="about-body">
-            <p>AZAI is local AI on this machine. Ask Jeeves is the research assistant. When Ollama is running, answers use that local base. When it is not, Jeeves answers from the local stub and says so.</p>
+            <p>AZAI is local AI on this machine. Ask Jeeves is the research assistant. The default core is the constitution and guide. It does not require Ollama or model weights. Ollama is an optional slot.</p>
             <p>Lamb Lens reads Service, Clarity, and Peace. Jeeves is not sovereign and cannot modify scores. Jeeves has the same rights as a normal user.</p>
             <p>Optional gpt, grok, and venice run on this machine when you choose them and a key is set here. The hosted checker runs Lamb Lens.</p>
             <p>Author: Aziel Eliab. This page stays on 127.0.0.1.</p>

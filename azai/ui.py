@@ -26,6 +26,8 @@ from azai.config import (
     UI_HOST,
     UI_PORT,
 )
+from azai.jeeves import ollama_opt_in
+from azai.ollama import ollama_model, ollama_url
 from azai.ollama import probe as ollama_probe
 from azai.debug import dlog, enabled as debug_enabled, status_payload
 from azai.lamb import check_text
@@ -47,7 +49,7 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
         "info": {
             "title": "AZAI local runtime",
             "version": __version__,
-            "summary": "True local AI on an Ollama base with Ask Jeeves research assistant. OpenAI-compatible. Not a hosted paid-key proxy. Jeeves is not sovereign.",
+            "summary": "True local AI: standalone local core with Ask Jeeves. Does not require Ollama or model weights. OpenAI-compatible. Not a hosted paid-key proxy. Jeeves is not sovereign.",
             "description": (
                 LIMITATION
                 + " Ask Jeeves research assistant for site assistants "
@@ -73,14 +75,14 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
             "/v1/models": {
                 "get": {
                     "operationId": "azai_models",
-                    "summary": "Lists local (Ollama+JEEVES), ollama, blend, gpt, grok, venice.",
+                    "summary": "Lists local (constitution/guide), ollama (optional slot), blend, gpt, grok, venice.",
                     "responses": {"200": {"description": "OpenAI-compat model list"}},
                 }
             },
             "/v1/chat/completions": {
                 "post": {
                     "operationId": "azai_chat",
-                    "summary": "Ask Jeeves research assistant (Ollama + JEEVES). Stream accepted, returned non-stream. Optional site_context for Corpus callers.",
+                    "summary": "Ask Jeeves research assistant (local core). Stream accepted, returned non-stream. Optional site_context for Corpus callers. Ollama only when model=ollama or AZAI_BACKEND=ollama.",
                     "requestBody": {
                         "required": True,
                         "content": {
@@ -138,7 +140,7 @@ def openapi_spec(origin: str = "http://127.0.0.1:8860") -> dict[str, Any]:
             "/v1/integrity": {
                 "get": {
                     "operationId": "azai_integrity",
-                    "summary": "Peace / clarity / service + receipt chain health.",
+                    "summary": "Service / clarity / peace + receipt chain health.",
                     "responses": {"200": {"description": "integrity"}},
                 }
             },
@@ -310,7 +312,28 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/v1/health" or path == "/api/status":
             integ = self.state.runtime.integrity()
             status = provider_status()
-            ollama = ollama_probe()
+            if ollama_opt_in():
+                ollama = ollama_probe()
+                ollama_payload = {
+                    "required": False,
+                    "opt_in": True,
+                    "probed": True,
+                    "reachable": bool(ollama.get("reachable")),
+                    "model": ollama.get("model"),
+                    "model_present": bool(ollama.get("model_present")),
+                    "url": ollama.get("url"),
+                }
+            else:
+                ollama_payload = {
+                    "required": False,
+                    "opt_in": False,
+                    "probed": False,
+                    "reachable": False,
+                    "model": ollama_model(),
+                    "model_present": False,
+                    "url": ollama_url(),
+                    "note": "optional slot; default core does not probe Ollama",
+                }
             payload = {
                 "ok": True,
                 "product": "azai",
@@ -323,19 +346,15 @@ class Handler(BaseHTTPRequestHandler):
                 "jeeves_sovereign": False,
                 "can_modify_scores": False,
                 "corpus_library": "https://www.azielcorpuslibrary.net/",
-                "local_ai": "ollama-base",
+                "local_ai": "local-core",
+                "weights_required": False,
                 "true_local_ai": True,
                 "runtime": integ["runtime"],
                 "jeeves": integ["jeeves"],
                 "lamb": integ["lamb"],
                 "integrity": integ["overall"],
                 "providers": {k: {"present": v["present"]} for k, v in status.items()},
-                "ollama": {
-                    "reachable": bool(ollama.get("reachable")),
-                    "model": ollama.get("model"),
-                    "model_present": bool(ollama.get("model_present")),
-                    "url": ollama.get("url"),
-                },
+                "ollama": ollama_payload,
                 "limitation": LIMITATION,
                 "motto": MOTTO,
                 "sample_prompt": SAMPLE_PROMPT,

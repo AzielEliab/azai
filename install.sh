@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # AZAI one-click install. Counted download via this project's Worker.
-# Installs the Python package, then the local Ollama base + default model.
+# Installs the Python package only. The default core does not require Ollama
+# or model weights. scripts/setup-ollama.sh is optional.
 # Usage: curl -fsSL https://azai-download-tracker.vibelock.workers.dev/install.sh | bash
 set -euo pipefail
 
@@ -28,22 +29,13 @@ python -m pip install -e .
 
 echo
 echo "Installed AZAI."
-echo "Next: local Ollama and the default model (llama3.2 unless AZAI_OLLAMA_MODEL is set)."
-echo
-
-if [ -f scripts/setup-ollama.sh ]; then
-  bash scripts/setup-ollama.sh || true
-else
-  echo "scripts/setup-ollama.sh missing from this tree. Exact steps:"
-  echo "  curl -fsSL https://ollama.com/install.sh | sh"
-  echo "  ollama serve"
-  echo "  ollama pull ${AZAI_OLLAMA_MODEL:-llama3.2}"
-  echo "  azai doctor"
-fi
-
-echo
+echo "The default core does not require Ollama or model weights."
 echo "Next:"
 echo "  azai ui"
 echo "Then open http://127.0.0.1:8860/"
-echo "Self-check: azai doctor"
+echo "Self-check: azai doctor   (green without Ollama)"
+echo
+echo "Optional Ollama slot: scripts/setup-ollama.sh"
+echo "  Then set AZAI_BACKEND=ollama or call model=ollama."
+echo "  The installer does not run that script."
 echo "Author: Aziel Eliab."

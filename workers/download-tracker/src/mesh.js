@@ -366,7 +366,7 @@ export function meshPointer() {
     catalog_mcp: FRAGGATE_MCP,
     fraggate_slug: MESH_SLUG,
     origin: RUNTIME + MESH_PATH,
-    note: "PROXY to aziel-runtime /v1/mesh/* via AZIEL_RUNTIME. Not a local op. Not AnonBroadcast. Not AZMail's product-local ring. AZAI remains true local AI on an Ollama base with JEEVES. Hosted /v1 is lamb-check ONLY. Full node process is local qnm-node/. QNS-CD-1.0 hub cite only — not a public qnsd proxy. " + MESH_NOTE,
+    note: "PROXY to aziel-runtime /v1/mesh/* via AZIEL_RUNTIME. Not a local op. Not AnonBroadcast. Not AZMail's product-local ring. AZAI remains true local AI: a standalone local core with JEEVES. Ollama is optional. Hosted /v1 is lamb-check ONLY. Full node process is local qnm-node/. QNS-CD-1.0 hub cite only — not a public qnsd proxy. " + MESH_NOTE,
     anon_broadcast: ANON_BROADCAST,
     anon_broadcast_publish_path: false,
     qns_cd_spec: QNS_CD_SPEC,

@@ -24,8 +24,8 @@ from azai.debug import dlog
 from azai.runtime import LambBlocked, Runtime, SealedError, models_payload, resolve_data_dir
 
 _MODEL_BLURB = {
-    "local": "Ollama on this machine (default)",
-    "ollama": "Same local Ollama base",
+    "local": "Constitution and guide on this machine (default; no weights)",
+    "ollama": "Optional Ollama slot (AZAI_BACKEND=ollama or model=ollama)",
     "blend": "gpt, grok, and venice, each answer labeled",
     "gpt": "OpenAI on this machine when OPENAI_API_KEY is set",
     "grok": "xAI on this machine when a Grok key is set",
@@ -37,7 +37,8 @@ def _welcome_text() -> str:
     return (
         f"AZAI {__version__} — ask a question on this machine.\n"
         "\n"
-        "Jeeves answers through Ollama on this computer. "
+        "Jeeves answers from the local core on this computer. "
+        "No Ollama and no model weights are required. "
         "Lamb Lens reads Service, Clarity, and Peace on each turn.\n"
         "\n"
         "Next:\n"
@@ -54,7 +55,7 @@ def _welcome_payload() -> dict:
         "product": "azai",
         "version": __version__,
         "author": "Aziel Eliab",
-        "summary": "Ask a question on this machine. Jeeves answers through Ollama.",
+        "summary": "Ask a question on this machine. Jeeves answers from the local core. Ollama is optional.",
         "ui": f"http://{UI_HOST}:{UI_PORT}/",
         "next": ["azai ui", "azai doctor", "azai --help"],
     }
@@ -74,7 +75,7 @@ def _help_text() -> str:
         "\n"
         "Everyday\n"
         "  models          List models\n"
-        "  ollama          See whether Ollama is running\n"
+        "  ollama          See whether the optional Ollama slot is running\n"
         "  version         Print the version\n"
         "\n"
         "Advanced\n"
@@ -203,7 +204,7 @@ def _build_parser() -> AzaiArgumentParser:
     p_doc.add_argument("--data", default=None)
     p_doc.add_argument("--json", action="store_true", dest="as_json")
 
-    p_ol = sub.add_parser("ollama", help="See whether Ollama is running.")
+    p_ol = sub.add_parser("ollama", help="See whether the optional Ollama slot is running.")
     p_ol.add_argument("--json", action="store_true", dest="as_json")
 
     p_imp = sub.add_parser("import", help="Import a .txt or JSON conversation.")
@@ -359,19 +360,21 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 0
         url = payload.get("url") or "http://127.0.0.1:11434"
         model = payload.get("model") or "llama3.2"
+        print("Ollama is an optional slot. The default core does not require it or any weights.")
         if payload.get("reachable") and payload.get("model_present"):
-            print(f"Ollama is ready at {url} with model {model}.")
+            print(f"The slot is ready at {url} with model {model}.")
+            print("Use it with AZAI_BACKEND=ollama or model=ollama.")
         elif payload.get("reachable"):
-            print(f"Ollama is running at {url}. Model {model} is not pulled yet.")
-            print(f"Next: ollama pull {model}")
+            print(f"The slot is running at {url}. Model {model} is not pulled yet.")
+            print(f"Next, only if you want this slot: ollama pull {model}")
             if payload.get("steps"):
                 print()
                 print(payload["steps"])
         else:
-            print(f"Ollama is not running at {url}.")
+            print(f"The slot is not running at {url}. AZAI still answers with model=local.")
             if payload.get("error"):
                 print(payload["error"])
-            print("Next: install Ollama, then run azai doctor.")
+            print("Opt in later with scripts/setup-ollama.sh, then AZAI_BACKEND=ollama or model=ollama.")
             print()
             print(payload.get("steps") or install_steps())
         return 0

@@ -1,9 +1,11 @@
 """AZAI (Aziel Artificial Intelligence).
 
-True local AI package on an Ollama base. JEEVES is the Ask Jeeves
-research assistant (ethics/assistant layer) and is not sovereign.
-Lamb Lens first — public Corpus posture; never the operator.
-OpenAI-compatible local API. Not a hosted paid-key proxy.
+True local AI: a standalone local core. The default path does not
+require Ollama or model weights. JEEVES is the Ask Jeeves research
+assistant (ethics/assistant layer) and is not sovereign.
+Lamb Lens first — Service → Clarity → Peace; public Corpus posture;
+never the operator. OpenAI-compatible local API. Not a hosted paid-key proxy.
+Ollama is an optional slot (AZAI_BACKEND=ollama or model=ollama).
 
 Optional paid GPT/Grok/Venice blend happens on the operator's local
 `azai serve` only. The hosted Worker /v1 is lamb-check ONLY.

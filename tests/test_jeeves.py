@@ -32,7 +32,13 @@ def test_jeeves_is_not_sovereign_and_not_gpt() -> None:
     assert "not sovereign" in low
     assert "not gpt" in low
     assert "not a new foundation model" in low
+    assert "does not require Ollama" in SYSTEM
+    assert "Service → Clarity → Peace" in SYSTEM
     card = mode_card()
+    assert card["base"] == "local"
+    assert card["weights_required"] is False
+    assert card["ollama"] == "optional"
+    assert card["lamb_order"] == "Service → Clarity → Peace"
     assert card["sovereign"] is False
     assert card["not_gpt"] is True
     assert card["author"] == "Aziel Eliab"
@@ -141,10 +147,10 @@ def test_site_context_drops_secrets_and_persists_nothing() -> None:
 
 
 def test_runtime_chat_site_context_count_only_in_receipt(tmp_path) -> None:
-    seen: dict = {}
+    called = {"n": 0}
 
     def hook(name, messages, model):
-        seen["messages"] = messages
+        called["n"] += 1
         return "from-context"
 
     TEST_HOOKS["ollama"] = hook
@@ -165,12 +171,13 @@ def test_runtime_chat_site_context_count_only_in_receipt(tmp_path) -> None:
         model="local",
         site_context=[{"title": "Florence", "summary": "Public record."}],
     )
+    assert called["n"] == 0
+    assert "from-context" not in out["content"]
+    assert "Florence" in out["content"]
+    assert "JEEVES" in out["content"] or "Jeeves" in out["content"]
     assert out["ask_jeeves"] is True
     assert out["jeeves_sovereign"] is False
     assert out["site_context_n"] == 1
-    sys_text = " ".join(m["content"] for m in seen["messages"] if m["role"] == "system")
-    assert "Florence" in sys_text
-    assert "JEEVES" in sys_text
     recs = rt.receipts.read()
     chat_recs = [r for r in recs if r.get("action") == "chat"]
     assert chat_recs
@@ -182,18 +189,6 @@ def test_runtime_chat_site_context_count_only_in_receipt(tmp_path) -> None:
 
 
 def test_openai_completion_accepts_site_context(tmp_path) -> None:
-    from azai import ollama as ollama_mod
-
-    ollama_mod.TEST_HOOKS["ollama"] = lambda n, m, model: "ok"
-    ollama_mod.TEST_PROBE = lambda: {
-        "ok": True,
-        "reachable": True,
-        "url": "http://127.0.0.1:11434",
-        "model": "llama3.2",
-        "model_present": True,
-        "models": ["llama3.2"],
-        "steps": None,
-    }
     rt = Runtime(data_dir=tmp_path)
     payload = rt.openai_completion(
         {
@@ -202,6 +197,8 @@ def test_openai_completion_accepts_site_context(tmp_path) -> None:
             "site_context": [{"title": "Gazetteer", "summary": "Places."}],
         }
     )
+    content = payload["choices"][0]["message"]["content"]
+    assert "Gazetteer" in content
     assert payload["azai"]["ask_jeeves"] is True
     assert payload["azai"]["jeeves_sovereign"] is False
     assert payload["azai"]["site_context_n"] == 1

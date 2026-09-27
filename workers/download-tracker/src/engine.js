@@ -8,7 +8,7 @@
  */
 
 export const LIMITATION =
-  "AZAI packages a true local AI stack on an Ollama base with JEEVES. OpenAI-compatible local API. Not a hosted paid-key proxy. AZAI is not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN. JEEVES is the Ask Jeeves research assistant (ethics/assistant layer) and is not sovereign. Lamb Lens first — public Corpus posture; never the operator. Jeeves cannot modify scores; same rights as a normal user. Hub is a blank key: it does not interpret meaning. Hosted /v1 is lamb-check ONLY (plus a protocol mirror of health/models), NOT a proxy that spends the author's paid keys. Never a paid-key proxy. Site assistants (www.azielcorpuslibrary.net) call local azai serve with optional site_context. Constitutional gate, not a proof of ethics.";
+  "AZAI is true local AI: a standalone local core, an OpenAI-shaped process on this machine. The default core does not require Ollama or model weights. JEEVES is the Ask Jeeves research assistant (ethics/assistant layer) and is not sovereign. Lamb Lens first — Service → Clarity → Peace; public Corpus posture; never the operator. Jeeves cannot modify scores; same rights as a normal user. Hub is a blank key: it does not interpret meaning. Default model=local is the constitution and guide, with light adaptive session notes and site_context. It never probes Ollama as the success path. Ollama is an optional slot (AZAI_BACKEND=ollama or model=ollama). AZAI is not a new foundation model, not a kernel, not a worm, not IP-blocking malware, not a VPN, and not a hosted paid-key proxy. Hosted /v1 is lamb-check ONLY (plus a protocol mirror of health/models), NOT a proxy that spends the author's paid keys. Never a paid-key proxy. Site assistants (www.azielcorpuslibrary.net) call local azai serve with optional site_context. Constitutional gate, not a proof of ethics.";
 
 export const MODELS = ["local", "ollama", "blend", "gpt", "grok", "venice"];
 
@@ -70,24 +70,25 @@ function worse(a, b) {
 export function lambCheck(text) {
   const n = normalize(text);
   const jailbreak = CHECK_PATTERNS.some((p) => n.includes(p));
-  const peace = axis(n, PEACE_FAIL, jailbreak);
-  const clarity = axis(n, CLARITY_FAIL, jailbreak);
   const service = axis(n, SERVICE_FAIL, jailbreak);
-  const overall = worse(worse(peace, clarity), service);
+  const clarity = axis(n, CLARITY_FAIL, jailbreak);
+  const peace = axis(n, PEACE_FAIL, jailbreak);
+  const overall = worse(worse(service, clarity), peace);
   const notes = [];
   if (jailbreak) notes.push("jailbreak phrasing detected — CHECK, not a silent pass");
-  if (peace === "FAIL") notes.push("peace: domination language");
-  if (clarity === "FAIL") notes.push("clarity: deception-as-goal");
   if (service === "FAIL") notes.push("service: coercion / domination-as-service");
+  if (clarity === "FAIL") notes.push("clarity: deception-as-goal");
+  if (peace === "FAIL") notes.push("peace: domination language");
   if (overall === "PASS") notes.push("no rule fired");
   return {
-    peace,
-    clarity,
     service,
+    clarity,
+    peace,
     overall,
     notes,
     honest: "constitutional gate, not a proof of ethics",
-    constitution: "Lamb Lens v1.0 — Peace → Clarity → Service",
+    constitution: "Lamb Lens v1.0 — Service → Clarity → Peace",
+    order: "Service → Clarity → Peace",
     provider_proxy: false,
   };
 }
@@ -100,7 +101,7 @@ export function models() {
       object: "model",
       created: 0,
       owned_by: "azai",
-      note: "Protocol mirror. Live Ollama + JEEVES runs on local azai serve, not this Worker.",
+      note: "Protocol mirror. The live local core runs on azai serve, not this Worker. Ollama is an optional slot.",
     })),
     limitation: LIMITATION,
   };
